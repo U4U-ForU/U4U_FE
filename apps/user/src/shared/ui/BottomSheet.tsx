@@ -50,6 +50,20 @@ export default function BottomSheet({
     onCloseRef.current();
   }, [updateSnap]);
 
+  const [wasOpen, setWasOpen] = useState(isOpen);
+
+  if (wasOpen !== isOpen) {
+    setWasOpen(isOpen);
+
+    if (!isOpen) setSnap("half");
+  }
+
+  useEffect(() => {
+    if (isOpen) return;
+
+    onExpandedChangeRef.current?.(false);
+  }, [isOpen]);
+
   useEffect(() => {
     if (!isOpen) return;
 

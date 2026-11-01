@@ -6,8 +6,10 @@ import DealItemList from "../item/DealItemList";
 import Modal from "@/src/shared/ui/modal/Modal";
 import ModalParent from "@/src/shared/ui/modal/ModalParent";
 import Button from "@/src/shared/ui/Button";
+import Image from "next/image";
+import { outerTextStroke } from "@/src/shared/lib/textStroke";
 
-const ACCEPTED_MODAL_DURATION = 1000;
+const ACCEPTED_MODAL_DURATION = 2000;
 
 interface CommentProps {
   nickname: string;
@@ -77,7 +79,11 @@ export default function Comment({
       />
 
       <ModalParent isOpen={isAcceptedOpen}>
-        <AcceptedBox>거래가 수락되었습니다</AcceptedBox>
+        <AcceptedBox>
+          <AcceptedTitle data-text="거래 완료!">거래 완료!</AcceptedTitle>
+          <AcceptedText>인벤토리를 확인해보세요</AcceptedText>
+          <AcceptedImage src="/img/modal.svg" width={172} height={158} alt="" />
+        </AcceptedBox>
       </ModalParent>
 
       <Modal
@@ -99,18 +105,44 @@ export default function Comment({
 const AcceptedBox = styled.div`
   display: flex;
   width: 320px;
-  padding: var(--space-20, 20px);
-  justify-content: center;
+  height: 300px;
+  padding-top: 32px;
+  flex-direction: column;
   align-items: center;
   border-radius: 12px;
-  background: #fff;
-  color: var(--gray-700, #504a4c);
+  background-image: url("/img/background/100.png");
+  background-position: center;
+  background-size: cover;
+  overflow: hidden;
+`;
+
+const AcceptedTitle = styled.div`
+  font-family: "Cafe24 Ssurround";
+  font-size: 32px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 150%;
+
+  ${outerTextStroke(
+    "var(--color-gray-0, #fff)",
+    "var(--pink-p3, #A06D6D)",
+    "4px",
+  )}
+`;
+
+const AcceptedText = styled.div`
+  margin-top: 4px;
+  color: var(--brown-p1, #a06d6d);
   text-align: center;
   font-family: "Cafe24 Ssurround";
-  font-size: var(--typo-body-medium, 16px);
+  font-size: 20px;
   font-style: normal;
   font-weight: 700;
-  line-height: 150%;
+  line-height: normal;
+`;
+
+const AcceptedImage = styled(Image)`
+  margin-top: auto;
 `;
 
 const AcceptButton = styled(Button)`

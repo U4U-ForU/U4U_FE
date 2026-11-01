@@ -30,7 +30,6 @@ export default function Star({
   className,
   state,
 }: StarProps) {
-
   const isInteractive = Boolean(onClick);
 
   return (

@@ -12,7 +12,7 @@ import Title from "@/src/features/signup/ui/Title";
 import { validateId } from "@/src/shared/lib/validate";
 import { useSignupSubmit } from "@/src/features/signup/model/useSignupSubmit";
 import SuccessModal from "@/src/features/signup/ui/SuccessModal";
-import Modal from "@/src/shared/ui/Modal";
+import Modal from "@/src/shared/ui/modal/ModalParent";
 
 export default function IdPage() {
   const [id, setId] = useState("");

@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import Item from "./Item";
 import type { InventoryItem } from "../model/types";
 import { useState } from "react";
-import Modal from "@/src/shared/ui/Modal";
+import Modal from "@/src/shared/ui/modal/ModalParent";
 import ItemModal from "./ItemModal";
 
 interface ItemListProps {

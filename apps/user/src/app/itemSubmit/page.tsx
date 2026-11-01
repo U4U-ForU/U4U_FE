@@ -50,7 +50,7 @@ export default function ItemSubmit() {
           onChange={setItemDescription}
         />
       </InputWrapper>
-      <Button
+      <SubmitButton
         text="아이템 제출"
         fontColor="white"
         fontBorderColor="#A75959"
@@ -66,8 +66,14 @@ export default function ItemSubmit() {
 
 const Wrapper = styled.div`
   display: flex;
+  min-height: 100dvh;
+  padding-bottom: calc(20px + env(safe-area-inset-bottom));
   align-items: center;
   flex-direction: column;
+`;
+
+const SubmitButton = styled(Button)`
+  margin-top: auto;
 `;
 
 const UploadArea = styled.div`

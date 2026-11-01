@@ -3,7 +3,7 @@
 import styled from "@emotion/styled";
 import type { SubmitStatus } from "../model/types";
 import { useState } from "react";
-import Modal from "@/src/shared/ui/Modal";
+import Modal from "@/src/shared/ui/modal/ModalParent";
 import SubmitItemModal from "./SubmitItemModal";
 import SubmitStatusBadge from "./SubmitStatusBadge";
 
@@ -77,7 +77,7 @@ const Img = styled.img`
 const ItemName = styled.div`
   display: -webkit-box;
   -webkit-line-clamp: 2;
-  height: 28.8px; /* 2줄 고정: 14.4px * 2 */
+  height: 28.8px;
   -webkit-box-orient: vertical;
   overflow: hidden;
   color: var(--brown-b3, #6f5e4c);

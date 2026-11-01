@@ -9,7 +9,7 @@ import GachaGo from "@/src/features/gacha/ui/page/GachaGo";
 import GachaBeforeResult from "@/src/features/gacha/ui/page/GachaBeforeResult";
 import GachaResult from "@/src/features/gacha/ui/page/GachaResult";
 import GachaAllResult from "@/src/features/gacha/ui/page/GachaAllResult";
-import Modal from "@/src/shared/ui/Modal";
+import Modal from "@/src/shared/ui/modal/ModalParent";
 import { useUserStarStore } from "@/src/entities/user/model/useUserStarStore";
 import {
   GACHA_DRAW_COST,

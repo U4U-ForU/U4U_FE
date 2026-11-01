@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import { useState } from "react";
-import Modal from "@/src/shared/ui/Modal";
+import Modal from "@/src/shared/ui/modal/ModalParent";
 import ItemModal from "@/src/entities/item/ui/ItemModal";
 import GachaItem from "./GachaItem";
 import type { GachaItem as GachaItemType } from "../../model/types";

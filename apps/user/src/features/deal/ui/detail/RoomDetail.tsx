@@ -8,6 +8,7 @@ interface RoomDetailProps {
   writer: string;
   text: string;
   commentCount: number;
+  menu?: ReactNode;
   children?: ReactNode;
 }
 
@@ -17,10 +18,12 @@ export default function RoomDetail({
   writer,
   text,
   commentCount,
+  menu,
   children,
 }: RoomDetailProps) {
   return (
     <Wrapper>
+      {menu}
       <Title>{title}</Title>
       <Info>
         <InfoDetail>{date}</InfoDetail>

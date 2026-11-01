@@ -1,4 +1,7 @@
+"use client";
+
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import styled from "@emotion/styled";
 import FilterBoxList from "./FilterBoxList";
 import EmptyList from "@/src/shared/ui/EmptyList";
@@ -16,6 +19,7 @@ interface DealListProps {
 }
 
 export default function DealList({ rooms }: DealListProps) {
+  const router = useRouter();
   const [filter, setFilter] = useState<DealFilter>("전체");
 
   const filteredRooms =
@@ -35,6 +39,11 @@ export default function DealList({ rooms }: DealListProps) {
               itemCount={room.itemCount}
               commentCount={room.commentCount}
               nickname={room.nickname}
+              onClick={() =>
+                router.push(
+                  room.status === "내 글" ? "/deal/mydetail" : "/deal/detail",
+                )
+              }
             />
           ))}
         </RoomList>

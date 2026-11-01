@@ -3,6 +3,7 @@
 import styled from "@emotion/styled";
 import ModalParent from "@/src/shared/ui/modal/ModalParent";
 import Button from "@/src/shared/ui/Button";
+import { outerTextStroke } from "@/src/shared/lib/textStroke";
 
 interface ModalProps {
   isOpen: boolean;
@@ -12,6 +13,7 @@ interface ModalProps {
   title: string;
   text: string;
   text2: string;
+  confirmText?: string;
 }
 
 const CONFIRM_COLORS = {
@@ -35,6 +37,7 @@ export default function Modal({
   title,
   text,
   text2,
+  confirmText = "삭제",
 }: ModalProps) {
   const colors = CONFIRM_COLORS[type];
 
@@ -42,7 +45,14 @@ export default function Modal({
     <ModalParent isOpen={isOpen} onClose={onCancel}>
       <Wrapper>
         <Top>
-          <Title>{title}</Title>
+          <Title
+            data-text={title}
+            role="heading"
+            aria-level={2}
+            aria-label={title}
+          >
+            {title}
+          </Title>
           <TextWrapper>
             <Text>{text}</Text>
             <Text>{text2}</Text>
@@ -58,7 +68,7 @@ export default function Modal({
             onClick={onCancel}
           />
           <Button
-            text="삭제"
+            text={confirmText}
             fontColor="white"
             fontBorderColor={colors.fontBorder}
             backgroundColor={colors.background}
@@ -86,14 +96,20 @@ const Wrapper = styled.div`
 `;
 
 const Title = styled.div`
-  color: var(--brown-p1, #a06d6d);
   text-align: center;
+  white-space: pre-line;
   font-family: "Cafe24 Ssurround";
   font-size: 24px;
   font-style: normal;
-  font-weight: 700;
+  font-weight: 600;
   line-height: 150%; /* 36px */
   margin-bottom: 4px;
+
+  ${outerTextStroke(
+    "var(--color-gray-0, #fff)",
+    "var(--pink-p3, #dfafaf)",
+    "4px",
+  )}
 `;
 
 const TextWrapper = styled.div``;

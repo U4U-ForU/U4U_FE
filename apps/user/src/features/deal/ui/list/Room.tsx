@@ -7,6 +7,7 @@ interface RoomProps {
   itemCount: number;
   commentCount: number;
   nickname: string;
+  onClick: () => void;
 }
 
 export default function Room({
@@ -14,17 +15,15 @@ export default function Room({
   itemCount,
   commentCount,
   nickname,
+  onClick,
 }: RoomProps) {
   return (
-    <Wrapper>
+    <Wrapper onClick={onClick}>
       <Top>
         <Title>{name}</Title>
-        <Image
-          src="/img/Gacha/arrow.svg"
-          width={10}
-          height={10}
-          alt="방으로 이동"
-        />
+        <MoveButton type="button" aria-label={`${name} 방으로 이동`}>
+          <Image src="/img/Gacha/arrow.svg" width={10} height={10} alt="" />
+        </MoveButton>
       </Top>
       <DealItemList itemCount={itemCount} />
       <Bottom>
@@ -34,6 +33,15 @@ export default function Room({
     </Wrapper>
   );
 }
+
+const MoveButton = styled.button`
+  display: flex;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+`;
 
 const Bottom = styled.div`
   display: flex;
@@ -83,6 +91,7 @@ const Wrapper = styled.div`
   align-self: stretch;
   border-radius: var(--radius-md, 12px);
   background: #fff;
+  cursor: pointer;
 
   /* shadow/200 */
   box-shadow: 0 0 5px 0 var(--color-opacity-black-15, rgba(0, 0, 0, 0.15));

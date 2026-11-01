@@ -1,6 +1,7 @@
 "use client";
 
 import styled from "@emotion/styled";
+import { FOCUSABLE_SELECTOR } from "@/src/shared/ui/modal/ModalParent";
 import {
   useCallback,
   useEffect,
@@ -32,6 +33,7 @@ export default function BottomSheet({
   const [snap, setSnap] = useState<SnapPoint>("half");
   const [dragOffset, setDragOffset] = useState<number | null>(null);
   const startYRef = useRef<number | null>(null);
+  const sheetRef = useRef<HTMLDivElement>(null);
   const onCloseRef = useRef(onClose);
   const onExpandedChangeRef = useRef(onExpandedChange);
 
@@ -62,6 +64,17 @@ export default function BottomSheet({
     if (isOpen) return;
 
     onExpandedChangeRef.current?.(false);
+  }, [isOpen]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const sheet = sheetRef.current;
+    const previouslyFocused = document.activeElement as HTMLElement | null;
+
+    (sheet?.querySelector<HTMLElement>(FOCUSABLE_SELECTOR) ?? sheet)?.focus();
+
+    return () => previouslyFocused?.focus?.();
   }, [isOpen]);
 
   useEffect(() => {
@@ -120,9 +133,11 @@ export default function BottomSheet({
     <>
       <Backdrop $isOpen={isOpen} onClick={closeSheet} />
       <Sheet
+        ref={sheetRef}
         role="dialog"
         aria-modal="true"
-        aria-hidden={!isOpen}
+        tabIndex={-1}
+        inert={!isOpen}
         $offset={isOpen ? offset : 100}
         $isDragging={dragOffset !== null}
       >

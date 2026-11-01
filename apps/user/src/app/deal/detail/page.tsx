@@ -10,11 +10,13 @@ import CommentInput from "@/src/features/deal/ui/detail/CommentInput";
 import ItemPickerSheet from "@/src/features/deal/ui/detail/ItemPickerSheet";
 import type { InventoryItem } from "@/src/entities/item/model/types";
 import { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import { MOCK_COMMENTS } from "@/src/features/deal/model/detail/mockComments";
 
 const MAX_SELECTED_ITEMS = 10;
 
 export default function Detail() {
+  const router = useRouter();
   const [comments, setComments] = useState(MOCK_COMMENTS);
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const [isProposing, setIsProposing] = useState(false);
@@ -47,7 +49,10 @@ export default function Detail() {
   return (
     <Page>
       <Global styles={dealBackground} />
-      <Header title="거래 상세 " />
+      <Header
+        title="거래 상세 "
+        onBackPress={() => router.push("/deal/list")}
+      />
 
       <Content>
         <RoomDetail

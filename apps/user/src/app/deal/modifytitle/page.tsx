@@ -4,11 +4,13 @@ import { Global, css } from "@emotion/react";
 import styled from "@emotion/styled";
 import Header from "@/src/shared/ui/Header";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 import Button from "@/src/shared/ui/Button";
 import { SHEET_HALF_HEIGHT_DVH } from "@/src/shared/ui/BottomSheet";
 
 export default function Detail() {
+  const router = useRouter();
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const [isSheetExpanded, setIsSheetExpanded] = useState(false);
 
@@ -17,7 +19,10 @@ export default function Detail() {
   return (
     <Page>
       <Global styles={dealBackground} />
-      <Header title="거래 제목 수정" />
+      <Header
+        title="거래 제목 수정"
+        onBackPress={() => router.push("/deal/mydetail")}
+      />
 
       <Content>
         <Input type="text" placeholder="(원래 거래방 이름이 들어감)"></Input>
@@ -26,6 +31,7 @@ export default function Detail() {
       <ButtonArea $offsetDvh={buttonOffset} $isHidden={isSheetExpanded}>
         <Button
           text="거래 수정하기"
+          onClick={() => router.push("/deal/mydetail")}
           fontColor="white"
           backgroundColor="#FFD0D0"
           borderColor="#DFAFAF"

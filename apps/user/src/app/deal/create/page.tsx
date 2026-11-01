@@ -4,6 +4,7 @@ import { Global, css } from "@emotion/react";
 import styled from "@emotion/styled";
 import Header from "@/src/shared/ui/Header";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import ItemPickerSheet from "@/src/features/deal/ui/detail/ItemPickerSheet";
 import ItemList from "@/src/features/deal/ui/create.tsx/ItemList";
 import type { InventoryItem } from "@/src/entities/item/model/types";
@@ -13,6 +14,7 @@ import { SHEET_HALF_HEIGHT_DVH } from "@/src/shared/ui/BottomSheet";
 const MAX_SELECTED_ITEMS = 10;
 
 export default function Detail() {
+  const router = useRouter();
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const [isSheetExpanded, setIsSheetExpanded] = useState(false);
   const [selectedItems, setSelectedItems] = useState<InventoryItem[]>([]);
@@ -30,7 +32,7 @@ export default function Detail() {
   return (
     <Page>
       <Global styles={dealBackground} />
-      <Header title="거래 생성" />
+      <Header title="거래 생성" onBackPress={() => router.push("/deal/list")} />
 
       <Content>
         <Input type="text" placeholder="거래방 이름을 입력해주세요."></Input>
@@ -54,6 +56,7 @@ export default function Detail() {
       <ButtonArea $offsetDvh={buttonOffset} $isHidden={isSheetExpanded}>
         <Button
           text="거래 생성하기"
+          onClick={() => router.push("/deal/list")}
           fontColor="white"
           backgroundColor="#FFD0D0"
           borderColor="#DFAFAF"

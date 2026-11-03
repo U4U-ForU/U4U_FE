@@ -16,7 +16,11 @@ export function useItemSlots() {
   const [slots, setSlots] = useState<Slots>(Array(SLOT_COUNT).fill(null));
   const [fillOrder, setFillOrder] = useState<number[] | null>(null);
 
-  const openPicker = (index: number) => setFillOrder(getFillOrder(index));
+  const openPicker = (index: number) => {
+    if (slots[index] !== null) return;
+
+    setFillOrder(getFillOrder(index));
+  };
 
   const closePicker = () => setFillOrder(null);
 

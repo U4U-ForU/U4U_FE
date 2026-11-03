@@ -21,6 +21,7 @@ export default function ItemSlots({
             type="button"
             aria-label={item ? item.name : `${index + 1}번 재료 선택`}
             onClick={() => onSlotClick(index)}
+            disabled={item !== null}
           >
             {item && (
               <Image
@@ -84,4 +85,8 @@ const Slot = styled.button`
   cursor: pointer;
   overflow: hidden;
   -webkit-tap-highlight-color: transparent;
+
+  &:disabled {
+    cursor: default;
+  }
 `;

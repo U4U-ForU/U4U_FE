@@ -71,7 +71,7 @@ const ButtonArea = styled.div`
   left: 0;
   right: 0;
   bottom: 0;
-  z-index: 103;
+  z-index: 1;
   display: flex;
   justify-content: center;
   padding-bottom: calc(20px + env(safe-area-inset-bottom));

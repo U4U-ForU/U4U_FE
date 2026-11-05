@@ -6,13 +6,17 @@ import Image from "next/image";
 import styled from "@emotion/styled";
 import DailyCheck from "@/src/features/dailyCheck";
 import MainMenuItemList from "@/src/widgets/main_menu";
+import MypageModal from "@/src/features/mypage/ui/Modal";
+import { useState } from "react";
 
 export default function Main() {
+  const [isMypageOpen, setIsMypageOpen] = useState(false);
+
   return (
     <Page>
       <BgBottom />
       <Foreground>
-        <MainHeader />
+        <MainHeader onProfileClick={() => setIsMypageOpen(true)} />
       </Foreground>
       <DailyCheck />
       <MainMenuItemList />
@@ -30,6 +34,11 @@ export default function Main() {
           borderColor="#DFAFAF"
         />
       </BottomContent>
+
+      <MypageModal
+        isOpen={isMypageOpen}
+        onClose={() => setIsMypageOpen(false)}
+      />
     </Page>
   );
 }

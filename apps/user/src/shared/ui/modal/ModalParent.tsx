@@ -89,8 +89,8 @@ const Backdrop = styled.div`
   inset: 0;
   z-index: 100;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  overflow-y: auto;
+  overscroll-behavior: contain;
   background: rgba(0, 0, 0, 0.4);
   -webkit-backdrop-filter: blur(4px);
   backdrop-filter: blur(4px);
@@ -98,6 +98,7 @@ const Backdrop = styled.div`
 
 const Content = styled.div`
   position: relative;
+  margin: auto;
 
   &:focus {
     outline: none;

@@ -12,7 +12,7 @@ export default function Itemmix() {
   const {
     slots,
     selectedItems,
-    canRecombine,
+    isFull: canRecombine,
     isPickerOpen,
     openPicker,
     closePicker,

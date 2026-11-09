@@ -8,6 +8,7 @@ import {
   type SignupData,
 } from "@/src/features/signup/model/SignupContext";
 import {
+  validateEmail,
   validateNickname,
   validatePassword,
   validateId,
@@ -20,7 +21,7 @@ type Step = (typeof STEPS)[number];
 function isStepDone(step: Step, data: SignupData) {
   switch (step) {
     case "email":
-      return !validateNickname(data.email);
+      return !validateEmail(data.email);
     case "password":
       return !validatePassword(data.password);
     case "nickname":

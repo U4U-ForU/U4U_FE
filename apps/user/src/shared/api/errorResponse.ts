@@ -21,7 +21,7 @@ export function createErrorMessage({
 
     const serverMessage = error.response?.data?.message;
 
-    if (preferServerMessage && serverMessage === "string") {
+    if (preferServerMessage && typeof serverMessage === "string") {
       return serverMessage;
     }
 

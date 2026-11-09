@@ -1,10 +1,9 @@
 "use client";
 
-import styled from "@emotion/styled";
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 import AuthFormLayout from "@/src/features/signup/ui/AuthFormLayout";
-import Input from "@/src/features/signup/ui/Input";
+import PasswordField from "@/src/features/signup/ui/PasswordField";
 import Requirement from "@/src/features/signup/ui/Requirement";
 import {
   validatePassword,
@@ -20,7 +19,7 @@ export default function PasswordPage() {
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   const errorMessage = (() => {
-    const isMismatched = passwordConfirm !== "" && password !== passwordConfirm;
+    const isMismatched = !!passwordConfirm && password !== passwordConfirm;
 
     if (isMismatched) return validatePasswordConfirm(password, passwordConfirm);
 
@@ -35,15 +34,15 @@ export default function PasswordPage() {
   const handlePasswordChange = (value: string) => {
     setPassword(value);
 
-    if (data.password !== "") save({ password: "" });
+    if (data.password) save({ password: "" });
   };
 
   const handleNext = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setIsSubmitted(true);
 
-    if (validatePassword(password) !== "") return;
-    if (validatePasswordConfirm(password, passwordConfirm) !== "") return;
+    if (validatePassword(password)) return;
+    if (validatePasswordConfirm(password, passwordConfirm)) return;
 
     save({ password });
     router.push("/signup/nickname");
@@ -57,31 +56,13 @@ export default function PasswordPage() {
       question="회원가입"
       onSubmit={handleNext}
     >
-      <Inputs>
-        <Input
-          label="비밀번호"
-          type="password"
-          placeholder="비밀번호를 입력해주세요."
-          autoComplete="new-password"
-          value={password}
-          onChange={handlePasswordChange}
-        />
-        <Input
-          label="비밀번호 확인"
-          type="password"
-          placeholder="비밀번호를 다시 입력해주세요."
-          autoComplete="new-password"
-          value={passwordConfirm}
-          onChange={setPasswordConfirm}
-        />
-      </Inputs>
+      <PasswordField
+        password={password}
+        passwordConfirm={passwordConfirm}
+        onPasswordChange={handlePasswordChange}
+        onPasswordConfirmChange={setPasswordConfirm}
+      />
       <Requirement informationText="영문, 숫자, 특수문자를 포함하여 8~20자 이내" />
     </AuthFormLayout>
   );
 }
-
-const Inputs = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-`;

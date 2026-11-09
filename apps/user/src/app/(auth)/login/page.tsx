@@ -3,14 +3,17 @@
 import { useState, type FormEvent } from "react";
 import AuthFormLayout from "@/src/features/signup/ui/AuthFormLayout";
 import { validateId, validatePassword } from "@/src/shared/lib/validate";
-import { useLoginSubmit } from "@/src/features/login/model/useLoginSubmit";
+import {
+  getLoginErrorMessage,
+  useLogin,
+} from "@/src/features/login/model/useLogin";
 import LoginField from "@/src/features/login/ui/LoginField";
 
 export default function Login() {
   const [loginId, setLoginId] = useState("");
   const [password, setPassword] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const { submit, isSubmitting, error, resetError } = useLoginSubmit();
+  const { mutate: login, isPending, error, reset } = useLogin();
 
   let errorMessage = "";
 
@@ -18,18 +21,18 @@ export default function Login() {
     errorMessage = validateId(loginId) || validatePassword(password);
   }
 
-  if (!errorMessage) {
-    errorMessage = error;
+  if (!errorMessage && error) {
+    errorMessage = getLoginErrorMessage(error);
   }
 
   const handleLoginIdChange = (value: string) => {
     setLoginId(value);
-    if (error) resetError();
+    if (error) reset();
   };
 
   const handlePasswordChange = (value: string) => {
     setPassword(value);
-    if (error) resetError();
+    if (error) reset();
   };
 
   const handleLogin = (event: FormEvent<HTMLFormElement>) => {
@@ -39,7 +42,7 @@ export default function Login() {
     if (validateId(loginId)) return;
     if (validatePassword(password)) return;
 
-    submit({ loginId, password });
+    login({ loginId, password });
   };
 
   return (
@@ -47,8 +50,8 @@ export default function Login() {
       titles={["로그인"]}
       titleAlign="center"
       errorMessage={errorMessage}
-      buttonText={isSubmitting ? "로그인 중" : "로그인"}
-      buttonDisabled={isSubmitting}
+      buttonText={isPending ? "로그인 중" : "로그인"}
+      buttonDisabled={isPending}
       question="로그인"
       onSubmit={handleLogin}
     >

@@ -17,15 +17,14 @@ export default function EmailPage() {
 
   const handleChange = (value: string) => {
     setEmail(value);
-
-    if (data.email !== "") save({ email: "" });
+    if (data.email) save({ email: "" });
   };
 
   const handleNext = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setIsSubmitted(true);
 
-    if (validateEmail(email) !== "") return;
+    if (validateEmail(email)) return;
 
     save({ email });
     router.push("/signup/password");

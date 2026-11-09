@@ -20,14 +20,14 @@ export default function NicknamePage() {
   const handleChange = (value: string) => {
     setNickname(value);
 
-    if (data.nickname !== "") save({ nickname: "" });
+    if (data.nickname) save({ nickname: "" });
   };
 
   const handleNext = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setIsSubmitted(true);
 
-    if (validateNickname(nickname) !== "") return;
+    if (validateNickname(nickname)) return;
 
     save({ nickname });
     router.push("/signup/id");

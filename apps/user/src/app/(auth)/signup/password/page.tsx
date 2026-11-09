@@ -3,13 +3,9 @@
 import styled from "@emotion/styled";
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
-import Button from "@/src/shared/ui/Button";
-import BottomArea from "@/src/features/signup/ui/BottomArea";
-import ErrorMessage from "@/src/features/signup/ui/ErrorMessage";
+import AuthFormLayout from "@/src/features/signup/ui/AuthFormLayout";
 import Input from "@/src/features/signup/ui/Input";
-import Question from "@/src/features/signup/ui/Question";
 import Requirement from "@/src/features/signup/ui/Requirement";
-import Title from "@/src/features/signup/ui/Title";
 import {
   validatePassword,
   validatePasswordConfirm,
@@ -54,59 +50,35 @@ export default function PasswordPage() {
   };
 
   return (
-    <Wrapper onSubmit={handleNext}>
-      <Title text="비밀번호를" />
-      <Title text="입력해주세요" />
-      <Field>
-        <Inputs>
-          <Input
-            label="비밀번호"
-            type="password"
-            placeholder="비밀번호를 입력해주세요."
-            autoComplete="new-password"
-            value={password}
-            onChange={handlePasswordChange}
-          />
-          <Input
-            label="비밀번호 확인"
-            type="password"
-            placeholder="비밀번호를 다시 입력해주세요."
-            autoComplete="new-password"
-            value={passwordConfirm}
-            onChange={setPasswordConfirm}
-          />
-        </Inputs>
-        <Requirement informationText="영문, 숫자, 특수문자를 포함하여 8~20자 이내" />
-        <ErrorMessage text={errorMessage} />
-      </Field>
-      <BottomArea>
-        <Button
-          type="submit"
-          text="다음"
-          fontColor="#FFF"
-          backgroundColor="#FFD3D3"
-          borderColor="#DFAFAF"
-          boxShadow={false}
-          fontBorderColor="#C57373"
+    <AuthFormLayout
+      titles={["비밀번호를", "입력해주세요"]}
+      errorMessage={errorMessage}
+      buttonText="다음"
+      question="회원가입"
+      onSubmit={handleNext}
+    >
+      <Inputs>
+        <Input
+          label="비밀번호"
+          type="password"
+          placeholder="비밀번호를 입력해주세요."
+          autoComplete="new-password"
+          value={password}
+          onChange={handlePasswordChange}
         />
-        <Question text="회원가입" />
-      </BottomArea>
-    </Wrapper>
+        <Input
+          label="비밀번호 확인"
+          type="password"
+          placeholder="비밀번호를 다시 입력해주세요."
+          autoComplete="new-password"
+          value={passwordConfirm}
+          onChange={setPasswordConfirm}
+        />
+      </Inputs>
+      <Requirement informationText="영문, 숫자, 특수문자를 포함하여 8~20자 이내" />
+    </AuthFormLayout>
   );
 }
-
-const Wrapper = styled.form`
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-`;
-
-const Field = styled.div`
-  display: flex;
-  margin-top: 36px;
-  flex-direction: column;
-  gap: 8px;
-`;
 
 const Inputs = styled.div`
   display: flex;

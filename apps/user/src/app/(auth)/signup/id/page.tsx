@@ -1,98 +1,100 @@
 "use client";
 
 import styled from "@emotion/styled";
+import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
-import Button from "@/src/shared/ui/Button";
-import BottomArea from "@/src/features/signup/ui/BottomArea";
-import ErrorMessage from "@/src/features/signup/ui/ErrorMessage";
+import AuthFormLayout from "@/src/features/signup/ui/AuthFormLayout";
 import Input from "@/src/features/signup/ui/Input";
-import Question from "@/src/features/signup/ui/Question";
 import Requirement from "@/src/features/signup/ui/Requirement";
-import Title from "@/src/features/signup/ui/Title";
 import { validateId } from "@/src/shared/lib/validate";
-import { useSignupSubmit } from "@/src/features/signup/model/useSignupSubmit";
+import {
+  getSignupErrorMessage,
+  useSignup,
+} from "@/src/features/signup/model/useSignup";
+import { saveTokens } from "@/src/shared/lib/tokenStorage";
 import SuccessModal from "@/src/features/signup/ui/SuccessModal";
 import Modal from "@/src/shared/ui/modal/ModalParent";
 
 export default function IdPage() {
   const [id, setId] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const { submit, isSubmitting, error, resetError, isSuccess, confirmSuccess } =
-    useSignupSubmit();
+  const router = useRouter();
+  const {
+    mutate: signup,
+    data: tokens,
+    isPending,
+    isSuccess,
+    error,
+    reset,
+  } = useSignup();
 
-  const errorMessage = (isSubmitted ? validateId(id) : "") || error;
+  let errorMessage = "";
+
+  if (isSubmitted) {
+    errorMessage = validateId(id);
+  }
+
+  if (!errorMessage && error) {
+    errorMessage = getSignupErrorMessage(error);
+  }
 
   const handleChange = (value: string) => {
     setId(value);
 
-    if (error !== "") resetError();
+    if (error) reset();
   };
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setIsSubmitted(true);
 
-    if (validateId(id) !== "") return;
+    if (validateId(id)) return;
 
-    submit(id);
+    signup(id);
+  };
+
+  const handleConfirm = () => {
+    if (!tokens) {
+      router.replace("/login");
+      return;
+    }
+
+    saveTokens(tokens);
+    router.replace("/main");
   };
 
   return (
     <>
       <Modal isOpen={isSuccess}>
-        <SuccessModal onConfirm={confirmSuccess} />
+        <SuccessModal onConfirm={handleConfirm} />
       </Modal>
 
-      <Wrapper onSubmit={handleSubmit}>
-        <Title text="로그인 시 사용될" />
-        <Title text="아이디를 입력해주세요" />
-        <Field>
-          <Input
-            label="아이디"
-            placeholder="아이디를 입력해주세요"
-            autoComplete="username"
-            value={id}
-            onChange={handleChange}
-          />
-          <Requirements>
-            <Requirement informationText="영문, 숫자 조합 4~20자 이내" />
-            <Requirement informationText="가입 후에는 아이디를 변경할 수 없어요" />
-          </Requirements>
-          <ErrorMessage text={errorMessage} />
-        </Field>
-        <BottomArea>
-          <Button
-            type="submit"
-            text={isSubmitting ? "가입 중" : "가입하기"}
-            fontColor="#FFF"
-            backgroundColor="#FFD3D3"
-            borderColor="#DFAFAF"
-            boxShadow={false}
-            fontBorderColor="#C57373"
-            disabled={isSubmitting}
-          />
-          <Question text="회원가입" />
-        </BottomArea>
-      </Wrapper>
+      <AuthFormLayout
+        titles={["로그인 시 사용될", "아이디를 입력해주세요"]}
+        errorMessage={errorMessage}
+        buttonText={isPending ? "가입 중" : "가입하기"}
+        buttonDisabled={isPending}
+        question="회원가입"
+        onSubmit={handleSubmit}
+      >
+        <Input
+          label="아이디"
+          placeholder="아이디를 입력해주세요"
+          autoComplete="username"
+          value={id}
+          onChange={handleChange}
+        />
+        <Requirements>
+          <Requirement informationText="영문, 숫자 조합 4~20자 이내" />
+          <Requirement informationText="가입 후에는 아이디를 변경할 수 없어요" />
+        </Requirements>
+      </AuthFormLayout>
     </>
   );
 }
-
-const Wrapper = styled.form`
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-`;
 
 const Requirements = styled.div`
   display: flex;
   flex-direction: column;
   gap: 2px;
-`;
-
-const Field = styled.div`
-  display: flex;
-  margin-top: 36px;
-  flex-direction: column;
-  gap: 8px;
 `;

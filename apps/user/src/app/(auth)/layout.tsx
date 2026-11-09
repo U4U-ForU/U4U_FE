@@ -1,27 +1,27 @@
 "use client";
 
+import { Global, css } from "@emotion/react";
 import styled from "@emotion/styled";
-import { useEffect, type ReactNode } from "react";
+import type { ReactNode } from "react";
 import { BOTTOM_AREA_HEIGHT } from "@/src/features/signup/ui/BottomArea";
 import AuthGuard from "@/src/shared/ui/AuthGuard";
 
 export default function AuthLayout({ children }: { children: ReactNode }) {
-  useEffect(() => {
-    const previousOverflow = document.body.style.overflow;
-
-    document.body.style.overflow = "hidden";
-
-    return () => {
-      document.body.style.overflow = previousOverflow;
-    };
-  }, []);
-
   return (
-    <AuthGuard requireAuth={false} redirectTo="/main">
-      <Wrapper>{children}</Wrapper>
-    </AuthGuard>
+    <>
+      <Global styles={lockScroll} />
+      <AuthGuard requireAuth={false} redirectTo="/main">
+        <Wrapper>{children}</Wrapper>
+      </AuthGuard>
+    </>
   );
 }
+
+const lockScroll = css`
+  body {
+    overflow: hidden;
+  }
+`;
 
 const Wrapper = styled.div`
   position: relative;

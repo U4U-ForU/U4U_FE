@@ -1,98 +1,66 @@
 "use client";
 
-import styled from "@emotion/styled";
 import { useState, type FormEvent } from "react";
-import Button from "@/src/shared/ui/Button";
-import BottomArea from "@/src/features/signup/ui/BottomArea";
-import ErrorMessage from "@/src/features/signup/ui/ErrorMessage";
-import Input from "@/src/features/signup/ui/Input";
-import Question from "@/src/features/signup/ui/Question";
-import Title from "@/src/features/signup/ui/Title";
+import AuthFormLayout from "@/src/features/signup/ui/AuthFormLayout";
 import { validateId, validatePassword } from "@/src/shared/lib/validate";
-import { useLoginSubmit } from "@/src/features/login/model/useLoginSubmit";
+import {
+  getLoginErrorMessage,
+  useLogin,
+} from "@/src/features/login/model/useLogin";
+import LoginField from "@/src/features/login/ui/LoginField";
 
 export default function Login() {
   const [loginId, setLoginId] = useState("");
   const [password, setPassword] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const { submit, isSubmitting, error, resetError } = useLoginSubmit();
+  const { mutate: login, isPending, error, reset } = useLogin();
 
-  const errorMessage =
-    (isSubmitted ? validateId(loginId) || validatePassword(password) : "") ||
-    error;
+  let errorMessage = "";
 
-  const handleChange = (setValue: (value: string) => void) => {
-    return (value: string) => {
-      setValue(value);
+  if (isSubmitted) {
+    errorMessage = validateId(loginId) || validatePassword(password);
+  }
 
-      if (error !== "") resetError();
-    };
+  if (!errorMessage && error) {
+    errorMessage = getLoginErrorMessage(error);
+  }
+
+  const handleLoginIdChange = (value: string) => {
+    setLoginId(value);
+    if (error) reset();
+  };
+
+  const handlePasswordChange = (value: string) => {
+    setPassword(value);
+    if (error) reset();
   };
 
   const handleLogin = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setIsSubmitted(true);
 
-    if (validateId(loginId) !== "") return;
-    if (validatePassword(password) !== "") return;
+    if (validateId(loginId)) return;
+    if (validatePassword(password)) return;
 
-    submit({ loginId, password });
+    login({ loginId, password });
   };
 
   return (
-    <Wrapper onSubmit={handleLogin}>
-      <TitleWrapper>
-        <Title text="로그인" />
-      </TitleWrapper>
-      <Field>
-        <Input
-          label="아이디"
-          placeholder="아이디를 입력해주세요."
-          autoComplete="username"
-          value={loginId}
-          onChange={handleChange(setLoginId)}
-        />
-        <Input
-          label="비밀번호"
-          placeholder="비밀번호를 입력해주세요."
-          type="password"
-          autoComplete="current-password"
-          value={password}
-          onChange={handleChange(setPassword)}
-        />
-        <ErrorMessage text={errorMessage} />
-      </Field>
-      <BottomArea>
-        <Button
-          type="submit"
-          text={isSubmitting ? "로그인 중" : "로그인"}
-          fontColor="#FFF"
-          backgroundColor="#FFD3D3"
-          borderColor="#DFAFAF"
-          boxShadow={false}
-          fontBorderColor="#C57373"
-          disabled={isSubmitting}
-        />
-        <Question text="로그인" />
-      </BottomArea>
-    </Wrapper>
+    <AuthFormLayout
+      titles={["로그인"]}
+      titleAlign="center"
+      errorMessage={errorMessage}
+      buttonText={isPending ? "로그인 중" : "로그인"}
+      buttonDisabled={isPending}
+      question="로그인"
+      onSubmit={handleLogin}
+    >
+      <LoginField
+        loginId={loginId}
+        password={password}
+        onLoginIdChange={handleLoginIdChange}
+        onPasswordChange={handlePasswordChange}
+      />
+    </AuthFormLayout>
   );
 }
-
-const Wrapper = styled.form`
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-`;
-
-const Field = styled.div`
-  display: flex;
-  margin-top: 36px;
-  flex-direction: column;
-  gap: 8px;
-`;
-
-const TitleWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-`;

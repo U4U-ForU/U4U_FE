@@ -11,6 +11,7 @@ import {
   validateEmail,
   validateNickname,
   validatePassword,
+  validateId,
 } from "@/src/shared/lib/validate";
 
 const STEPS = ["email", "password", "nickname", "id"] as const;
@@ -20,13 +21,13 @@ type Step = (typeof STEPS)[number];
 function isStepDone(step: Step, data: SignupData) {
   switch (step) {
     case "email":
-      return validateEmail(data.email) === "";
+      return !validateEmail(data.email);
     case "password":
-      return validatePassword(data.password) === "";
+      return !validatePassword(data.password);
     case "nickname":
-      return validateNickname(data.nickname) === "";
+      return !validateNickname(data.nickname);
     case "id":
-      return true;
+      return !validateId(data.id);
   }
 }
 
@@ -37,11 +38,17 @@ function StepGuard({ children }: { children: ReactNode }) {
 
   const currentStep = STEPS.find((step) => pathname === `/signup/${step}`);
 
-  const unfinishedStep = currentStep
-    ? STEPS.slice(0, STEPS.indexOf(currentStep)).find(
-        (step) => !isStepDone(step, data),
-      )
-    : undefined;
+  let unfinishedStep: Step | undefined;
+
+  if (currentStep) {
+    const currentIndex = STEPS.indexOf(currentStep);
+    const previousSteps = STEPS.slice(0, currentIndex);
+
+    unfinishedStep = previousSteps.find((step) => {
+      const isDone = isStepDone(step, data);
+      return !isDone;
+    });
+  }
 
   useEffect(() => {
     if (!unfinishedStep) return;

@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import "./global.css";
+import Providers from "./providers";
 
 export const metadata: Metadata = {
   title: "U4U",
@@ -35,7 +36,9 @@ export default function RootLayout({
     <html lang="ko">
       <body className="antialiased">
         <div className="app-background" />
-        <main className="app-content">{children}</main>
+        <main className="app-content">
+          <Providers>{children}</Providers>
+        </main>
       </body>
     </html>
   );

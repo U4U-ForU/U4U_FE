@@ -29,6 +29,7 @@ export default function SelectBox({
 
   return (
     <Block
+      type="button"
       $colors={colors}
       $width={width ?? (modalType ? 263 : 170)}
       onClick={onClick}
@@ -38,7 +39,7 @@ export default function SelectBox({
   );
 }
 
-const Block = styled.div<{
+const Block = styled.button<{
   $colors: { border: string; background: string };
   $width: number;
 }>`

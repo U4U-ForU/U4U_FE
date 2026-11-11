@@ -32,7 +32,7 @@ export default function FilteringBlockList({
       {FILTERS.map((name) => (
         <FilteringBlock
           key={name}
-          title={name}
+          title={name === "심사 중" ? "승인 전" : name}
           count={getCount(name)}
           active={active === name}
           onClick={() => onChange(name)}

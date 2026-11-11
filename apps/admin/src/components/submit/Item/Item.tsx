@@ -10,7 +10,7 @@ interface ItemProps {
 
 export default function Item({ name, status, onClick }: ItemProps) {
   return (
-    <Wrapper onClick={onClick}>
+    <Wrapper type="button" onClick={onClick}>
       <Badge text={status} />
       <Image
         src={"/tempImg/itemImg/itemImg.svg"}
@@ -23,7 +23,7 @@ export default function Item({ name, status, onClick }: ItemProps) {
   );
 }
 
-const Wrapper = styled.div`
+const Wrapper = styled.button`
   display: flex;
   width: 282px;
   padding: 0;

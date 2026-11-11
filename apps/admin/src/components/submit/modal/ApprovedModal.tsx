@@ -6,6 +6,7 @@ import Image from "next/image";
 import Badge from "../Item/Badge";
 import type { Status } from "../Item/ItemType";
 import ModalLayout from "./ModalLayout";
+import SubText from "./modalItem/SubText";
 
 interface ApprovedModalProps {
   status: Status;
@@ -21,6 +22,7 @@ export default function ApprovedModal({
   return (
     <ModalLayout isOpen={modalIsOpen} onClose={() => setModalIsOpen(false)}>
       <Top>
+        <SubText text="아이템 제출 심사완료 2026.10.09" />
         <Image
           src={"/icon/closeButton/icon/UI_actions/Vector.svg"}
           width={12}
@@ -63,7 +65,7 @@ const BottomRight = styled.div`
 const Top = styled.div`
   width: 100%;
   display: flex;
-  justify-content: end;
+  justify-content: space-between;
 `;
 
 const Bottom = styled.div`

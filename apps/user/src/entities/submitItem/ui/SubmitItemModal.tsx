@@ -24,7 +24,7 @@ export default function SubmitItemModal({
   img,
   onClose,
 }: SubmitItemModalProps) {
-  const canCancel = status === "미승인";
+  const canCancel = status === "승인 전";
 
   return (
     <Wrapper>

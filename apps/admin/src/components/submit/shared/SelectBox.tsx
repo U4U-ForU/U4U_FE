@@ -1,13 +1,16 @@
 import styled from "@emotion/styled";
 
-type SelectBoxProps =
+type SelectBoxProps = { onClick?: () => void; width?: number } & (
   | { type: keyof typeof TYPE_COLORS; modalType?: never }
-  | { modalType: keyof typeof MODAL_TYPE_COLORS; type?: never };
+  | { modalType: keyof typeof MODAL_TYPE_COLORS; type?: never }
+);
 
-const TYPE_COLORS = {
+export const TYPE_COLORS = {
   거절: { border: "#A06D6D", background: "#E26C7A" },
   승인: { border: "#478769", background: "#50AB80" },
   "조합 등록": { border: "#5C87A0", background: "#69ADD4" },
+  등록: { border: "#5C87A0", background: "#69ADD4" },
+  취소: { border: "#D0CCCC", background: "#F9F8F8" },
 };
 
 const MODAL_TYPE_COLORS = {
@@ -15,11 +18,20 @@ const MODAL_TYPE_COLORS = {
   삭제: { border: "#A06D6D", background: "#E26C7A" },
 };
 
-export default function SelectBox({ type, modalType }: SelectBoxProps) {
+export default function SelectBox({
+  type,
+  modalType,
+  onClick,
+  width,
+}: SelectBoxProps) {
   const colors = modalType ? MODAL_TYPE_COLORS[modalType] : TYPE_COLORS[type];
 
   return (
-    <Block $colors={colors} $isModalType={!!modalType}>
+    <Block
+      $colors={colors}
+      $width={width ?? (modalType ? 263 : 170)}
+      onClick={onClick}
+    >
       {modalType ?? type}
     </Block>
   );
@@ -27,11 +39,11 @@ export default function SelectBox({ type, modalType }: SelectBoxProps) {
 
 const Block = styled.div<{
   $colors: { border: string; background: string };
-  $isModalType: boolean;
+  $width: number;
 }>`
   display: flex;
   cursor: pointer;
-  width: ${({ $isModalType }) => ($isModalType ? "263px" : "170px")};
+  width: ${({ $width }) => $width}px;
   height: 64px;
   padding: var(--space-12, 12px) var(--space-24, 24px);
   justify-content: center;

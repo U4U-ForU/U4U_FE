@@ -4,15 +4,27 @@ interface BadgeProps {
   text: string;
 }
 
+const BADGE_COLORS: Record<string, string> = {
+  "심사 중": "#b3aeaf",
+  "승인 완료": "#50ab80",
+  "조합 처리 완료": "#69add4",
+  거절됨: "#e26c7a",
+  취소됨: "#8e8889",
+};
+
 export default function Badge({ text }: BadgeProps) {
-  return <BadgeWrapper>{text}</BadgeWrapper>;
+  return (
+    <BadgeWrapper $color={BADGE_COLORS[text] ?? "#b3aeaf"}>
+      {text === "심사 중" ? "승인 전" : text}
+    </BadgeWrapper>
+  );
 }
 
-const BadgeWrapper = styled.div`
+const BadgeWrapper = styled.div<{ $color: string }>`
   color: white;
   border-radius: var(--radius-full, 999999px);
   border: 1px solid var(--color-gray-0, #fff);
-  background: var(--gray-500, #b3aeaf);
+  background: ${({ $color }) => $color};
   position: absolute;
   left: 31px;
   top: 15px;

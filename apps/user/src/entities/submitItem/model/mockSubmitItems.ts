@@ -3,7 +3,7 @@ import type { SubmittedItem } from "./types";
 export const MOCK_SUBMIT_ITEMS: SubmittedItem[] = [
   {
     id: 1,
-    status: "미승인",
+    status: "승인 전",
     itemName: "앙녕핫세요",
     itemDescription:
       "푹신한 핑크빛 젤리가 콕 박힌 귀여운 냥이 장갑! 착용하면 냥냥 펀치의 파워가 업!",
@@ -35,7 +35,7 @@ export const MOCK_SUBMIT_ITEMS: SubmittedItem[] = [
   },
   {
     id: 5,
-    status: "미승인",
+    status: "승인 전",
     itemName: "구름사탕",
     itemDescription: "한 입 베어 물면 입안에서 폭신하게 흩어지는 구름 사탕.",
     submittedAt: "2025.09.29",

@@ -4,18 +4,26 @@ import styled from "@emotion/styled";
 import SelectBox from "../shared/SelectBox";
 import SubText from "./modalItem/SubText";
 import Image from "next/image";
+import Badge from "../Item/Badge";
+import type { Status } from "../Item/ItemType";
 import ModalLayout from "./ModalLayout";
 import InfoText from "./modalItem/InfoText";
+import CheckModal, { type CheckType } from "./CheckModal";
+import { useState } from "react";
 
 interface PendingModalProps {
+  status: Status;
   modalIsOpen: boolean;
   setModalIsOpen: (isOpen: boolean) => void;
 }
 
 export default function PendingModal({
+  status,
   modalIsOpen,
   setModalIsOpen,
 }: PendingModalProps) {
+  const [checkType, setCheckType] = useState<CheckType | null>(null);
+
   return (
     <ModalLayout isOpen={modalIsOpen} onClose={() => setModalIsOpen(false)}>
       <Top>
@@ -30,13 +38,16 @@ export default function PendingModal({
       </Top>
 
       <Bottom>
-        <Image
-          src={"/tempImg/itemImg/itemImg.svg"}
-          width={400}
-          height={400}
-          alt="아이템 이미지"
-          style={{ cursor: "pointer" }}
-        />
+        <ImageBox>
+          <Badge text={status} />
+          <Image
+            src={"/tempImg/itemImg/itemImg.svg"}
+            width={400}
+            height={400}
+            alt="아이템 이미지"
+            style={{ cursor: "pointer" }}
+          />
+        </ImageBox>
 
         <BottomRight>
           <div>
@@ -46,12 +57,23 @@ export default function PendingModal({
           </div>
 
           <SelectBoxList>
-            <SelectBox type="거절" />
-            <SelectBox type="승인" />
-            <SelectBox type="조합 등록" />
+            <SelectBox type="거절" onClick={() => setCheckType("거절")} />
+            <SelectBox type="승인" onClick={() => setCheckType("승인")} />
+            <SelectBox type="조합 등록" onClick={() => setCheckType("등록")} />
           </SelectBoxList>
         </BottomRight>
       </Bottom>
+
+      {checkType && (
+        <CheckModal
+          type={checkType}
+          onCancel={() => setCheckType(null)}
+          onConfirm={() => {
+            setCheckType(null);
+            setModalIsOpen(false);
+          }}
+        />
+      )}
     </ModalLayout>
   );
 }
@@ -106,4 +128,8 @@ const ItemText = styled.div`
   align-self: stretch;
   border-radius: var(--radius-md, 12px);
   background: var(--gray-50, #f9f8f8);
+`;
+
+const ImageBox = styled.div`
+  position: relative;
 `;

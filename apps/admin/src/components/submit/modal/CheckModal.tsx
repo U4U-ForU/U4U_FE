@@ -2,6 +2,8 @@ import styled from "@emotion/styled";
 import SubText from "./modalItem/SubText";
 import SelectBox from "../shared/SelectBox";
 import { TYPE_COLORS } from "../shared/SelectBox";
+import { useId } from "react";
+import { useDialogFocus } from "../shared/useDialogFocus";
 
 export type CheckType = "거절" | "승인" | "등록" | "삭제";
 
@@ -16,6 +18,9 @@ export default function CheckModal({
   onCancel,
   onConfirm,
 }: CheckModalProps) {
+  const titleId = useId();
+  const { ref, handleKeyDown } = useDialogFocus(onCancel);
+
   return (
     <Backdrop
       onClick={(event) => {
@@ -23,9 +28,17 @@ export default function CheckModal({
         onCancel();
       }}
     >
-      <Wrapper onClick={(event) => event.stopPropagation()}>
+      <Wrapper
+        ref={ref}
+        role="alertdialog"
+        aria-modal="true"
+        aria-labelledby={titleId}
+        tabIndex={-1}
+        onKeyDown={handleKeyDown}
+        onClick={(event) => event.stopPropagation()}
+      >
         <Top>
-          <Title $colors={TYPE_COLORS[type]}>
+          <Title id={titleId} $colors={TYPE_COLORS[type]}>
             정말 이 아이템을
             <br />
             {type}하시겠습니까?

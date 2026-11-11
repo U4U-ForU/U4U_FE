@@ -1,21 +1,36 @@
 "use client";
 
 import styled from "@emotion/styled";
-import { useEffect, type ReactNode } from "react";
+import type { ReactNode } from "react";
+import { useDialogFocus } from "../shared/useDialogFocus";
 
 interface ModalLayoutProps {
   isOpen: boolean;
   onClose: () => void;
+  labelledBy: string;
   children: ReactNode;
 }
 
 export default function ModalLayout({
   onClose,
+  labelledBy,
   children,
 }: ModalLayoutProps) {
+  const { ref, handleKeyDown } = useDialogFocus(onClose);
+
   return (
     <Backdrop onClick={onClose}>
-      <Wrapper onClick={(event) => event.stopPropagation()}>{children}</Wrapper>
+      <Wrapper
+        ref={ref}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={labelledBy}
+        tabIndex={-1}
+        onKeyDown={handleKeyDown}
+        onClick={(event) => event.stopPropagation()}
+      >
+        {children}
+      </Wrapper>
     </Backdrop>
   );
 }

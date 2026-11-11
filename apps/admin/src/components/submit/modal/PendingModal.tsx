@@ -7,9 +7,10 @@ import Image from "next/image";
 import Badge from "../Item/Badge";
 import type { Status } from "../Item/ItemType";
 import ModalLayout from "./ModalLayout";
+import CloseButton from "../shared/CloseButton";
 import InfoText from "./modalItem/InfoText";
 import CheckModal, { type CheckType } from "./CheckModal";
-import { useState } from "react";
+import { useId, useState } from "react";
 
 interface PendingModalProps {
   status: Status;
@@ -22,19 +23,18 @@ export default function PendingModal({
   modalIsOpen,
   setModalIsOpen,
 }: PendingModalProps) {
+  const titleId = useId();
   const [checkType, setCheckType] = useState<CheckType | null>(null);
 
   return (
-    <ModalLayout isOpen={modalIsOpen} onClose={() => setModalIsOpen(false)}>
+    <ModalLayout
+      isOpen={modalIsOpen}
+      onClose={() => setModalIsOpen(false)}
+      labelledBy={titleId}
+    >
       <Top>
         <SubText text="아이템 제출 심사중" />
-        <Image
-          src={"/icon/closeButton/icon/UI_actions/Vector.svg"}
-          width={12}
-          height={12}
-          alt="닫기 버튼"
-          onClick={() => setModalIsOpen(false)}
-        />
+        <CloseButton onClick={() => setModalIsOpen(false)} />
       </Top>
 
       <Bottom>
@@ -51,7 +51,9 @@ export default function PendingModal({
 
         <BottomRight>
           <div>
-            <ItemName style={{ marginBottom: "12px" }}>아이템 이름</ItemName>
+            <ItemName id={titleId} style={{ marginBottom: "12px" }}>
+              아이템 이름
+            </ItemName>
             <ItemText>아이템 설명</ItemText>
             <InfoText date="2026.11.11" userName="maremare" />
           </div>

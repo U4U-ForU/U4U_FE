@@ -3,12 +3,13 @@ import Image from "next/image";
 import Badge from "../Item/Badge";
 import type { Status } from "../Item/ItemType";
 import ModalLayout from "./ModalLayout";
+import CloseButton from "../shared/CloseButton";
 import SubText from "./modalItem/SubText";
 import RecombItem from "./modalItem/RecombItem";
 import SelectBox from "../shared/SelectBox";
 import InfoText from "./modalItem/InfoText";
 import CheckModal from "./CheckModal";
-import { useState } from "react";
+import { useId, useState } from "react";
 
 interface RecombModalProps {
   status: Status;
@@ -21,19 +22,18 @@ export default function RecombModal({
   modalIsOpen,
   setModalIsOpen,
 }: RecombModalProps) {
+  const titleId = useId();
   const [isDeleteCheckOpen, setIsDeleteCheckOpen] = useState(false);
 
   return (
-    <ModalLayout isOpen={modalIsOpen} onClose={() => setModalIsOpen(false)}>
+    <ModalLayout
+      isOpen={modalIsOpen}
+      onClose={() => setModalIsOpen(false)}
+      labelledBy={titleId}
+    >
       <Top>
         <SubText text="아이템 제출 심사완료 2026.10.09" />
-        <Image
-          src={"/icon/closeButton/icon/UI_actions/Vector.svg"}
-          width={12}
-          height={12}
-          alt="닫기 버튼"
-          onClick={() => setModalIsOpen(false)}
-        />
+        <CloseButton onClick={() => setModalIsOpen(false)} />
       </Top>
 
       <Bottom>
@@ -50,7 +50,9 @@ export default function RecombModal({
 
         <BottomRight>
           <BottomTop>
-            <ItemName style={{ marginBottom: "12px" }}>아이템 이름</ItemName>
+            <ItemName id={titleId} style={{ marginBottom: "12px" }}>
+              아이템 이름
+            </ItemName>
             <ImageWrapper>
               <RecombItem text="아이템" />
               <RecombItem text="아이템ㄷㄱㄷㄱㄷㄱㄷㄱㄷㄱㄷㄱ" />

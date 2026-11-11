@@ -5,11 +5,12 @@ import Badge from "./Badge";
 interface ItemProps {
   name: string;
   status: string;
+  onClick: () => void;
 }
 
-export default function Item({ name, status }: ItemProps) {
+export default function Item({ name, status, onClick }: ItemProps) {
   return (
-    <Wrapper>
+    <Wrapper onClick={onClick}>
       <Badge text={status} />
       <Image
         src={"/tempImg/itemImg/itemImg.svg"}
@@ -25,6 +26,11 @@ export default function Item({ name, status }: ItemProps) {
 const Wrapper = styled.div`
   display: flex;
   width: 282px;
+  padding: 0;
+  border: none;
+  background: none;
+  font: inherit;
+  cursor: pointer;
   flex-direction: column;
   gap: 12px;
   align-items: center;

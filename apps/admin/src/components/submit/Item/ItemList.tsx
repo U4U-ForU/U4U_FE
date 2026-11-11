@@ -4,13 +4,19 @@ import type { ItemMockType } from "./ItemType";
 
 interface ItemListProps {
   items: ItemMockType[];
+  onItemClick: (item: ItemMockType) => void;
 }
 
-export default function ItemList({ items }: ItemListProps) {
+export default function ItemList({ items, onItemClick }: ItemListProps) {
   return (
     <Wrapper>
       {items.map((item) => (
-        <Item name={item.title} key={item.id} status={item.status} />
+        <Item
+          key={item.id}
+          name={item.title}
+          status={item.status}
+          onClick={() => onItemClick(item)}
+        />
       ))}
     </Wrapper>
   );

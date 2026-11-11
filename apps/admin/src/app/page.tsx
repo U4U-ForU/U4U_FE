@@ -3,11 +3,7 @@
 import styled from "@emotion/styled";
 
 export default function AdminHome() {
-  return (
-    <Wrapper>
-      <Title>U4U Admin</Title>
-    </Wrapper>
-  );
+  return <Wrapper></Wrapper>;
 }
 
 const Wrapper = styled.main`
@@ -15,9 +11,4 @@ const Wrapper = styled.main`
   min-height: 100dvh;
   justify-content: center;
   align-items: center;
-`;
-
-const Title = styled.h1`
-  font-size: 32px;
-  font-weight: 700;
 `;

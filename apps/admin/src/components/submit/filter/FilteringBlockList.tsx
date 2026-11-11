@@ -1,46 +1,41 @@
 import FilteringBlock from "./FilteringBlock";
 import styled from "@emotion/styled";
-import { useState } from "react";
+import type { ItemMockType } from "../Item/ItemType";
 
-export default function FilteringBlockList() {
-  const [active, setActive] = useState("전체");
+const FILTERS = [
+  "전체",
+  "심사 중",
+  "승인 완료",
+  "조합 처리 완료",
+  "거절됨",
+  "취소됨",
+];
 
-  const LIST = [
-    {
-      name: "전체",
-      count: 193,
-    },
-    {
-      name: "심사 중",
-      count: 64,
-    },
-    {
-      name: "승인 완료",
-      count: 22,
-    },
-    {
-      name: "조합 처리 완료",
-      count: 6,
-    },
-    {
-      name: "거절됨",
-      count: 43,
-    },
-    {
-      name: "취소됨",
-      count: 24,
-    },
-  ];
+interface FilteringBlockListProps {
+  items: ItemMockType[];
+  active: string;
+  onChange: (status: string) => void;
+}
+
+export default function FilteringBlockList({
+  items,
+  active,
+  onChange,
+}: FilteringBlockListProps) {
+  const getCount = (name: string) =>
+    name === "전체"
+      ? items.length
+      : items.filter((item) => item.status === name).length;
 
   return (
     <Wrapper>
-      {LIST.map((item) => (
+      {FILTERS.map((name) => (
         <FilteringBlock
-          key={item.name}
-          title={item.name}
-          count={item.count}
-          active={active === item.name}
-          onClick={() => setActive(item.name)}
+          key={name}
+          title={name}
+          count={getCount(name)}
+          active={active === name}
+          onClick={() => onChange(name)}
         />
       ))}
     </Wrapper>

@@ -1,17 +1,20 @@
 "use client";
 
 import styled from "@emotion/styled";
-import SubText from "./modalItem/SubText";
 import InfoText from "./modalItem/InfoText";
 import Image from "next/image";
+import Badge from "../Item/Badge";
+import type { Status } from "../Item/ItemType";
 import ModalLayout from "./ModalLayout";
 
 interface ApprovedModalProps {
+  status: Status;
   modalIsOpen: boolean;
   setModalIsOpen: (isOpen: boolean) => void;
 }
 
 export default function ApprovedModal({
+  status,
   modalIsOpen,
   setModalIsOpen,
 }: ApprovedModalProps) {
@@ -28,7 +31,8 @@ export default function ApprovedModal({
       </Top>
 
       <Bottom>
-        <div>
+        <ImageBox>
+          <Badge text={status} />
           <Image
             src={"/tempImg/itemImg/itemImg.svg"}
             width={400}
@@ -36,7 +40,7 @@ export default function ApprovedModal({
             alt="아이템 이미지"
             style={{ cursor: "pointer" }}
           />
-        </div>
+        </ImageBox>
 
         <BottomRight>
           <ItemName style={{ marginBottom: "12px" }}>아이템 이름</ItemName>
@@ -67,12 +71,6 @@ const Bottom = styled.div`
   gap: 48px;
 `;
 
-const Info = styled.div`
-  display: flex;
-  justify-content: space-between;
-  margin-top: 6px;
-`;
-
 const ItemName = styled.div`
   color: #000;
   font-family: "Cafe24 Ssurround";
@@ -99,4 +97,8 @@ const ItemText = styled.div`
   font-style: normal;
   font-weight: 400;
   line-height: 150%; /* 24px */
+`;
+
+const ImageBox = styled.div`
+  position: relative;
 `;

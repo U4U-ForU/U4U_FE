@@ -1,16 +1,20 @@
 import styled from "@emotion/styled";
 import Image from "next/image";
+import Badge from "../Item/Badge";
+import type { Status } from "../Item/ItemType";
 import ModalLayout from "./ModalLayout";
 import RecombItem from "./modalItem/RecombItem";
 import SelectBox from "../shared/SelectBox";
 import InfoText from "./modalItem/InfoText";
 
 interface RecombModalProps {
+  status: Status;
   modalIsOpen: boolean;
   setModalIsOpen: (isOpen: boolean) => void;
 }
 
 export default function RecombModal({
+  status,
   modalIsOpen,
   setModalIsOpen,
 }: RecombModalProps) {
@@ -27,7 +31,8 @@ export default function RecombModal({
       </Top>
 
       <Bottom>
-        <div>
+        <ImageBox>
+          <Badge text={status} />
           <Image
             src={"/tempImg/itemImg/itemImg.svg"}
             width={400}
@@ -35,7 +40,7 @@ export default function RecombModal({
             alt="아이템 이미지"
             style={{ cursor: "pointer" }}
           />
-        </div>
+        </ImageBox>
 
         <BottomRight>
           <BottomTop>
@@ -95,12 +100,6 @@ const Bottom = styled.div`
   gap: 48px;
 `;
 
-const Info = styled.div`
-  display: flex;
-  justify-content: space-between;
-  margin-top: 6px;
-`;
-
 const ItemName = styled.div`
   color: #000;
   font-family: "Cafe24 Ssurround";
@@ -127,4 +126,8 @@ const ItemText = styled.div`
   font-style: normal;
   font-weight: 400;
   line-height: 150%; /* 24px */
+`;
+
+const ImageBox = styled.div`
+  position: relative;
 `;

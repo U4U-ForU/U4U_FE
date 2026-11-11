@@ -14,13 +14,18 @@ export default function FilteringBlock({
   active,
 }: FilteringBlockProps) {
   return (
-    <Wrapper onClick={onClick} $active={active}>
+    <Wrapper
+      type="button"
+      aria-pressed={active}
+      onClick={onClick}
+      $active={active}
+    >
       {title} {count}
     </Wrapper>
   );
 }
 
-const Wrapper = styled.div<{ $active: boolean }>`
+const Wrapper = styled.button<{ $active: boolean }>`
   padding: var(--space-8, 8px) var(--space-20, 20px);
   display: flex;
   justify-content: center;

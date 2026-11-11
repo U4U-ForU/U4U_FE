@@ -11,6 +11,7 @@ export const TYPE_COLORS = {
   "조합 등록": { border: "#5C87A0", background: "#69ADD4" },
   등록: { border: "#5C87A0", background: "#69ADD4" },
   취소: { border: "#D0CCCC", background: "#F9F8F8" },
+  삭제: { border: "#A06D6D", background: "#E26C7A" },
 };
 
 const MODAL_TYPE_COLORS = {

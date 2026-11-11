@@ -7,6 +7,8 @@ import SubText from "./modalItem/SubText";
 import RecombItem from "./modalItem/RecombItem";
 import SelectBox from "../shared/SelectBox";
 import InfoText from "./modalItem/InfoText";
+import CheckModal from "./CheckModal";
+import { useState } from "react";
 
 interface RecombModalProps {
   status: Status;
@@ -19,6 +21,8 @@ export default function RecombModal({
   modalIsOpen,
   setModalIsOpen,
 }: RecombModalProps) {
+  const [isDeleteCheckOpen, setIsDeleteCheckOpen] = useState(false);
+
   return (
     <ModalLayout isOpen={modalIsOpen} onClose={() => setModalIsOpen(false)}>
       <Top>
@@ -58,10 +62,24 @@ export default function RecombModal({
 
           <SelectBoxWrapper>
             <SelectBox modalType="수정" />
-            <SelectBox modalType="삭제" />
+            <SelectBox
+              modalType="삭제"
+              onClick={() => setIsDeleteCheckOpen(true)}
+            />
           </SelectBoxWrapper>
         </BottomRight>
       </Bottom>
+
+      {isDeleteCheckOpen && (
+        <CheckModal
+          type="삭제"
+          onCancel={() => setIsDeleteCheckOpen(false)}
+          onConfirm={() => {
+            setIsDeleteCheckOpen(false);
+            setModalIsOpen(false);
+          }}
+        />
+      )}
     </ModalLayout>
   );
 }

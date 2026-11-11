@@ -3,7 +3,7 @@ import SubText from "./modalItem/SubText";
 import SelectBox from "../shared/SelectBox";
 import { TYPE_COLORS } from "../shared/SelectBox";
 
-export type CheckType = "거절" | "승인" | "등록";
+export type CheckType = "거절" | "승인" | "등록" | "삭제";
 
 interface CheckModalProps {
   type: CheckType;

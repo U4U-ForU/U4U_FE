@@ -11,7 +11,7 @@ import CloseButton from "../shared/CloseButton";
 import SubText from "./modalItem/SubText";
 
 interface ApprovedModalProps {
-  status: Status;
+  status?: Status;
   modalIsOpen: boolean;
   setModalIsOpen: (isOpen: boolean) => void;
 }
@@ -29,13 +29,13 @@ export default function ApprovedModal({
       labelledBy={titleId}
     >
       <Top>
-        <SubText text="아이템 제출 심사완료 2026.10.09" />
+        {status && <SubText text="아이템 제출 심사완료 2026.10.09" />}
         <CloseButton onClick={() => setModalIsOpen(false)} />
       </Top>
 
       <Bottom>
         <ImageBox>
-          <Badge text={status} />
+          {status && <Badge text={status} />}
           <Image
             src={"/tempImg/itemImg/itemImg.svg"}
             width={400}
@@ -69,6 +69,10 @@ const Top = styled.div`
   width: 100%;
   display: flex;
   justify-content: space-between;
+
+  & > :last-child {
+    margin-left: auto;
+  }
 `;
 
 const Bottom = styled.div`

@@ -10,9 +10,10 @@ import SelectBox from "../shared/SelectBox";
 import InfoText from "./modalItem/InfoText";
 import CheckModal from "./CheckModal";
 import { useId, useState } from "react";
+import { useRouter } from "next/navigation";
 
 interface RecombModalProps {
-  status: Status;
+  status?: Status;
   modalIsOpen: boolean;
   setModalIsOpen: (isOpen: boolean) => void;
 }
@@ -23,6 +24,7 @@ export default function RecombModal({
   setModalIsOpen,
 }: RecombModalProps) {
   const titleId = useId();
+  const router = useRouter();
   const [isDeleteCheckOpen, setIsDeleteCheckOpen] = useState(false);
 
   return (
@@ -32,13 +34,13 @@ export default function RecombModal({
       labelledBy={titleId}
     >
       <Top>
-        <SubText text="아이템 제출 심사완료 2026.10.09" />
+        {status && <SubText text="아이템 제출 심사완료 2026.10.09" />}
         <CloseButton onClick={() => setModalIsOpen(false)} />
       </Top>
 
       <Bottom>
         <ImageBox>
-          <Badge text={status} />
+          {status && <Badge text={status} />}
           <Image
             src={"/tempImg/itemImg/itemImg.svg"}
             width={400}
@@ -63,7 +65,10 @@ export default function RecombModal({
           </BottomTop>
 
           <SelectBoxWrapper>
-            <SelectBox modalType="수정" />
+            <SelectBox
+              modalType="수정"
+              onClick={() => router.push("/recipes/modify")}
+            />
             <SelectBox
               modalType="삭제"
               onClick={() => setIsDeleteCheckOpen(true)}
@@ -75,6 +80,7 @@ export default function RecombModal({
       {isDeleteCheckOpen && (
         <CheckModal
           type="삭제"
+          target={status ? "아이템" : "조합법"}
           onCancel={() => setIsDeleteCheckOpen(false)}
           onConfirm={() => {
             setIsDeleteCheckOpen(false);
@@ -115,6 +121,10 @@ const Top = styled.div`
   width: 100%;
   display: flex;
   justify-content: space-between;
+
+  & > :last-child {
+    margin-left: auto;
+  }
 `;
 
 const Bottom = styled.div`

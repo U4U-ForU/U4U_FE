@@ -9,14 +9,18 @@ export type CheckType = "거절" | "승인" | "등록" | "삭제";
 
 interface CheckModalProps {
   type: CheckType;
+  target?: "아이템" | "조합법";
   onCancel: () => void;
   onConfirm: () => void;
+  onClick?: () => void;
 }
 
 export default function CheckModal({
   type,
+  target = "아이템",
   onCancel,
   onConfirm,
+  onClick,
 }: CheckModalProps) {
   const titleId = useId();
   const { ref, handleKeyDown } = useDialogFocus(onCancel);
@@ -35,11 +39,16 @@ export default function CheckModal({
         aria-labelledby={titleId}
         tabIndex={-1}
         onKeyDown={handleKeyDown}
-        onClick={(event) => event.stopPropagation()}
+        onClick={(event) => {
+          event.stopPropagation();
+          {
+            onClick && onClick();
+          }
+        }}
       >
         <Top>
           <Title id={titleId} $colors={TYPE_COLORS[type]}>
-            정말 이 아이템을
+            정말 이 {target}을
             <br />
             {type}하시겠습니까?
           </Title>

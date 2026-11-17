@@ -1,5 +1,19 @@
 "use client";
 
-export default function page() {
-  return <div></div>;
+import RecipesList from "@/src/components/recipes/RecipesList";
+import RecombModal from "@/src/components/submit/modal/RecombModal";
+import { useState } from "react";
+
+export default function Page() {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <div>
+      <RecipesList setIsOpen={setIsOpen} />
+
+      {isOpen && (
+        <RecombModal modalIsOpen={isOpen} setModalIsOpen={setIsOpen} />
+      )}
+    </div>
+  );
 }

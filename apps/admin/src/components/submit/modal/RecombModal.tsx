@@ -14,12 +14,14 @@ import type { Recipe } from "../../recipes/mock_recipes";
 
 interface RecombModalProps {
   recipe: Recipe;
+  name?: string;
   status?: Status;
   onClose: () => void;
 }
 
 export default function RecombModal({
   recipe,
+  name,
   status,
   onClose,
 }: RecombModalProps) {
@@ -48,7 +50,7 @@ export default function RecombModal({
       }
     >
       <Top>
-        <ItemTitle id={titleId}>{recipe.result.name}</ItemTitle>
+        <ItemTitle id={titleId}>{name ?? recipe.result.name}</ItemTitle>
         <ImageWrapper>
           {recipe.ingredients.map((ingredient, idx) => (
             <RecombItem key={idx} text={ingredient} />

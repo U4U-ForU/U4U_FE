@@ -35,6 +35,7 @@ export default function SubmitsPage() {
 
       {Modal && selected && recipe && (
         <Modal
+          name={selected.name}
           status={selected.status}
           recipe={recipe}
           onClose={() => setSelected(null)}

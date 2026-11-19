@@ -2,7 +2,7 @@
 
 import ResultItem from "@/src/components/recipes/modify/main/result/ResultItem";
 import { Global, css } from "@emotion/react";
-import { redirect, useParams } from "next/navigation";
+import { redirect, useParams, useRouter } from "next/navigation";
 import styled from "@emotion/styled";
 import Inventory from "@/src/components/recipes/modify/inventory/Inventory";
 import InfoLine from "@/src/components/recipes/modify/main/InfoLine";
@@ -12,6 +12,7 @@ import { findRecipe } from "@/src/components/recipes/mock_recipes";
 import { useRecipeSlots } from "@/src/components/recipes/modify/shared/useRecipeSlots";
 
 export default function Page() {
+  const router = useRouter();
   const { id } = useParams<{ id: string }>();
   const recipe = findRecipe(Number(id));
   if (!recipe) redirect("/recipes");
@@ -54,7 +55,11 @@ export default function Page() {
             onOverChange={setOver}
           />
           <Bottom>
-            <Buttons canSubmit={canSubmit} />
+            <Buttons
+              canSubmit={canSubmit}
+              onCancel={() => router.push("/recipes")}
+              onConfirm={() => router.push("/recipes")}
+            />
             <Info>오른쪽에서 재료를 선택하거나 드래그하여 배치</Info>
           </Bottom>
         </Main>

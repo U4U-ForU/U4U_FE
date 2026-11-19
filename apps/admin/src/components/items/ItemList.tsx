@@ -1,10 +1,13 @@
 import Item from "./Item";
 import styled from "@emotion/styled";
-import { mock_items } from "@/src/components/shared/mock_items";
+import {
+  mock_items,
+  type ItemSummary,
+} from "@/src/components/shared/mock_items";
 
 interface ItemListProps {
   input: string;
-  onItemClick: () => void;
+  onItemClick: (item: ItemSummary) => void;
 }
 
 export default function ItemList({ input, onItemClick }: ItemListProps) {
@@ -15,7 +18,11 @@ export default function ItemList({ input, onItemClick }: ItemListProps) {
   return (
     <Wrapper>
       {filtered.map((item) => (
-        <Item key={item.id} name={item.name} onClick={onItemClick} />
+        <Item
+          key={item.id}
+          name={item.name}
+          onClick={() => onItemClick(item)}
+        />
       ))}
     </Wrapper>
   );

@@ -3,9 +3,15 @@ import Button from "@/src/components/shared/Button";
 
 interface ButtonsProps {
   canSubmit: boolean;
+  onCancel: () => void;
+  onConfirm: () => void;
 }
 
-export default function Buttons({ canSubmit }: ButtonsProps) {
+export default function Buttons({
+  canSubmit,
+  onCancel,
+  onConfirm,
+}: ButtonsProps) {
   return (
     <Wrapper>
       <Button
@@ -14,6 +20,7 @@ export default function Buttons({ canSubmit }: ButtonsProps) {
         backgroundColor="#F9F8F8"
         boxShadow={false}
         borderColor="#D0CCCC"
+        onClick={onCancel}
       />
       <ConfirmButton
         text="확인"
@@ -23,6 +30,7 @@ export default function Buttons({ canSubmit }: ButtonsProps) {
         fontBorderColor={canSubmit ? "#A75959" : undefined}
         boxShadow={false}
         disabled={!canSubmit}
+        onClick={onConfirm}
       />
     </Wrapper>
   );

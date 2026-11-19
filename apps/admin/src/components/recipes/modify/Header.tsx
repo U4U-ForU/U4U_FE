@@ -2,19 +2,25 @@
 
 import styled from "@emotion/styled";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Header() {
   return (
     <Wrapper>
-      <Icon src={"/icon/Before.svg"} width={6} height={10} alt="돌아가기" />
+      <BackLink href="/recipes" aria-label="조합법 목록으로 돌아가기">
+        <Image src={"/icon/Before.svg"} width={6} height={10} alt="" />
+      </BackLink>
       <Title>조합법 수정</Title>
     </Wrapper>
   );
 }
 
-const Icon = styled(Image)`
+const BackLink = styled(Link)`
   position: absolute;
   left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   margin: 24px;
 `;
 

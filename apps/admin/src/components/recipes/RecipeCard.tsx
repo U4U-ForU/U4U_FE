@@ -78,5 +78,10 @@ const Wrapper = styled.button`
     transform: translateY(-10px);
   }
 
+  &:focus-visible {
+    outline: 2px solid #a75959;
+    outline-offset: 2px;
+  }
+
   box-shadow: 0 0 5px 0 var(--color-opacity-black-15, rgba(0, 0, 0, 0.15));
 `;

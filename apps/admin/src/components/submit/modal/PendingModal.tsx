@@ -11,11 +11,16 @@ import CheckModal, { type CheckType } from "./CheckModal";
 import { useId, useState } from "react";
 
 interface PendingModalProps {
+  name: string;
   status: Status;
   onClose: () => void;
 }
 
-export default function PendingModal({ status, onClose }: PendingModalProps) {
+export default function PendingModal({
+  name,
+  status,
+  onClose,
+}: PendingModalProps) {
   const titleId = useId();
   const [checkType, setCheckType] = useState<CheckType | null>(null);
 
@@ -39,7 +44,7 @@ export default function PendingModal({ status, onClose }: PendingModalProps) {
       }
     >
       <div>
-        <ItemTitle id={titleId}>아이템 이름</ItemTitle>
+        <ItemTitle id={titleId}>{name}</ItemTitle>
         <FixedDescription>아이템 설명</FixedDescription>
         <InfoText date="2026.11.11" userName="maremare" />
       </div>

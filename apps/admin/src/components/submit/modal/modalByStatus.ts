@@ -6,6 +6,7 @@ import ApprovedModal from "./ApprovedModal";
 import RecombModal from "./RecombModal";
 
 export interface StatusModalProps {
+  name: string;
   status: Status;
   recipe: Recipe;
   onClose: () => void;

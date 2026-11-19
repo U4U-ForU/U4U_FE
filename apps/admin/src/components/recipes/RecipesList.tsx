@@ -1,16 +1,16 @@
 import RecipeCard from "./RecipeCard";
 import styled from "@emotion/styled";
-import { mock_items } from "@/src/components/shared/mock_items";
+import { mock_recipes, type Recipe } from "./mock_recipes";
 
 interface RecipesListProps {
-  setIsOpen: (isOpen: boolean) => void;
+  onSelect: (recipe: Recipe) => void;
 }
 
-export default function RecipesList({ setIsOpen }: RecipesListProps) {
+export default function RecipesList({ onSelect }: RecipesListProps) {
   return (
     <Wrapper>
-      {mock_items.map((item) => (
-        <RecipeCard key={item.id} name={item.name} setIsOpen={setIsOpen} />
+      {mock_recipes.map((recipe) => (
+        <RecipeCard key={recipe.id} recipe={recipe} onSelect={onSelect} />
       ))}
     </Wrapper>
   );

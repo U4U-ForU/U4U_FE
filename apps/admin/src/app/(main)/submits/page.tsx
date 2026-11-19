@@ -6,21 +6,23 @@ import ItemList from "@/src/components/submit/Item/ItemList";
 import { useState } from "react";
 import { mock_submits } from "@/src/components/submit/Item/mock_submits";
 import type {
-  Status,
+  ItemMockType,
   StatusFilter,
 } from "@/src/components/submit/Item/ItemType";
 import { MODAL_BY_STATUS } from "@/src/components/submit/modal/modalByStatus";
+import { findRecipe } from "@/src/components/recipes/mock_recipes";
 
 export default function SubmitsPage() {
   const [active, setActive] = useState<StatusFilter>("전체");
-  const [selectedStatus, setSelectedStatus] = useState<Status | null>(null);
+  const [selected, setSelected] = useState<ItemMockType | null>(null);
 
   const filtered =
     active === "전체"
       ? mock_submits
       : mock_submits.filter((item) => item.status === active);
 
-  const Modal = selectedStatus ? MODAL_BY_STATUS[selectedStatus] : null;
+  const Modal = selected ? MODAL_BY_STATUS[selected.status] : null;
+  const recipe = selected ? findRecipe(selected.id) : null;
 
   return (
     <Wrapper>
@@ -29,15 +31,13 @@ export default function SubmitsPage() {
         active={active}
         onChange={setActive}
       />
-      <ItemList
-        items={filtered}
-        onItemClick={(item) => setSelectedStatus(item.status)}
-      />
+      <ItemList items={filtered} onItemClick={setSelected} />
 
-      {Modal && selectedStatus && (
+      {Modal && selected && recipe && (
         <Modal
-          status={selectedStatus}
-          onClose={() => setSelectedStatus(null)}
+          status={selected.status}
+          recipe={recipe}
+          onClose={() => setSelected(null)}
         />
       )}
     </Wrapper>

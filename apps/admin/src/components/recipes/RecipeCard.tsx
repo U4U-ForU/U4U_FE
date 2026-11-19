@@ -1,15 +1,16 @@
 import styled from "@emotion/styled";
 import Image from "next/image";
+import type { Recipe } from "./mock_recipes";
 
 interface RecipeCardProps {
-  name: string;
-  setIsOpen: (isOpen: boolean) => void;
+  recipe: Recipe;
+  onSelect: (recipe: Recipe) => void;
 }
 
-export default function RecipeCard({ name, setIsOpen }: RecipeCardProps) {
+export default function RecipeCard({ recipe, onSelect }: RecipeCardProps) {
   return (
-    <Wrapper onClick={() => setIsOpen(true)}>
-      <ItemName>{name}</ItemName>
+    <Wrapper type="button" onClick={() => onSelect(recipe)}>
+      <ItemName>{recipe.result.name}</ItemName>
       <Bottom>
         <Image
           src={"/tempImg/itemImg/itemImg.svg"}
@@ -21,24 +22,15 @@ export default function RecipeCard({ name, setIsOpen }: RecipeCardProps) {
         <Image src={"/icon/location.svg"} width={23} height={10} alt="화살표" />
 
         <Ingredients>
-          <Image
-            src={"/tempImg/itemImg/itemImg.svg"}
-            width={50}
-            height={50}
-            alt="재료 아이템"
-          />
-          <Image
-            src={"/tempImg/itemImg/itemImg.svg"}
-            width={50}
-            height={50}
-            alt="재료 아이템"
-          />
-          <Image
-            src={"/tempImg/itemImg/itemImg.svg"}
-            width={50}
-            height={50}
-            alt="재료 아이템"
-          />
+          {recipe.ingredients.map((ingredient, idx) => (
+            <Image
+              key={idx}
+              src={"/tempImg/itemImg/itemImg.svg"}
+              width={50}
+              height={50}
+              alt={ingredient}
+            />
+          ))}
         </Ingredients>
       </Bottom>
     </Wrapper>
@@ -68,13 +60,14 @@ const Ingredients = styled.div`
   gap: var(--space-8, 8px);
 `;
 
-const Wrapper = styled.div`
+const Wrapper = styled.button`
   display: flex;
   width: 353px;
   padding: var(--space-20, 20px) 26px;
   flex-direction: column;
   align-items: flex-start;
   gap: var(--space-8, 8px);
+  border: none;
   border-radius: var(--radius-sm, 6px);
   background: #fff;
   cursor: pointer;

@@ -2,15 +2,20 @@
 
 import ResultItem from "@/src/components/recipes/modify/main/result/ResultItem";
 import { Global, css } from "@emotion/react";
+import { redirect, useParams } from "next/navigation";
 import styled from "@emotion/styled";
 import Inventory from "@/src/components/recipes/modify/inventory/Inventory";
 import InfoLine from "@/src/components/recipes/modify/main/InfoLine";
 import Inputs from "@/src/components/recipes/modify/main/input/Inputs";
 import Buttons from "@/src/components/recipes/modify/main/Buttons";
-import { mock_recipe } from "@/src/components/recipes/mock_recipe";
+import { findRecipe } from "@/src/components/recipes/mock_recipes";
 import { useRecipeSlots } from "@/src/components/recipes/modify/shared/useRecipeSlots";
 
 export default function Page() {
+  const { id } = useParams<{ id: string }>();
+  const recipe = findRecipe(Number(id));
+  if (!recipe) redirect("/recipes");
+
   const {
     result,
     slots,
@@ -24,7 +29,7 @@ export default function Page() {
     removeResult,
     setItemAt,
     removeItem,
-  } = useRecipeSlots(mock_recipe.result, mock_recipe.ingredients);
+  } = useRecipeSlots(recipe.result, recipe.ingredients);
 
   return (
     <>

@@ -10,14 +10,19 @@ import ItemTitle from "./modalItem/ItemTitle";
 import CheckModal from "./CheckModal";
 import { useId, useState } from "react";
 import { useRouter } from "next/navigation";
-import { mock_recipe } from "../../recipes/mock_recipe";
+import type { Recipe } from "../../recipes/mock_recipes";
 
 interface RecombModalProps {
+  recipe: Recipe;
   status?: Status;
   onClose: () => void;
 }
 
-export default function RecombModal({ status, onClose }: RecombModalProps) {
+export default function RecombModal({
+  recipe,
+  status,
+  onClose,
+}: RecombModalProps) {
   const titleId = useId();
   const router = useRouter();
   const [isDeleteCheckOpen, setIsDeleteCheckOpen] = useState(false);
@@ -43,9 +48,9 @@ export default function RecombModal({ status, onClose }: RecombModalProps) {
       }
     >
       <Top>
-        <ItemTitle id={titleId}>{mock_recipe.result.name}</ItemTitle>
+        <ItemTitle id={titleId}>{recipe.result.name}</ItemTitle>
         <ImageWrapper>
-          {mock_recipe.ingredients.map((ingredient, idx) => (
+          {recipe.ingredients.map((ingredient, idx) => (
             <RecombItem key={idx} text={ingredient} />
           ))}
         </ImageWrapper>
@@ -56,7 +61,7 @@ export default function RecombModal({ status, onClose }: RecombModalProps) {
       <SelectBoxWrapper>
         <SelectBox
           modalType="수정"
-          onClick={() => router.push("/recipes/modify")}
+          onClick={() => router.push(`/recipes/${recipe.id}/modify`)}
         />
         <SelectBox
           modalType="삭제"

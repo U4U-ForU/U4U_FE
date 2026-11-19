@@ -2,16 +2,19 @@
 
 import RecipesList from "@/src/components/recipes/RecipesList";
 import RecombModal from "@/src/components/submit/modal/RecombModal";
+import type { Recipe } from "@/src/components/recipes/mock_recipes";
 import { useState } from "react";
 
 export default function Page() {
-  const [isOpen, setIsOpen] = useState(false);
+  const [selected, setSelected] = useState<Recipe | null>(null);
 
   return (
     <div>
-      <RecipesList setIsOpen={setIsOpen} />
+      <RecipesList onSelect={setSelected} />
 
-      {isOpen && <RecombModal onClose={() => setIsOpen(false)} />}
+      {selected && (
+        <RecombModal recipe={selected} onClose={() => setSelected(null)} />
+      )}
     </div>
   );
 }

@@ -11,9 +11,7 @@ export default function Page() {
     <div>
       <RecipesList setIsOpen={setIsOpen} />
 
-      {isOpen && (
-        <RecombModal modalIsOpen={isOpen} setModalIsOpen={setIsOpen} />
-      )}
+      {isOpen && <RecombModal onClose={() => setIsOpen(false)} />}
     </div>
   );
 }

@@ -1,6 +1,6 @@
-import RecipesEach from "./RecipesEach";
-import { mock_item } from "./mock";
+import RecipeCard from "./RecipeCard";
 import styled from "@emotion/styled";
+import { mock_items } from "@/src/components/shared/mock_items";
 
 interface RecipesListProps {
   setIsOpen: (isOpen: boolean) => void;
@@ -9,8 +9,8 @@ interface RecipesListProps {
 export default function RecipesList({ setIsOpen }: RecipesListProps) {
   return (
     <Wrapper>
-      {mock_item.map((item) => (
-        <RecipesEach name={item} setIsOpen={setIsOpen} />
+      {mock_items.map((item) => (
+        <RecipeCard key={item.id} name={item.name} setIsOpen={setIsOpen} />
       ))}
     </Wrapper>
   );

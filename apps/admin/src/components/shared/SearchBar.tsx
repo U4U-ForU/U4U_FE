@@ -5,11 +5,18 @@ import { ChangeEvent } from "react";
 interface SearchBarProps {
   input: string;
   onChange: (value: string) => void;
+  width: number;
+  className?: string;
 }
 
-export default function SearchBar({ input, onChange }: SearchBarProps) {
+export default function SearchBar({
+  input,
+  onChange,
+  width,
+  className,
+}: SearchBarProps) {
   return (
-    <Wrapper>
+    <Wrapper $width={width} className={className}>
       <IconImage
         src={"/icon/Search/search.svg"}
         width={24}
@@ -48,7 +55,7 @@ const Input = styled.input`
   line-height: 150%; /* 24px */
 `;
 
-const Wrapper = styled.div`
+const Wrapper = styled.div<{ $width: number }>`
   display: flex;
   height: 44px;
   padding: var(--space-8, 8px) var(--space-16, 16px);
@@ -57,6 +64,5 @@ const Wrapper = styled.div`
   border-radius: var(--radius-full, 999999px);
   border: 2px solid var(--gray-500, #b3aeaf);
   background: #fff;
-  width: 648px;
-  margin: 48px auto 74px;
+  width: ${({ $width }) => $width}px;
 `;

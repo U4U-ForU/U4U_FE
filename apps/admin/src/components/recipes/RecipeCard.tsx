@@ -1,12 +1,12 @@
 import styled from "@emotion/styled";
 import Image from "next/image";
 
-interface RecipeEachProps {
+interface RecipeCardProps {
   name: string;
   setIsOpen: (isOpen: boolean) => void;
 }
 
-export default function RecipesEach({ name, setIsOpen }: RecipeEachProps) {
+export default function RecipeCard({ name, setIsOpen }: RecipeCardProps) {
   return (
     <Wrapper onClick={() => setIsOpen(true)}>
       <ItemName>{name}</ItemName>
@@ -20,7 +20,7 @@ export default function RecipesEach({ name, setIsOpen }: RecipeEachProps) {
 
         <Image src={"/icon/location.svg"} width={23} height={10} alt="화살표" />
 
-        <Items>
+        <Ingredients>
           <Image
             src={"/tempImg/itemImg/itemImg.svg"}
             width={50}
@@ -39,7 +39,7 @@ export default function RecipesEach({ name, setIsOpen }: RecipeEachProps) {
             height={50}
             alt="재료 아이템"
           />
-        </Items>
+        </Ingredients>
       </Bottom>
     </Wrapper>
   );
@@ -62,7 +62,7 @@ const ItemName = styled.div`
   line-height: 150%; /* 24px */
 `;
 
-const Items = styled.div`
+const Ingredients = styled.div`
   display: flex;
   align-items: center;
   gap: var(--space-8, 8px);

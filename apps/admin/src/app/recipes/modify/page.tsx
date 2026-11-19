@@ -101,4 +101,5 @@ const Main = styled.div`
   padding: clamp(12px, 2vh, 24px) 0 clamp(28px, 6vh, 72px);
   align-items: center;
   justify-content: center;
+  justify-content: safe center;
 `;

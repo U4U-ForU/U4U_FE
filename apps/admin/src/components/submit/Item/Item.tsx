@@ -1,10 +1,11 @@
 import styled from "@emotion/styled";
 import Image from "next/image";
 import Badge from "./Badge";
+import type { Status } from "./ItemType";
 
 interface ItemProps {
   name: string;
-  status: string;
+  status: Status;
   onClick: () => void;
 }
 

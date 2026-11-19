@@ -1,10 +1,11 @@
 import styled from "@emotion/styled";
+import { STATUS_LABEL, type Status } from "./ItemType";
 
 interface BadgeProps {
-  text: string;
+  text: Status;
 }
 
-const BADGE_COLORS: Record<string, string> = {
+const BADGE_COLORS: Record<Status, string> = {
   "심사 중": "#b3aeaf",
   "승인 완료": "#50ab80",
   "조합 처리 완료": "#69add4",
@@ -14,8 +15,8 @@ const BADGE_COLORS: Record<string, string> = {
 
 export default function Badge({ text }: BadgeProps) {
   return (
-    <BadgeWrapper $color={BADGE_COLORS[text] ?? "#b3aeaf"}>
-      {text === "심사 중" ? "승인 전" : text}
+    <BadgeWrapper $color={BADGE_COLORS[text]}>
+      {STATUS_LABEL[text]}
     </BadgeWrapper>
   );
 }

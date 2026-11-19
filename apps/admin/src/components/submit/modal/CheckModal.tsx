@@ -41,9 +41,7 @@ export default function CheckModal({
         onKeyDown={handleKeyDown}
         onClick={(event) => {
           event.stopPropagation();
-          {
-            onClick && onClick();
-          }
+          onClick?.();
         }}
       >
         <Top>

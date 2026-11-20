@@ -5,7 +5,6 @@ import type { ReactNode } from "react";
 import { useDialogFocus } from "../shared/useDialogFocus";
 
 interface ModalLayoutProps {
-  isOpen: boolean;
   onClose: () => void;
   labelledBy: string;
   children: ReactNode;

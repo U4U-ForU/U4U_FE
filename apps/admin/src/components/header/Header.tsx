@@ -1,14 +1,18 @@
 "use client";
 
 import styled from "@emotion/styled";
-import Menu from "./header/Menu";
 import Image from "next/image";
+import type { ReactNode } from "react";
 
-export default function Header() {
+interface HeaderProps {
+  children: ReactNode;
+}
+
+export default function Header({ children }: HeaderProps) {
   return (
     <Wrapper>
       <Image src={"/logo/logo.png"} width={123} height={55} alt="로고" />
-      <Menu />
+      {children}
     </Wrapper>
   );
 }

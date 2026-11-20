@@ -13,7 +13,7 @@ export default function ItemList({ items, onItemClick }: ItemListProps) {
       {items.map((item) => (
         <Item
           key={item.id}
-          name={item.title}
+          name={item.name}
           status={item.status}
           onClick={() => onItemClick(item)}
         />

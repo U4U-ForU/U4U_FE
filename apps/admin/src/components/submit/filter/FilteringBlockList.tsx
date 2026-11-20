@@ -1,8 +1,12 @@
 import FilteringBlock from "./FilteringBlock";
 import styled from "@emotion/styled";
-import type { ItemMockType } from "../Item/ItemType";
+import {
+  STATUS_LABEL,
+  type ItemMockType,
+  type StatusFilter,
+} from "../Item/ItemType";
 
-const FILTERS = [
+const FILTERS: StatusFilter[] = [
   "전체",
   "심사 중",
   "승인 완료",
@@ -13,8 +17,8 @@ const FILTERS = [
 
 interface FilteringBlockListProps {
   items: ItemMockType[];
-  active: string;
-  onChange: (status: string) => void;
+  active: StatusFilter;
+  onChange: (status: StatusFilter) => void;
 }
 
 export default function FilteringBlockList({
@@ -22,7 +26,7 @@ export default function FilteringBlockList({
   active,
   onChange,
 }: FilteringBlockListProps) {
-  const getCount = (name: string) =>
+  const getCount = (name: StatusFilter) =>
     name === "전체"
       ? items.length
       : items.filter((item) => item.status === name).length;
@@ -32,7 +36,7 @@ export default function FilteringBlockList({
       {FILTERS.map((name) => (
         <FilteringBlock
           key={name}
-          title={name === "심사 중" ? "승인 전" : name}
+          title={name === "전체" ? name : STATUS_LABEL[name]}
           count={getCount(name)}
           active={active === name}
           onClick={() => onChange(name)}

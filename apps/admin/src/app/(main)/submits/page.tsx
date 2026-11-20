@@ -22,7 +22,8 @@ export default function SubmitsPage() {
       : mock_submits.filter((item) => item.status === active);
 
   const Modal = selected ? MODAL_BY_STATUS[selected.status] : null;
-  const recipe = selected ? findRecipe(selected.id) : null;
+  const recipe =
+    selected?.recipeId === undefined ? null : findRecipe(selected.recipeId);
 
   return (
     <Wrapper>
@@ -33,7 +34,7 @@ export default function SubmitsPage() {
       />
       <ItemList items={filtered} onItemClick={setSelected} />
 
-      {Modal && selected && recipe && (
+      {Modal && selected && (
         <Modal
           name={selected.name}
           status={selected.status}

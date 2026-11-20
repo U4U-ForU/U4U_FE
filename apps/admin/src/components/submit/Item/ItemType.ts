@@ -15,4 +15,5 @@ export interface ItemMockType {
   id: number;
   name: string;
   status: Status;
+  recipeId?: number;
 }

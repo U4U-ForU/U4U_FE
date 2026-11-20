@@ -8,7 +8,7 @@ import RecombModal from "./RecombModal";
 export interface StatusModalProps {
   name: string;
   status: Status;
-  recipe: Recipe;
+  recipe: Recipe | null;
   onClose: () => void;
 }
 

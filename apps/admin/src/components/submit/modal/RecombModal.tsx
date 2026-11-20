@@ -13,7 +13,7 @@ import { useRouter } from "next/navigation";
 import type { Recipe } from "../../recipes/mock_recipes";
 
 interface RecombModalProps {
-  recipe: Recipe;
+  recipe: Recipe | null;
   name?: string;
   status?: Status;
   onClose: () => void;
@@ -28,6 +28,8 @@ export default function RecombModal({
   const titleId = useId();
   const router = useRouter();
   const [isDeleteCheckOpen, setIsDeleteCheckOpen] = useState(false);
+
+  if (!recipe) return null;
 
   return (
     <ItemDetailModal

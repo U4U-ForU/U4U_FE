@@ -10,8 +10,10 @@ import ItemPickerSheet from "@/src/features/deal/ui/detail/ItemPickerSheet";
 import { useItemSlots } from "@/src/features/pot/model/useItemSlots";
 import MixModal from "@/src/features/itemmix/ui/modal/MixModal";
 import ItemMixSuccess from "@/src/features/itemmix/ui/modal/itemMixSuccess";
+import { useRouter } from "next/navigation";
 
 export default function Itemmix() {
+  const router = useRouter();
   const {
     slots,
     selectedItems,
@@ -29,7 +31,7 @@ export default function Itemmix() {
   return (
     <Page>
       <Global styles={inventoryBackground} />
-      <Header title="아이템 섞기" />
+      <Header title="아이템 섞기" onBackPress={() => router.back()} />
       <ItemInputList
         slots={slots}
         onSlotClick={openPicker}

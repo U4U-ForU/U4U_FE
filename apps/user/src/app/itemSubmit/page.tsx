@@ -25,10 +25,7 @@ export default function ItemSubmit() {
 
   return (
     <Wrapper>
-      <Header
-        title="아이템 제출"
-        onBackPress={() => router.push("/itemSubmitList")}
-      />
+      <Header title="아이템 제출" onBackPress={() => router.back()} />
       <UploadArea>
         <ImageUploadBox onChange={setImageFile} />
       </UploadArea>

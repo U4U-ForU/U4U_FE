@@ -3,7 +3,7 @@ import Image from "next/image";
 
 interface ProfileHeaderProps {
   title: string;
-  onBackPress?: () => void;
+  onBackPress: () => void;
 }
 
 export default function ProfileHeader({
@@ -11,7 +11,13 @@ export default function ProfileHeader({
   onBackPress,
 }: ProfileHeaderProps) {
   const backIcon = (
-    <Image src={"/backicon/arrow.png"} width={24} height={24} alt="뒤로가기" />
+    <Image
+      src={"/backicon/arrow.png"}
+      width={24}
+      height={24}
+      alt="뒤로가기"
+      onClick={onBackPress}
+    />
   );
 
   return (

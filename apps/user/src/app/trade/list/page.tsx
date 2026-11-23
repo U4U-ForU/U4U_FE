@@ -13,7 +13,7 @@ export default function List() {
   return (
     <Page>
       <Global styles={dealBackground} />
-      <Header title="거래 목록" onBackPress={() => router.push("/main")} />
+      <Header title="거래 목록" onBackPress={() => router.back()} />
 
       <DealList rooms={MOCK_DEAL_ROOMS} />
       <CreateButton

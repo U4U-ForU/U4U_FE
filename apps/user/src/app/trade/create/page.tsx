@@ -32,7 +32,7 @@ export default function Detail() {
   return (
     <Page>
       <Global styles={dealBackground} />
-      <Header title="거래 생성" onBackPress={() => router.push("/deal/list")} />
+      <Header title="거래 생성" onBackPress={() => router.back()} />
 
       <Content>
         <Input type="text" placeholder="거래방 이름을 입력해주세요."></Input>

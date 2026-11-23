@@ -13,7 +13,10 @@ export default function ItemSubmitList() {
   return (
     <Wrapper>
       <PageBackground aria-hidden="true" />
-      <ProfileHeader title="아이템 제출 목록" />
+      <ProfileHeader
+        title="아이템 제출 목록"
+        onBackPress={() => router.back()}
+      />
       <SubmitItemFiltering items={MOCK_SUBMIT_ITEMS} />
       <BottomArea>
         <Button

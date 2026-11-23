@@ -19,10 +19,7 @@ export default function Detail() {
   return (
     <Page>
       <Global styles={dealBackground} />
-      <Header
-        title="거래 제목 수정"
-        onBackPress={() => router.push("/deal/mydetail")}
-      />
+      <Header title="거래 제목 수정" onBackPress={() => router.back()} />
 
       <Content>
         <Input type="text" placeholder="(원래 거래방 이름이 들어감)"></Input>

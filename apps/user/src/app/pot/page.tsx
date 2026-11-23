@@ -20,12 +20,7 @@ export default function Itemrecomb() {
           alt="설명"
         />
       </InfoIconWrapper>
-      <PotImage
-        src={"/tempImg/img/pot.svg"}
-        width={353}
-        height={447}
-        alt="이미지"
-      />
+      <PotImage src={"/img/pot.svg"} width={353} height={447} alt="이미지" />
       <ButtonWrapper>
         <Button
           text="아이템 섞기"

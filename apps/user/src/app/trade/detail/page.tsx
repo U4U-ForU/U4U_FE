@@ -50,7 +50,7 @@ export default function Detail() {
   return (
     <Page>
       <Global styles={dealBackground} />
-      <Header title="거래 상세 " onBackPress={() => router.back()} />
+      <Header title="거래 상세 " onBackPress={goBack} />
 
       <Content>
         <RoomDetail

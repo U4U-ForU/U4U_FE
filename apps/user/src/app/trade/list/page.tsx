@@ -21,7 +21,7 @@ export default function List() {
       <DealList rooms={MOCK_DEAL_ROOMS} />
       <CreateButton
         text="거래 생성"
-        onClick={() => router.push("/deal/create")}
+        onClick={() => router.push("/trade/create")}
         fontColor="white"
         backgroundColor="#FFD0D0"
         borderColor="#DFAFAF"

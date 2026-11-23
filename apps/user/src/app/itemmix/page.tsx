@@ -49,14 +49,12 @@ export default function Itemmix() {
         disabled={!canMix}
         onClick={() => setMixStep("mixing")}
       />
-
       <ItemPickerSheet
         isOpen={isPickerOpen}
         onClose={closePicker}
         onSelect={fillSlot}
         selectedItems={selectedItems}
       />
-
       <MixModal
         isOpen={mixStep === "mixing"}
         onClose={resetMixStep}

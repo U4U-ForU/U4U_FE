@@ -1,40 +1,34 @@
 "use client";
 
 import { useEffect, useSyncExternalStore, type ReactNode } from "react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
   getAccessToken,
   subscribeTokenChange,
 } from "@/src/shared/lib/tokenStorage";
+import { resolveAuthRedirect } from "@/src/shared/lib/authRoutes";
 
 const getSnapshot = () => getAccessToken() !== null;
 
 const getServerSnapshot = () => false;
 
-interface AuthGuardProps {
-  children: ReactNode;
-  requireAuth: boolean;
-  redirectTo: string;
-}
-
-export default function AuthGuard({
-  children,
-  requireAuth,
-  redirectTo,
-}: AuthGuardProps) {
+export default function AuthGuard({ children }: { children: ReactNode }) {
   const router = useRouter();
-  const hasToken = useSyncExternalStore(
+  const pathname = usePathname();
+  const isLoggedIn = useSyncExternalStore(
     subscribeTokenChange,
     getSnapshot,
     getServerSnapshot,
   );
-  const isAllowed = hasToken === requireAuth;
+  const redirectTo = resolveAuthRedirect(pathname, isLoggedIn);
 
   useEffect(() => {
-    if (getSnapshot() === requireAuth) return;
+    const target = resolveAuthRedirect(pathname, getSnapshot());
 
-    router.replace(redirectTo);
-  }, [isAllowed, requireAuth, redirectTo, router]);
+    if (target === null) return;
 
-  return isAllowed ? children : null;
+    router.replace(target);
+  }, [pathname, isLoggedIn, router]);
+
+  return redirectTo === null ? children : null;
 }

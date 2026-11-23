@@ -43,7 +43,10 @@ export default function Gacha() {
       {step === "drawing" && <GachaGo onFinish={finishDrawing} />}
       {step === "beforeResult" && <GachaBeforeResult onFinish={showResult} />}
       {step === "result" && (
-        <GachaResult items={items} onSkip={showAllResult} />
+        <GachaResult
+          items={items}
+          onSkip={items.length === 1 ? reset : showAllResult}
+        />
       )}
       {step === "allResult" && (
         <GachaAllResult items={items} onComplete={reset} />

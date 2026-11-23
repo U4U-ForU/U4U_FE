@@ -24,6 +24,7 @@ export default function GachaResult({ items, onSkip }: GachaResultProps) {
   const isDraggingRef = useRef(false);
 
   const currentItem = items[index];
+  const isSingleDraw = items.length === 1;
   const isFirst = index === 0;
   const isLast = index === items.length - 1;
   const stackedCount = Math.min(items.length - 1 - index, MAX_STACKED_CARD);
@@ -107,12 +108,14 @@ export default function GachaResult({ items, onSkip }: GachaResultProps) {
             <StackedCard key={stackIndex} $depth={stackedCount - stackIndex} />
           ))}
 
-          <FrontCard>
+          <FrontCard $tilted={!isSingleDraw}>
             <ItemModal
               img={currentItem.imageUrl}
               itemName={currentItem.name}
               itemDescription={currentItem.description}
-              ButtonText={isLast ? "결과 보기" : "다음"}
+              ButtonText={
+                !isLast ? "다음" : isSingleDraw ? "뽑기 완료" : "결과 보기"
+              }
               onClose={onSkip}
               onButtonClick={isLast ? onSkip : goNext}
               showCloseButton={false}
@@ -170,8 +173,8 @@ const StackedCard = styled.div<{ $depth: number }>`
   opacity: ${({ $depth }) => 1 - $depth * 0.15};
 `;
 
-const FrontCard = styled.div`
+const FrontCard = styled.div<{ $tilted: boolean }>`
   position: relative;
   z-index: 1;
-  transform: rotate(3deg);
+  transform: ${({ $tilted }) => ($tilted ? "rotate(3deg)" : "none")};
 `;

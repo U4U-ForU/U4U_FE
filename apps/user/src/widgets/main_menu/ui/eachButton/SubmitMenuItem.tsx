@@ -7,7 +7,7 @@ export default function SubmitMenuItem() {
   const router = useRouter();
 
   const move = () => {
-    router.push("itemsubmit");
+    router.push("/itemsubmit");
   };
 
   return (

@@ -8,8 +8,14 @@ import DailyCheck from "@/src/features/dailyCheck";
 import MainMenuItemList from "@/src/widgets/main_menu";
 import MypageModal from "@/src/features/mypage/ui/Modal";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function Main() {
+  const router = useRouter();
+
+  const onClick = () => {
+    router.push("/trade/list");
+  };
   const [isMypageOpen, setIsMypageOpen] = useState(false);
 
   return (
@@ -27,11 +33,12 @@ export default function Main() {
           width={300}
           height={315}
         />
-        <Button
+        <TradeButton
           text="거래하기"
           fontColor="#CE8F8F"
           backgroundColor="#fff"
           borderColor="#DFAFAF"
+          onClick={onClick}
         />
       </BottomContent>
 
@@ -60,8 +67,13 @@ const MainImg = styled(Image)`
   aspect-ratio: 49/57;
 `;
 
+const TradeButton = styled(Button)`
+  pointer-events: auto;
+`;
+
 const BottomContent = styled.div`
   position: fixed;
+  pointer-events: none;
   left: 50%;
   bottom: calc(24px + env(safe-area-inset-bottom));
   z-index: 1;

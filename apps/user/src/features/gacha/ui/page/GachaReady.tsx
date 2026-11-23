@@ -6,19 +6,19 @@ import Header from "@/src/shared/ui/Header";
 import Button from "@/src/shared/ui/Button";
 import { useUserStarStore } from "@/src/entities/user/model/useUserStarStore";
 import type { GachaDrawCount } from "@/src/features/gacha/model/types";
-import { useRouter } from "next/navigation";
+import { useSafeBack } from "@/src/shared/lib/useSafeBack";
 
 interface GachaReadyProps {
   onDraw: (drawCount: GachaDrawCount) => void;
 }
 
 export default function GachaReady({ onDraw }: GachaReadyProps) {
-  const router = useRouter();
+  const goBack = useSafeBack();
   const starCount = useUserStarStore((state) => state.starCount);
 
   return (
     <Wrapper>
-      <Header title="뽑기" onBackPress={() => router.back()} />
+      <Header title="뽑기" onBackPress={goBack} />
       <GachaImage src="/img/Gacha/Gacha.svg" width={320} height={442} alt="" />
       <Bottom>
         <Buttons>

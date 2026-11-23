@@ -5,14 +5,14 @@ import styled from "@emotion/styled";
 import Header from "@/src/shared/ui/Header";
 import ItemFiltering from "@/src/features/itemFiltering";
 import { MOCK_ITEMS } from "@/src/entities/item/model/mockItems";
-import { useRouter } from "next/navigation";
+import { useSafeBack } from "@/src/shared/lib/useSafeBack";
 
 export default function Inventory() {
-  const router = useRouter();
+  const goBack = useSafeBack();
   return (
     <Page>
       <Global styles={inventoryBackground} />
-      <Header title="인벤토리" onBackPress={() => router.back()} />
+      <Header title="인벤토리" onBackPress={goBack} />
       <ItemFiltering items={MOCK_ITEMS} />
     </Page>
   );

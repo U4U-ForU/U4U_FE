@@ -7,10 +7,10 @@ import Image from "next/image";
 import ItemPickerSheet from "@/src/features/deal/ui/detail/ItemPickerSheet";
 import ItemSlots from "@/src/features/pot/ui/ItemSlots";
 import { useItemSlots } from "@/src/features/pot/model/useItemSlots";
-import { useRouter } from "next/navigation";
+import { useSafeBack } from "@/src/shared/lib/useSafeBack";
 
 export default function Itemmix() {
-  const router = useRouter();
+  const goBack = useSafeBack();
 
   const {
     slots,
@@ -25,7 +25,7 @@ export default function Itemmix() {
 
   return (
     <Page>
-      <Header title="아이템 재조합" onBackPress={() => router.back()} />
+      <Header title="아이템 재조합" onBackPress={goBack} />
 
       <ItemSlots slots={slots} onSlotClick={openPicker} onRemove={clearSlot} />
 

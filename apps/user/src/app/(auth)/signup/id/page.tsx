@@ -7,6 +7,7 @@ import AuthFormLayout from "@/src/features/signup/ui/AuthFormLayout";
 import Input from "@/src/features/signup/ui/Input";
 import Requirement from "@/src/features/signup/ui/Requirement";
 import { validateId } from "@/src/shared/lib/validate";
+import { markReplace } from "@/src/shared/lib/navStack";
 import {
   getSignupErrorMessage,
   useSignup,
@@ -55,11 +56,13 @@ export default function IdPage() {
 
   const handleConfirm = () => {
     if (!tokens) {
+      markReplace();
       router.replace("/login");
       return;
     }
 
     saveTokens(tokens);
+    markReplace();
     router.replace("/main");
   };
 

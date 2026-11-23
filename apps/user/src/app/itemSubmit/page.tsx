@@ -6,10 +6,10 @@ import ImageUploadBox from "@/src/shared/ui/ImgUploadBox";
 import Button from "@/src/shared/ui/Button";
 import styled from "@emotion/styled";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useSafeBack } from "@/src/shared/lib/useSafeBack";
 
 export default function ItemSubmit() {
-  const router = useRouter();
+  const goBack = useSafeBack();
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [itemName, setItemName] = useState("");
   const [itemDescription, setItemDescription] = useState("");
@@ -25,7 +25,7 @@ export default function ItemSubmit() {
 
   return (
     <Wrapper>
-      <Header title="아이템 제출" onBackPress={() => router.back()} />
+      <Header title="아이템 제출" onBackPress={goBack} />
       <UploadArea>
         <ImageUploadBox onChange={setImageFile} />
       </UploadArea>

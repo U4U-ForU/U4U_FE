@@ -9,8 +9,10 @@ import ChooseBoxList from "@/src/features/pot/ui/choose/ChooseBoxList";
 import ChooseModal from "@/src/features/pot/ui/choose/ChooseModal";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useSafeBack } from "@/src/shared/lib/useSafeBack";
 
 export default function Itemmix() {
+  const goBack = useSafeBack();
   const router = useRouter();
   const { selectedItems, isPickerOpen, closePicker, fillSlot } = useItemSlots();
   const [selectedComb, setSelectedComb] = useState<number | null>(null);
@@ -20,7 +22,7 @@ export default function Itemmix() {
 
   return (
     <Page>
-      <Header title="조합법 선택" onBackPress={() => router.back()} />
+      <Header title="조합법 선택" onBackPress={goBack} />
 
       <Content>
         <ChooseBoxList

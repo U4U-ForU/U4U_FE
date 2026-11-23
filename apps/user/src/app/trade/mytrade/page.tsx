@@ -10,8 +10,10 @@ import CommentList from "@/src/features/deal/ui/detail/CommentList";
 import { MOCK_COMMENTS } from "@/src/features/deal/model/detail/mockComments";
 import PostMenu from "@/src/features/deal/ui/detail/PostMenu";
 import Modal from "@/src/shared/ui/modal/Modal";
+import { useSafeBack } from "@/src/shared/lib/useSafeBack";
 
 export default function MyDetail() {
+  const goBack = useSafeBack();
   const router = useRouter();
   const [comments, setComments] = useState(MOCK_COMMENTS);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
@@ -25,7 +27,7 @@ export default function MyDetail() {
   return (
     <Page>
       <Global styles={dealBackground} />
-      <Header title="거래 상세" onBackPress={() => router.back()} />
+      <Header title="거래 상세" onBackPress={goBack} />
 
       <Content>
         <RoomDetail

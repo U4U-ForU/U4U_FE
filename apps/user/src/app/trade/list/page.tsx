@@ -7,13 +7,15 @@ import Header from "@/src/shared/ui/Header";
 import DealList from "@/src/features/deal";
 import { MOCK_DEAL_ROOMS } from "@/src/features/deal/model/list/mockRooms";
 import Button from "@/src/shared/ui/Button";
+import { useSafeBack } from "@/src/shared/lib/useSafeBack";
 
 export default function List() {
+  const goBack = useSafeBack();
   const router = useRouter();
   return (
     <Page>
       <Global styles={dealBackground} />
-      <Header title="거래 목록" onBackPress={() => router.back()} />
+      <Header title="거래 목록" onBackPress={goBack} />
 
       <DealList rooms={MOCK_DEAL_ROOMS} />
       <CreateButton

@@ -4,13 +4,13 @@ import styled from "@emotion/styled";
 import Header from "@/src/shared/ui/Header";
 import Button from "@/src/shared/ui/Button";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useSafeBack } from "@/src/shared/lib/useSafeBack";
 
 export default function Itemrecomb() {
-  const router = useRouter();
+  const goBack = useSafeBack();
   return (
     <Page>
-      <Header title="가마솥" onBackPress={() => router.back()} />
+      <Header title="가마솥" onBackPress={goBack} />
       <InfoIconWrapper>
         <InfoIcon
           src={"/icon/info/icon/action/Error.svg"}

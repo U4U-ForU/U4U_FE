@@ -7,6 +7,7 @@ import {
   TOO_MANY_REQUESTS_MESSAGE,
 } from "@/src/shared/api/errorResponse";
 import { saveTokens } from "@/src/shared/lib/tokenStorage";
+import { markReplace } from "@/src/shared/lib/navStack";
 import { login } from "../api/login";
 import type { LoginRequestProps } from "../api/type";
 
@@ -31,6 +32,7 @@ export const useLogin = () => {
     },
 
     onSuccess: () => {
+      markReplace();
       router.replace("/main");
     },
 

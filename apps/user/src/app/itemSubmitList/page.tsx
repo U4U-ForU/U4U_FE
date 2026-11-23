@@ -6,17 +6,16 @@ import Button from "@/src/shared/ui/Button";
 import SubmitItemFiltering from "@/src/features/submitItemFiltering";
 import { MOCK_SUBMIT_ITEMS } from "@/src/entities/submitItem/model/mockSubmitItems";
 import { useRouter } from "next/navigation";
+import { useSafeBack } from "@/src/shared/lib/useSafeBack";
 
 export default function ItemSubmitList() {
+  const goBack = useSafeBack();
   const router = useRouter();
 
   return (
     <Wrapper>
       <PageBackground aria-hidden="true" />
-      <ProfileHeader
-        title="아이템 제출 목록"
-        onBackPress={() => router.back()}
-      />
+      <ProfileHeader title="아이템 제출 목록" onBackPress={goBack} />
       <SubmitItemFiltering items={MOCK_SUBMIT_ITEMS} />
       <BottomArea>
         <Button
@@ -26,7 +25,7 @@ export default function ItemSubmitList() {
           boxShadow={false}
           fontBorderColor="#A75959"
           borderColor="#DFAFAF"
-          onClick={() => router.push("/itemSubmit")}
+          onClick={() => router.push("/itemsubmit")}
         />
       </BottomArea>
     </Wrapper>

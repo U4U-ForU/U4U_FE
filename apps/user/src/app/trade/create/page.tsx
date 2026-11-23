@@ -10,10 +10,12 @@ import ItemList from "@/src/features/deal/ui/create.tsx/ItemList";
 import type { InventoryItem } from "@/src/entities/item/model/types";
 import Button from "@/src/shared/ui/Button";
 import { SHEET_HALF_HEIGHT_DVH } from "@/src/shared/ui/BottomSheet";
+import { useSafeBack } from "@/src/shared/lib/useSafeBack";
 
 const MAX_SELECTED_ITEMS = 10;
 
 export default function Detail() {
+  const goBack = useSafeBack();
   const router = useRouter();
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const [isSheetExpanded, setIsSheetExpanded] = useState(false);
@@ -32,7 +34,7 @@ export default function Detail() {
   return (
     <Page>
       <Global styles={dealBackground} />
-      <Header title="거래 생성" onBackPress={() => router.back()} />
+      <Header title="거래 생성" onBackPress={goBack} />
 
       <Content>
         <Input type="text" placeholder="거래방 이름을 입력해주세요."></Input>

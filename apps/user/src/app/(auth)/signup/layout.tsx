@@ -1,6 +1,7 @@
 "use client";
 
 import { usePathname, useRouter } from "next/navigation";
+import { markReplace } from "@/src/shared/lib/navStack";
 import { useEffect, type ReactNode } from "react";
 import {
   SignupProvider,
@@ -53,6 +54,7 @@ function StepGuard({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (!unfinishedStep) return;
 
+    markReplace();
     router.replace(`/signup/${unfinishedStep}`);
   }, [unfinishedStep, router]);
 

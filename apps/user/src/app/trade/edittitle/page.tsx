@@ -8,8 +8,10 @@ import { useRouter } from "next/navigation";
 
 import Button from "@/src/shared/ui/Button";
 import { SHEET_HALF_HEIGHT_DVH } from "@/src/shared/ui/BottomSheet";
+import { useSafeBack } from "@/src/shared/lib/useSafeBack";
 
 export default function Detail() {
+  const goBack = useSafeBack();
   const router = useRouter();
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const [isSheetExpanded, setIsSheetExpanded] = useState(false);
@@ -19,7 +21,7 @@ export default function Detail() {
   return (
     <Page>
       <Global styles={dealBackground} />
-      <Header title="거래 제목 수정" onBackPress={() => router.back()} />
+      <Header title="거래 제목 수정" onBackPress={goBack} />
 
       <Content>
         <Input type="text" placeholder="(원래 거래방 이름이 들어감)"></Input>

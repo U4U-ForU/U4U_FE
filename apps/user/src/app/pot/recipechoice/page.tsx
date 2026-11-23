@@ -47,7 +47,7 @@ export default function Itemmix() {
       <ChooseModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        onConfirm={() => router.push("/pot/itemmix")}
+        onConfirm={() => router.push("/itemmix")}
       />
 
       <ItemPickerSheet

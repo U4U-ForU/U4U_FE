@@ -58,7 +58,7 @@ export default function Detail() {
       <ButtonArea $offsetDvh={buttonOffset} $isHidden={isSheetExpanded}>
         <Button
           text="거래 생성하기"
-          onClick={() => router.push("/deal/list")}
+          onClick={() => router.push("/trade/list")}
           fontColor="white"
           backgroundColor="#FFD0D0"
           borderColor="#DFAFAF"

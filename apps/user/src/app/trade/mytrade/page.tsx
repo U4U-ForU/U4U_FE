@@ -40,7 +40,7 @@ export default function MyDetail() {
           commentCount={comments.length}
           menu={
             <PostMenu
-              onEdit={() => router.push("/deal/modifytitle")}
+              onEdit={() => router.push("/trade/edittitle")}
               onDelete={() => setIsDeleteOpen(true)}
             />
           }
@@ -65,7 +65,7 @@ export default function MyDetail() {
         onCancel={() => setIsDeleteOpen(false)}
         onConfirm={() => {
           setIsDeleteOpen(false);
-          router.push("/deal/list");
+          router.push("/trade/list");
         }}
       />
     </Page>

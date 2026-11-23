@@ -4,10 +4,19 @@ import type { ReactNode } from "react";
 interface RightBubbleProps {
   children: ReactNode;
   className?: string;
+  onClick: () => void;
 }
 
-export default function RightBubble({ children, className }: RightBubbleProps) {
-  return <Wrapper className={className}>{children}</Wrapper>;
+export default function RightBubble({
+  children,
+  className,
+  onClick,
+}: RightBubbleProps) {
+  return (
+    <Wrapper className={className} onClick={onClick}>
+      {children}
+    </Wrapper>
+  );
 }
 
 const Wrapper = styled.div`

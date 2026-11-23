@@ -5,12 +5,16 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import LeftBubble from "../bgBubble/LeftBubble";
 
-export default function RandomMenuItem() {
+export default function GachaMenuItem() {
   const router = useRouter();
 
+  const move = () => {
+    router.push("gacha");
+  };
+
   return (
-    <Trigger type="button" onClick={() => router.push("/gacha")}>
-      <Bubble>
+    <Trigger type="button">
+      <Bubble onClick={move}>
         뽑기
         <Random src="/img/random.svg" alt="" width={37} height={37} />
         <SmallStar src="/img/littlestar.svg" alt="" width={14} height={15} />

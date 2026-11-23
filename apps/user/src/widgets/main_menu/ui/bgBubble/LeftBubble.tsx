@@ -4,10 +4,19 @@ import type { ReactNode } from "react";
 interface LeftBubbleProps {
   children: ReactNode;
   className?: string;
+  onClick: () => void;
 }
 
-export default function LeftBubble({ children, className }: LeftBubbleProps) {
-  return <Wrapper className={className}>{children}</Wrapper>;
+export default function LeftBubble({
+  children,
+  className,
+  onClick,
+}: LeftBubbleProps) {
+  return (
+    <Wrapper className={className} onClick={onClick}>
+      {children}
+    </Wrapper>
+  );
 }
 
 const Wrapper = styled.div`

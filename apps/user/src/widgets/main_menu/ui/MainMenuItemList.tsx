@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
-import CombineMenuItem from "./eachButton/CombineMenuItem";
-import RandomMenuItem from "./eachButton/RandomMenuItem";
+import PotMenuItem from "./eachButton/PotMenuItem";
+import GachaMenuItem from "./eachButton/GachaMenuItem";
 import InventoryMenuItem from "./eachButton/InventoryMenuItem";
 import SubmitMenuItem from "./eachButton/SubmitMenuItem";
 
@@ -8,9 +8,9 @@ export default function MainMenuItemList() {
   return (
     <Wrapper>
       <SubmitMenuItem />
-      <CombineMenuItem />
+      <PotMenuItem />
       <InventoryMenuItem />
-      <RandomMenuItem />
+      <GachaMenuItem />
     </Wrapper>
   );
 }

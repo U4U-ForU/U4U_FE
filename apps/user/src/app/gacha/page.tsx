@@ -15,6 +15,7 @@ import {
   GACHA_DRAW_COST,
   type GachaDrawCount,
 } from "@/src/features/gacha/model/types";
+import PageFrame from "@/src/shared/ui/PageFrame";
 
 export default function Gacha() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -63,9 +64,6 @@ export default function Gacha() {
   );
 }
 
-const Page = styled.div`
-  display: flex;
-  height: 100dvh;
+const Page = styled(PageFrame)`
   padding-bottom: env(safe-area-inset-bottom);
-  flex-direction: column;
 `;

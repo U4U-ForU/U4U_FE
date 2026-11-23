@@ -8,6 +8,7 @@ import DealList from "@/src/features/deal";
 import { MOCK_DEAL_ROOMS } from "@/src/features/deal/model/list/mockRooms";
 import Button from "@/src/shared/ui/Button";
 import { useSafeBack } from "@/src/shared/lib/useSafeBack";
+import Page from "@/src/shared/ui/PageFrame";
 
 export default function List() {
   const goBack = useSafeBack();
@@ -41,11 +42,4 @@ const dealBackground = css`
   .app-background {
     background-image: url("/img/background/100.png");
   }
-`;
-
-const Page = styled.div`
-  display: flex;
-  height: 100dvh;
-  padding-bottom: calc(20px + env(safe-area-inset-bottom));
-  flex-direction: column;
 `;

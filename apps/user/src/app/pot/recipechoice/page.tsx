@@ -10,6 +10,7 @@ import ChooseModal from "@/src/features/pot/ui/choose/ChooseModal";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSafeBack } from "@/src/shared/lib/useSafeBack";
+import PageFrame from "@/src/shared/ui/PageFrame";
 
 export default function Itemmix() {
   const goBack = useSafeBack();
@@ -90,9 +91,7 @@ const Content = styled.div`
   overscroll-behavior: contain;
 `;
 
-const Page = styled.div`
-  display: flex;
-  height: 100dvh;
-  flex-direction: column;
+const Page = styled(PageFrame)`
+  padding-bottom: 0;
   align-items: center;
 `;

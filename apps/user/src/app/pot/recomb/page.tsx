@@ -8,6 +8,7 @@ import ItemPickerSheet from "@/src/features/deal/ui/detail/ItemPickerSheet";
 import ItemSlots from "@/src/features/pot/ui/ItemSlots";
 import { useItemSlots } from "@/src/features/pot/model/useItemSlots";
 import { useSafeBack } from "@/src/shared/lib/useSafeBack";
+import PageFrame from "@/src/shared/ui/PageFrame";
 
 export default function Itemmix() {
   const goBack = useSafeBack();
@@ -97,11 +98,7 @@ const ButtonWrapper = styled.div`
   margin-top: 32px;
 `;
 
-const Page = styled.div`
-  display: flex;
-  height: 90dvh;
-  padding-bottom: calc(20px + env(safe-area-inset-bottom));
-  flex-direction: column;
+const Page = styled(PageFrame)`
   align-items: center;
   justify-content: space-between;
 `;

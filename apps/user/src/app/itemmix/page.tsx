@@ -11,6 +11,7 @@ import { useItemSlots } from "@/src/features/pot/model/useItemSlots";
 import MixModal from "@/src/features/itemmix/ui/modal/MixModal";
 import ItemMixSuccess from "@/src/features/itemmix/ui/modal/itemMixSuccess";
 import { useSafeBack } from "@/src/shared/lib/useSafeBack";
+import Page from "@/src/shared/ui/PageFrame";
 
 export default function Itemmix() {
   const goBack = useSafeBack();
@@ -82,11 +83,4 @@ const MixButton = styled(Button)`
   &:disabled {
     opacity: 1;
   }
-`;
-
-const Page = styled.div`
-  display: flex;
-  height: 100dvh;
-  padding-bottom: calc(20px + env(safe-area-inset-bottom));
-  flex-direction: column;
 `;

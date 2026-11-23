@@ -11,6 +11,7 @@ import { MOCK_COMMENTS } from "@/src/features/deal/model/detail/mockComments";
 import PostMenu from "@/src/features/deal/ui/detail/PostMenu";
 import Modal from "@/src/shared/ui/modal/Modal";
 import { useSafeBack } from "@/src/shared/lib/useSafeBack";
+import Page from "@/src/shared/ui/PageFrame";
 
 export default function MyDetail() {
   const goBack = useSafeBack();
@@ -88,11 +89,4 @@ const dealBackground = css`
   .app-background {
     background-image: url("/img/background/100.png");
   }
-`;
-
-const Page = styled.div`
-  display: flex;
-  height: 100dvh;
-  padding-bottom: calc(20px + env(safe-area-inset-bottom));
-  flex-direction: column;
 `;

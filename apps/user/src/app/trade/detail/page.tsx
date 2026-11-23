@@ -10,9 +10,9 @@ import CommentInput from "@/src/features/deal/ui/detail/CommentInput";
 import ItemPickerSheet from "@/src/features/deal/ui/detail/ItemPickerSheet";
 import type { InventoryItem } from "@/src/entities/item/model/types";
 import { useEffect, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
 import { MOCK_COMMENTS } from "@/src/features/deal/model/detail/mockComments";
 import { useSafeBack } from "@/src/shared/lib/useSafeBack";
+import Page from "@/src/shared/ui/PageFrame";
 
 const MAX_SELECTED_ITEMS = 10;
 
@@ -123,11 +123,4 @@ const dealBackground = css`
   .app-background {
     background-image: url("/img/background/100.png");
   }
-`;
-
-const Page = styled.div`
-  display: flex;
-  height: 100dvh;
-  padding-bottom: calc(20px + env(safe-area-inset-bottom));
-  flex-direction: column;
 `;

@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import Button from "@/src/shared/ui/Button";
 import { SHEET_HALF_HEIGHT_DVH } from "@/src/shared/ui/BottomSheet";
 import { useSafeBack } from "@/src/shared/lib/useSafeBack";
+import PageFrame from "@/src/shared/ui/PageFrame";
 
 export default function Detail() {
   const goBack = useSafeBack();
@@ -103,10 +104,6 @@ const dealBackground = css`
   }
 `;
 
-const Page = styled.div`
-  display: flex;
-  height: 100dvh;
-  padding-bottom: calc(20px + env(safe-area-inset-bottom));
-  flex-direction: column;
+const Page = styled(PageFrame)`
   align-items: center;
 `;

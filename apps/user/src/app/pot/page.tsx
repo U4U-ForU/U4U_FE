@@ -5,6 +5,7 @@ import Header from "@/src/shared/ui/Header";
 import Button from "@/src/shared/ui/Button";
 import Image from "next/image";
 import { useSafeBack } from "@/src/shared/lib/useSafeBack";
+import PageFrame from "@/src/shared/ui/PageFrame";
 
 export default function Itemrecomb() {
   const goBack = useSafeBack();
@@ -71,10 +72,6 @@ const ButtonWrapper = styled.div`
   margin-top: 32px;
 `;
 
-const Page = styled.div`
-  display: flex;
-  height: 100dvh;
-  padding-bottom: calc(20px + env(safe-area-inset-bottom));
-  flex-direction: column;
+const Page = styled(PageFrame)`
   align-items: center;
 `;

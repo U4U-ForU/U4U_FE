@@ -10,13 +10,13 @@
   "theme_color": "#ffe4e4",
   "icons": [
     {
-      "src": "/icons/icon-192x192.png",
+      "src": "/icons/favicon-192x192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/icons/icon-512x512.png",
+      "src": "/icons/favicon-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"

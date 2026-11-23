@@ -81,7 +81,7 @@ const Wrapper = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 80px;
+  margin-bottom: calc(20px + env(safe-area-inset-bottom));
 `;
 
 const GachaImage = styled(Image)`

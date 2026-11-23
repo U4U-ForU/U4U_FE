@@ -69,7 +69,9 @@ const ButtonWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 12px;
-  margin-top: 32px;
+  /* auto 로 바닥에 붙이되, 짧은 화면에서 가마솥 그림과 붙지 않도록 최소 여백을 둔다 */
+  margin-top: auto;
+  padding-top: 32px;
 `;
 
 const Page = styled(PageFrame)`

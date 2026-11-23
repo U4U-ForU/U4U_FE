@@ -4,11 +4,13 @@ import styled from "@emotion/styled";
 import Header from "@/src/shared/ui/Header";
 import Button from "@/src/shared/ui/Button";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 export default function Itemrecomb() {
+  const router = useRouter();
   return (
     <Page>
-      <Header title="가마솥" />
+      <Header title="가마솥" onBackPress={() => router.back()} />
       <InfoIconWrapper>
         <InfoIcon
           src={"/icon/info/icon/action/Error.svg"}
@@ -18,7 +20,7 @@ export default function Itemrecomb() {
         />
       </InfoIconWrapper>
       <PotImage
-        src={"/tempImg/tempImg.svg"}
+        src={"/tempImg/img/pot.svg"}
         width={353}
         height={447}
         alt="이미지"

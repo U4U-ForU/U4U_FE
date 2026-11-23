@@ -20,7 +20,7 @@ export default function Itemmix() {
 
   return (
     <Page>
-      <Header title="조합법 선택" />
+      <Header title="조합법 선택" onBackPress={() => router.back()} />
 
       <Content>
         <ChooseBoxList

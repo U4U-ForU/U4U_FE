@@ -1,6 +1,7 @@
 "use client";
 
 import styled from "@emotion/styled";
+import { keyframes } from "@emotion/react";
 import { useRef, useState, type PointerEvent } from "react";
 import ItemModal from "@/src/entities/item/ui/ItemModal";
 import SkipButton from "../SkipButton";
@@ -14,12 +15,34 @@ interface GachaResultProps {
   onSkip: () => void;
 }
 
-const MAX_STACKED_CARD = 2;
+type SlideDirection = "next" | "prev";
+
+interface LeavingCardState {
+  item: GachaItem;
+  label: string;
+  direction: SlideDirection;
+}
+
+const MAX_STACKED_CARD = 1;
+const FLY_MS = 200;
+const RISE_MS = 300;
+const RISE_DELAY_MS = 90;
+const EASE = "cubic-bezier(0.22, 1, 0.36, 1)";
+const STACK_GAP = 16;
+const STACK_SHRINK = 0.05;
+const STACK_RESERVE = 16;
+
+const STACK_STEP = (depth: number) =>
+  `translateY(${-STACK_GAP * depth}px) scale(${1 - STACK_SHRINK * depth})`;
 const SWIPE_THRESHOLD = 50;
+
+const noop = () => {};
 const DRAG_START_THRESHOLD = 10;
 
 export default function GachaResult({ items, onSkip }: GachaResultProps) {
   const [index, setIndex] = useState(0);
+  const [direction, setDirection] = useState<SlideDirection>("next");
+  const [leaving, setLeaving] = useState<LeavingCardState | null>(null);
   const startXRef = useRef<number | null>(null);
   const isDraggingRef = useRef(false);
 
@@ -29,16 +52,32 @@ export default function GachaResult({ items, onSkip }: GachaResultProps) {
   const isLast = index === items.length - 1;
   const stackedCount = Math.min(items.length - 1 - index, MAX_STACKED_CARD);
 
+  const buttonLabel = !isLast
+    ? "다음"
+    : isSingleDraw
+      ? "뽑기 완료"
+      : "결과 보기";
+
+  const slideTo = (nextDirection: SlideDirection) => {
+    setDirection(nextDirection);
+    setLeaving({
+      item: currentItem,
+      label: buttonLabel,
+      direction: nextDirection,
+    });
+    setIndex((prev) => (nextDirection === "next" ? prev + 1 : prev - 1));
+  };
+
   const goPrev = () => {
     if (isFirst) return;
 
-    setIndex((prev) => prev - 1);
+    slideTo("prev");
   };
 
   const goNext = () => {
     if (isLast) return;
 
-    setIndex((prev) => prev + 1);
+    slideTo("next");
   };
 
   const handlePointerDown = (event: PointerEvent<HTMLDivElement>) => {
@@ -109,18 +148,41 @@ export default function GachaResult({ items, onSkip }: GachaResultProps) {
           ))}
 
           <FrontCard $tilted={!isSingleDraw}>
-            <ItemModal
-              img={currentItem.imageUrl}
-              itemName={currentItem.name}
-              itemDescription={currentItem.description}
-              ButtonText={
-                !isLast ? "다음" : isSingleDraw ? "뽑기 완료" : "결과 보기"
-              }
-              onClose={onSkip}
-              onButtonClick={isLast ? onSkip : goNext}
-              showCloseButton={false}
-            />
+            <CardSlide key={index} $direction={direction}>
+              <ItemModal
+                img={currentItem.imageUrl}
+                itemName={currentItem.name}
+                itemDescription={currentItem.description}
+                ButtonText={buttonLabel}
+                onClose={onSkip}
+                onButtonClick={isLast ? onSkip : goNext}
+                showCloseButton={false}
+              />
+            </CardSlide>
           </FrontCard>
+
+          {leaving && (
+            <LeavingCard
+              $tilted={!isSingleDraw}
+              $direction={leaving.direction}
+              aria-hidden="true"
+            >
+              <CardFly
+                $direction={leaving.direction}
+                onAnimationEnd={() => setLeaving(null)}
+              >
+                <ItemModal
+                  img={leaving.item.imageUrl}
+                  itemName={leaving.item.name}
+                  itemDescription={leaving.item.description}
+                  ButtonText={leaving.label}
+                  onClose={noop}
+                  onButtonClick={noop}
+                  showCloseButton={false}
+                />
+              </CardFly>
+            </LeavingCard>
+          )}
         </CardArea>
 
         <ArrowButton
@@ -156,6 +218,7 @@ const Deck = styled.div`
 
 const CardArea = styled.div`
   position: relative;
+  margin-top: ${STACK_RESERVE}px;
   width: 287px;
   height: 500px;
   flex-shrink: 0;
@@ -170,11 +233,89 @@ const StackedCard = styled.div<{ $depth: number }>`
   border-radius: 12px;
   border: 2px solid var(--pink-p1, #ffe7e7);
   background: #fff;
-  opacity: ${({ $depth }) => 1 - $depth * 0.15};
+  opacity: ${({ $depth }) => Math.max(0.35, 1 - $depth * 0.07)};
+  transform-origin: top center;
+  transform: ${({ $depth }) => STACK_STEP($depth)};
+  transition:
+    transform ${RISE_MS}ms ${EASE},
+    opacity ${RISE_MS}ms ${EASE};
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
 `;
 
 const FrontCard = styled.div<{ $tilted: boolean }>`
   position: relative;
   z-index: 1;
   transform: ${({ $tilted }) => ($tilted ? "rotate(3deg)" : "none")};
+`;
+
+const LeavingCard = styled.div<{
+  $tilted: boolean;
+  $direction: SlideDirection;
+}>`
+  position: absolute;
+  inset: 0;
+  z-index: ${({ $direction }) => ($direction === "next" ? 2 : 0)};
+  pointer-events: none;
+  transform: ${({ $tilted }) => ($tilted ? "rotate(3deg)" : "none")};
+`;
+
+const riseFromStack = keyframes`
+  from {
+    opacity: 0.6;
+    transform: ${STACK_STEP(1)};
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+`;
+
+const flyOffRight = keyframes`
+  to {
+    opacity: 0;
+    transform: translateX(115%) rotate(10deg);
+  }
+`;
+
+const returnFromLeft = keyframes`
+  from {
+    opacity: 0;
+    transform: translateX(-110%) rotate(-10deg);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+`;
+
+const sinkIntoStack = keyframes`
+  to {
+    opacity: 0;
+    transform: ${STACK_STEP(1)};
+  }
+`;
+
+const CardSlide = styled.div<{ $direction: SlideDirection }>`
+  transform-origin: top center;
+  animation: ${({ $direction }) =>
+      $direction === "next" ? riseFromStack : returnFromLeft}
+    ${RISE_MS}ms ${EASE} ${RISE_DELAY_MS}ms both;
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+`;
+
+const CardFly = styled.div<{ $direction: SlideDirection }>`
+  transform-origin: top center;
+  animation: ${({ $direction }) =>
+      $direction === "next" ? flyOffRight : sinkIntoStack}
+    ${FLY_MS}ms ease-in forwards;
+
+  @media (prefers-reduced-motion: reduce) {
+    animation-duration: 1ms;
+  }
 `;

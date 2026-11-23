@@ -2,6 +2,7 @@
 
 import styled from "@emotion/styled";
 import { useRouter } from "next/navigation";
+import { markReplace } from "@/src/shared/lib/navStack";
 
 interface QuestionProps {
   text: "회원가입" | "로그인";
@@ -12,13 +13,15 @@ export default function Question({ text }: QuestionProps) {
 
   const isSignup = text === "회원가입";
 
+  const move = () => {
+    markReplace();
+    router.replace(isSignup ? "/login" : "/signup");
+  };
+
   return (
     <Wrapper>
       <Q>{isSignup ? "계정이 있으신가요?" : "계정이 없으신가요?"}</Q>
-      <Button
-        type="button"
-        onClick={() => router.push(isSignup ? "/login" : "/signup")}
-      >
+      <Button type="button" onClick={move}>
         {isSignup ? "로그인" : "회원가입"}
       </Button>
     </Wrapper>

@@ -38,7 +38,6 @@ export default function RootLayout({
       <body className="antialiased">
         <div className="app-background" />
         <main className="app-content">
-          {children}
           <Providers>
             <AuthGuard>{children}</AuthGuard>
           </Providers>

@@ -3,21 +3,34 @@
 import { Global, css } from "@emotion/react";
 import styled from "@emotion/styled";
 import Header from "@/src/shared/ui/Header";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { Suspense, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 
 import { Button } from "@u4u/ui";
-import { SHEET_HALF_HEIGHT_DVH } from "@/src/shared/ui/BottomSheet";
 import { useSafeBack } from "@/src/shared/lib/useSafeBack";
 import PageFrame from "@/src/shared/ui/PageFrame";
+import TitleInput from "@/src/shared/ui/TitleInput";
+import ConfirmModal from "@/src/shared/ui/modal/Modal";
+
+const MAX_ROOM_NAME_LENGTH = 30;
 
 export default function Detail() {
+  return (
+    <Suspense>
+      <EditTitle />
+    </Suspense>
+  );
+}
+
+function EditTitle() {
   const goBack = useSafeBack();
   const router = useRouter();
-  const [isSheetOpen, setIsSheetOpen] = useState(false);
-  const [isSheetExpanded, setIsSheetExpanded] = useState(false);
+  const searchParams = useSearchParams();
+  const [title, setTitle] = useState(searchParams.get("title") ?? "");
 
-  const buttonOffset = isSheetOpen ? SHEET_HALF_HEIGHT_DVH : 0;
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+
+  const canEdit = title.trim() !== "";
 
   return (
     <Page>
@@ -25,65 +38,55 @@ export default function Detail() {
       <Header title="거래 제목 수정" onBackPress={goBack} />
 
       <Content>
-        <Input type="text" placeholder="(원래 거래방 이름이 들어감)"></Input>
+        <TitleInput
+          label="거래방 이름"
+          maxLength={MAX_ROOM_NAME_LENGTH}
+          value={title}
+          onChange={setTitle}
+        />
       </Content>
 
-      <ButtonArea $offsetDvh={buttonOffset} $isHidden={isSheetExpanded}>
+      <ButtonArea>
         <Button
           text="거래 수정하기"
-          onClick={() => router.push("/trade/mytrade")}
-          fontColor="white"
-          backgroundColor="#FFD0D0"
-          borderColor="#DFAFAF"
-          fontBorderColor="#A75959"
+          onClick={() => setIsConfirmOpen(true)}
+          disabled={!canEdit}
+          fontColor={canEdit ? "white" : "#B3AEAF"}
+          backgroundColor={canEdit ? "#FFD0D0" : "#E0DDDD"}
+          borderColor={canEdit ? "#DFAFAF" : "white"}
+          fontBorderColor={canEdit ? "#A75959" : "none"}
           boxShadow={false}
         />
       </ButtonArea>
+
+      <ConfirmModal
+        isOpen={isConfirmOpen}
+        type="confirm"
+        title={"거래 제목을 정말\n수정하시겠어요?"}
+        text="수정한 제목은 거래 목록에도"
+        text2="그대로 반영됩니다."
+        confirmText="수정"
+        onCancel={() => setIsConfirmOpen(false)}
+        onConfirm={() => {
+          setIsConfirmOpen(false);
+          router.push("/trade/mytrade");
+        }}
+      />
     </Page>
   );
 }
 
-const ButtonArea = styled.div<{ $offsetDvh: number; $isHidden: boolean }>`
+const ButtonArea = styled.div`
   position: fixed;
   left: 0;
   right: 0;
-  bottom: ${({ $offsetDvh }) => $offsetDvh}dvh;
+  bottom: 0;
   z-index: 103;
   display: flex;
   justify-content: center;
   padding-bottom: calc(20px + env(safe-area-inset-bottom));
-  opacity: ${({ $isHidden }) => ($isHidden ? 0 : 1)};
-  pointer-events: ${({ $isHidden }) => ($isHidden ? "none" : "auto")};
-  transition:
-    bottom 0.25s ease,
-    opacity 0.2s ease;
 `;
 
-const Input = styled.input`
-  display: flex;
-  height: 48px;
-  padding: 0 var(--number-16, 16px);
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-  align-self: stretch;
-  border-radius: var(--number-6, 6px);
-  background: var(--color-gray-0, #fff);
-  outline: none;
-  border: none;
-
-  /* body/body-medium */
-  font-family: Pretendard;
-  font-size: var(--typo-body-medium, 16px);
-  font-style: normal;
-  font-weight: 400;
-  line-height: 150%; /* 24px */
-
-  ::placeholder {
-    color: #b3aeaf;
-  }
-`;
 
 const Content = styled.div`
   display: flex;

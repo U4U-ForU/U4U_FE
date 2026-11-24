@@ -8,14 +8,17 @@ interface CommentInputProps {
   items: InventoryItem[];
   onOpenPicker: () => void;
   onRemove?: (index: number) => void;
+  onSend?: () => void;
 }
 
 export default function CommentInput({
   items,
   onOpenPicker,
   onRemove,
+  onSend,
 }: CommentInputProps) {
   const isRemovable = Boolean(onRemove);
+  const canSend = items.length > 0;
 
   return (
     <Wrapper onClick={onOpenPicker}>
@@ -50,12 +53,22 @@ export default function CommentInput({
         )}
       </Input>
       <Bottom>
-        <Image
-          src={"/img/sendButton/send.svg"}
-          width={24}
-          height={24}
-          alt="전송버튼"
-        ></Image>
+        <SendButton
+          type="button"
+          aria-label="거래 제안 보내기"
+          disabled={!canSend}
+          onClick={(event) => {
+            event.stopPropagation();
+            onSend?.();
+          }}
+        >
+          <Image
+            src={"/img/sendButton/send.svg"}
+            width={24}
+            height={24}
+            alt=""
+          />
+        </SendButton>
       </Bottom>
     </Wrapper>
   );
@@ -66,6 +79,20 @@ const Bottom = styled.div`
   justify-content: flex-end;
   align-items: flex-start;
   align-self: stretch;
+`;
+
+const SendButton = styled.button`
+  display: flex;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
 `;
 
 const Input = styled.div`

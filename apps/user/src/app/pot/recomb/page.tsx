@@ -2,16 +2,17 @@
 
 import styled from "@emotion/styled";
 import Header from "@/src/shared/ui/Header";
-import Button from "@/src/shared/ui/Button";
+import { Button } from "@u4u/ui";
 import Image from "next/image";
 import ItemPickerSheet from "@/src/features/deal/ui/detail/ItemPickerSheet";
 import ItemSlots from "@/src/features/pot/ui/ItemSlots";
 import { useItemSlots } from "@/src/features/pot/model/useItemSlots";
 import { useSafeBack } from "@/src/shared/lib/useSafeBack";
 import PageFrame from "@/src/shared/ui/PageFrame";
+import { useRouter } from "next/navigation";
 
 export default function Itemmix() {
-  const goBack = useSafeBack();
+  const router = useRouter();
 
   const {
     slots,
@@ -26,7 +27,7 @@ export default function Itemmix() {
 
   return (
     <Page>
-      <Header title="아이템 재조합" onBackPress={goBack} />
+      <Header title="아이템 재조합" onBackPress={() => router.push("/pot")} />
 
       <ItemSlots slots={slots} onSlotClick={openPicker} onRemove={clearSlot} />
 
@@ -57,6 +58,7 @@ export default function Itemmix() {
           backgroundColor="white"
           fontColor="#A75959"
           boxShadow={false}
+          onClick={() => router.push("/pot/recipechoice")}
         />
       </ButtonWrapper>
 

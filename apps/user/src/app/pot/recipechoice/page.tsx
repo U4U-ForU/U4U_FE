@@ -2,7 +2,7 @@
 
 import styled from "@emotion/styled";
 import Header from "@/src/shared/ui/Header";
-import Button from "@/src/shared/ui/Button";
+import { Button } from "@u4u/ui";
 import ItemPickerSheet from "@/src/features/deal/ui/detail/ItemPickerSheet";
 import { useItemSlots } from "@/src/features/pot/model/useItemSlots";
 import ChooseBoxList from "@/src/features/pot/ui/choose/ChooseBoxList";
@@ -13,7 +13,6 @@ import { useSafeBack } from "@/src/shared/lib/useSafeBack";
 import PageFrame from "@/src/shared/ui/PageFrame";
 
 export default function Itemmix() {
-  const goBack = useSafeBack();
   const router = useRouter();
   const { selectedItems, isPickerOpen, closePicker, fillSlot } = useItemSlots();
   const [selectedComb, setSelectedComb] = useState<number | null>(null);
@@ -23,7 +22,7 @@ export default function Itemmix() {
 
   return (
     <Page>
-      <Header title="조합법 선택" onBackPress={goBack} />
+      <Header title="조합법 선택" onBackPress={() => router.push("/pot")} />
 
       <Content>
         <ChooseBoxList
@@ -48,7 +47,7 @@ export default function Itemmix() {
       <ChooseModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        onConfirm={() => router.push("/itemmix")}
+        onConfirm={() => router.push("/pot/recomb")}
       />
 
       <ItemPickerSheet

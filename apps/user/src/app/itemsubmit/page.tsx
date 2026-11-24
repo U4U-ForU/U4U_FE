@@ -3,13 +3,16 @@
 import Header from "@/src/shared/ui/Header";
 import InputBox from "@/src/shared/ui/InputBox";
 import ImageUploadBox from "@/src/shared/ui/ImgUploadBox";
-import Button from "@/src/shared/ui/Button";
+import { Button } from "@u4u/ui";
 import styled from "@emotion/styled";
 import { useState } from "react";
-import { useSafeBack } from "@/src/shared/lib/useSafeBack";
+import { useBackTo } from "@/src/shared/lib/useBackTo";
+import { useRouter } from "next/navigation";
 
 export default function ItemSubmit() {
-  const goBack = useSafeBack();
+  const router = useRouter();
+
+  const goBack = useBackTo("/itemsubmitlist");
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [itemName, setItemName] = useState("");
   const [itemDescription, setItemDescription] = useState("");
@@ -21,6 +24,7 @@ export default function ItemSubmit() {
 
   const handleSubmit = () => {
     if (!canSubmit) return;
+    router.push("/itemsubmitlist");
   };
 
   return (

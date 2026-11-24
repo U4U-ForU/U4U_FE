@@ -2,7 +2,7 @@
 
 import styled from "@emotion/styled";
 import ProfileHeader from "@/src/shared/ui/Header";
-import Button from "@/src/shared/ui/Button";
+import { Button } from "@u4u/ui";
 import SubmitItemFiltering from "@/src/features/submitItemFiltering";
 import { MOCK_SUBMIT_ITEMS } from "@/src/entities/submitItem/model/mockSubmitItems";
 import { useRouter } from "next/navigation";

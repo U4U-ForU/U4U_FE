@@ -2,13 +2,24 @@
 
 import styled from "@emotion/styled";
 import Header from "@/src/shared/ui/Header";
-import Button from "@/src/shared/ui/Button";
+import { Button } from "@u4u/ui";
 import Image from "next/image";
-import { useSafeBack } from "@/src/shared/lib/useSafeBack";
+import { useBackTo } from "@/src/shared/lib/useBackTo";
 import PageFrame from "@/src/shared/ui/PageFrame";
+import { useRouter } from "next/navigation";
 
 export default function Itemrecomb() {
-  const goBack = useSafeBack();
+  const router = useRouter();
+
+  const moveToMix = () => {
+    router.push("/pot/itemmix");
+  };
+
+  const moveToRecombList = () => {
+    router.push("/pot/recipechoice");
+  };
+
+  const goBack = useBackTo("/main");
   return (
     <Page>
       <Header title="가마솥" onBackPress={goBack} />
@@ -29,6 +40,7 @@ export default function Itemrecomb() {
           backgroundColor="#FFD0D0"
           fontColor="white"
           boxShadow={false}
+          onClick={moveToMix}
         />
         <Button
           text="아이템 재조합"
@@ -37,6 +49,7 @@ export default function Itemrecomb() {
           backgroundColor="white"
           fontColor="#A75959"
           boxShadow={false}
+          onClick={moveToRecombList}
         />
       </ButtonWrapper>
     </Page>

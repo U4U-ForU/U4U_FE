@@ -1,8 +1,9 @@
 import styled from "@emotion/styled";
 import FilterBox from "./FilterBox";
-import type { ItemFilter } from "@/src/entities/item/model/types";
-
-const FILTERS: ItemFilter[] = ["전체", "보유", "예약"];
+import {
+  ITEM_FILTERS as FILTERS,
+  type ItemFilter,
+} from "@/src/entities/item/model/types";
 
 interface FilterBoxListProps {
   value: ItemFilter;

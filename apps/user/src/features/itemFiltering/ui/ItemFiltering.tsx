@@ -15,10 +15,14 @@ const EMPTY_MESSAGE: Record<ItemFilter, string> = {
 
 interface ItemFilteringProps {
   items: InventoryItem[];
+  initialFilter?: ItemFilter;
 }
 
-export default function ItemFiltering({ items }: ItemFilteringProps) {
-  const [filter, setFilter] = useState<ItemFilter>("전체");
+export default function ItemFiltering({
+  items,
+  initialFilter = "전체",
+}: ItemFilteringProps) {
+  const [filter, setFilter] = useState<ItemFilter>(initialFilter);
 
   const filteredItems =
     filter === "전체" ? items : items.filter((item) => item.status === filter);
@@ -29,7 +33,7 @@ export default function ItemFiltering({ items }: ItemFilteringProps) {
       {filteredItems.length === 0 ? (
         <EmptyList text={EMPTY_MESSAGE[filter]} />
       ) : (
-        <ItemList items={filteredItems} />
+        <ItemList items={filteredItems} filter={filter} />
       )}
     </>
   );

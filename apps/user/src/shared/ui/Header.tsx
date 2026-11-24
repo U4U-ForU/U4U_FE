@@ -11,13 +11,7 @@ export default function ProfileHeader({
   onBackPress,
 }: ProfileHeaderProps) {
   const backIcon = (
-    <Image
-      src={"/backicon/arrow.png"}
-      width={24}
-      height={24}
-      alt="뒤로가기"
-      onClick={onBackPress}
-    />
+    <Image src={"/backicon/arrow.png"} width={24} height={24} alt="뒤로가기" />
   );
 
   return (
@@ -51,6 +45,7 @@ const BackButton = styled.button`
 const Top = styled.div`
   display: flex;
   position: relative;
+  z-index: 101;
   align-self: stretch;
   flex-direction: row;
   align-items: center;

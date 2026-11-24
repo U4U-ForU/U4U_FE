@@ -6,16 +6,19 @@ import { Button } from "@u4u/ui";
 import SubmitItemFiltering from "@/src/features/submitItemFiltering";
 import { MOCK_SUBMIT_ITEMS } from "@/src/entities/submitItem/model/mockSubmitItems";
 import { useRouter } from "next/navigation";
-import { useSafeBack } from "@/src/shared/lib/useSafeBack";
 
 export default function ItemSubmitList() {
-  const goBack = useSafeBack();
   const router = useRouter();
 
   return (
     <Wrapper>
       <PageBackground aria-hidden="true" />
-      <ProfileHeader title="아이템 제출 목록" onBackPress={goBack} />
+      <ProfileHeader
+        title="아이템 제출 목록"
+        onBackPress={() => {
+          router.push("/main");
+        }}
+      />
       <SubmitItemFiltering items={MOCK_SUBMIT_ITEMS} />
       <BottomArea>
         <Button

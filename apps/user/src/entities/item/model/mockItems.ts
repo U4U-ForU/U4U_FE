@@ -1,6 +1,10 @@
 import type { InventoryItem } from "./types";
 
-export const MOCK_ITEMS: InventoryItem[] = [
+const MOCK_MAKER = "maremare";
+const MOCK_DESCRIPTION =
+  "푹신한 핑크빛 젤리가 콕 박힌 귀여운 냥이 장갑! 착용하면 냥냥 펀치의 파워가 업! 심쿵 주의 귀여움으로 적의 마음을 스르륵 녹여 공격력을 살짝 낮춰버려요.";
+
+const ITEMS: InventoryItem[] = [
   { id: 1, name: "반짝이는별", count: 10, status: "보유" },
   { id: 2, name: "구름사탕", status: "보유" },
   { id: 3, name: "달빛조각", count: 8, status: "보유" },
@@ -24,3 +28,9 @@ export const MOCK_ITEMS: InventoryItem[] = [
   { id: 21, name: "꿈의깃털", count: 25, status: "예약" },
   { id: 22, name: "소원램프", count: 12000, status: "예약" },
 ];
+
+export const MOCK_ITEMS: InventoryItem[] = ITEMS.map((item) => ({
+  ...item,
+  maker: MOCK_MAKER,
+  description: MOCK_DESCRIPTION,
+}));

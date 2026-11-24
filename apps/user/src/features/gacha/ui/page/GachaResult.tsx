@@ -142,17 +142,21 @@ export default function GachaResult({ items, onSkip }: GachaResultProps) {
         <SkipButton onClick={onSkip} />
       </SkipArea>
 
-      <InfomationArea>
-        <Infomation />
-      </InfomationArea>
+      {!isSingleDraw && (
+        <InfomationArea>
+          <Infomation />
+        </InfomationArea>
+      )}
 
       <Deck>
-        <ArrowButton
-          direction="prev"
-          label="이전 아이템 보기"
-          onClick={goPrev}
-          disabled={isFirst}
-        />
+        {!isSingleDraw && (
+          <ArrowButton
+            direction="prev"
+            label="이전 아이템 보기"
+            onClick={goPrev}
+            disabled={isFirst}
+          />
+        )}
 
         <CardArea
           onPointerDown={handlePointerDown}
@@ -203,12 +207,14 @@ export default function GachaResult({ items, onSkip }: GachaResultProps) {
           )}
         </CardArea>
 
-        <ArrowButton
-          direction="next"
-          label="다음 아이템 보기"
-          onClick={goNext}
-          disabled={isLast}
-        />
+        {!isSingleDraw && (
+          <ArrowButton
+            direction="next"
+            label="다음 아이템 보기"
+            onClick={goNext}
+            disabled={isLast}
+          />
+        )}
       </Deck>
     </Wrapper>
   );

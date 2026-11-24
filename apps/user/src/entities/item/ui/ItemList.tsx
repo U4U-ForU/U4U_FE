@@ -17,8 +17,13 @@ export default function ItemList({ items }: ItemListProps) {
   const isReserved = selectedItem?.status === "예약";
 
   const goToTrade = () => {
-    // TODO: 예약 아이템이 등록된 거래방 id로 이동
-    router.push(isReserved ? "/trade/detail" : "/trade/create");
+    if (isReserved) {
+      // TODO: 예약 아이템이 등록된 거래방 id로 이동
+      router.push("/trade/detail");
+      return;
+    }
+
+    router.push(`/trade/create?itemId=${selectedItem?.id}`);
   };
 
   return (

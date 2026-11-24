@@ -3,11 +3,12 @@
 import { Global, css } from "@emotion/react";
 import styled from "@emotion/styled";
 import Header from "@/src/shared/ui/Header";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { Suspense, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import ItemPickerSheet from "@/src/features/deal/ui/detail/ItemPickerSheet";
 import ItemList from "@/src/features/deal/ui/create.tsx/ItemList";
 import type { InventoryItem } from "@/src/entities/item/model/types";
+import { MOCK_ITEMS } from "@/src/entities/item/model/mockItems";
 import { Button } from "@u4u/ui";
 import { SHEET_HALF_HEIGHT_DVH } from "@/src/shared/ui/BottomSheet";
 import { useSafeBack } from "@/src/shared/lib/useSafeBack";
@@ -16,11 +17,25 @@ import PageFrame from "@/src/shared/ui/PageFrame";
 const MAX_SELECTED_ITEMS = 10;
 
 export default function Detail() {
+  return (
+    <Suspense>
+      <TradeCreate />
+    </Suspense>
+  );
+}
+
+function TradeCreate() {
   const goBack = useSafeBack();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const [isSheetExpanded, setIsSheetExpanded] = useState(false);
-  const [selectedItems, setSelectedItems] = useState<InventoryItem[]>([]);
+  const [selectedItems, setSelectedItems] = useState<InventoryItem[]>(() => {
+    const itemId = Number(searchParams.get("itemId"));
+    const item = MOCK_ITEMS.find(({ id }) => id === itemId);
+
+    return item ? [item] : [];
+  });
 
   const addItem = (item: InventoryItem) =>
     setSelectedItems((prev) =>

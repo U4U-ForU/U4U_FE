@@ -3,9 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 import AuthFormLayout from "@/src/features/signup/ui/AuthFormLayout";
-import Input from "@/src/features/signup/ui/Input";
-import { validateEmail } from "@/src/shared/lib/validate";
-import { useSignupContext } from "@/src/features/signup/model/SignupContext";
+import { Input, useSignupContext, validateEmail } from "@u4u/ui";
 
 export default function EmailPage() {
   const router = useRouter();
@@ -43,6 +41,7 @@ export default function EmailPage() {
         placeholder="이메일을 입력해주세요."
         autoComplete="email"
         value={email}
+        isError={!!errorMessage}
         onChange={handleChange}
       />
     </AuthFormLayout>

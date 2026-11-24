@@ -1,13 +1,15 @@
 "use client";
 
-import styled from "@emotion/styled";
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 import AuthFormLayout from "@/src/features/signup/ui/AuthFormLayout";
-import Input from "@/src/features/signup/ui/Input";
-import Requirement from "@/src/features/signup/ui/Requirement";
-import { validateNickname } from "@/src/shared/lib/validate";
-import { useSignupContext } from "@/src/features/signup/model/SignupContext";
+import {
+  Input,
+  Requirement,
+  Requirements,
+  useSignupContext,
+  validateNickname,
+} from "@u4u/ui";
 
 export default function NicknamePage() {
   const router = useRouter();
@@ -46,6 +48,7 @@ export default function NicknamePage() {
         placeholder="닉네임을 입력해주세요"
         autoComplete="nickname"
         value={nickname}
+        isError={!!errorMessage}
         onChange={handleChange}
       />
       <Requirements>
@@ -55,9 +58,3 @@ export default function NicknamePage() {
     </AuthFormLayout>
   );
 }
-
-const Requirements = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-`;

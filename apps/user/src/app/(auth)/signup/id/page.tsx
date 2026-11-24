@@ -1,20 +1,13 @@
 "use client";
 
-import styled from "@emotion/styled";
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 import AuthFormLayout from "@/src/features/signup/ui/AuthFormLayout";
-import Input from "@/src/features/signup/ui/Input";
-import Requirement from "@/src/features/signup/ui/Requirement";
-import { validateId } from "@/src/shared/lib/validate";
-import { markReplace } from "@/src/shared/lib/navStack";
+import { Input, Requirement, Requirements, validateId } from "@u4u/ui";
 import {
   getSignupErrorMessage,
   useSignup,
 } from "@/src/features/signup/model/useSignup";
-import { saveTokens } from "@/src/shared/lib/tokenStorage";
-import SuccessModal from "@/src/features/signup/ui/SuccessModal";
-import Modal from "@/src/shared/ui/modal/ModalParent";
 
 export default function IdPage() {
   const [id, setId] = useState("");
@@ -54,24 +47,8 @@ export default function IdPage() {
     signup(id);
   };
 
-  const handleConfirm = () => {
-    if (!tokens) {
-      markReplace();
-      router.replace("/login");
-      return;
-    }
-
-    saveTokens(tokens);
-    markReplace();
-    router.replace("/main");
-  };
-
   return (
     <>
-      <Modal isOpen={isSuccess}>
-        <SuccessModal onConfirm={handleConfirm} />
-      </Modal>
-
       <AuthFormLayout
         titles={["로그인 시 사용될", "아이디를 입력해주세요"]}
         errorMessage={errorMessage}
@@ -85,6 +62,7 @@ export default function IdPage() {
           placeholder="아이디를 입력해주세요"
           autoComplete="username"
           value={id}
+          isError={!!errorMessage}
           onChange={handleChange}
         />
         <Requirements>
@@ -95,9 +73,3 @@ export default function IdPage() {
     </>
   );
 }
-
-const Requirements = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-`;

@@ -14,6 +14,13 @@ export default function ItemList({ items }: ItemListProps) {
   const [selectedItem, setSelectedItem] = useState<InventoryItem | null>(null);
   const router = useRouter();
 
+  const isReserved = selectedItem?.status === "예약";
+
+  const goToTrade = () => {
+    // TODO: 예약 아이템이 등록된 거래방 id로 이동
+    router.push(isReserved ? "/trade/detail" : "/trade/create");
+  };
+
   return (
     <>
       <Scroller>
@@ -35,8 +42,8 @@ export default function ItemList({ items }: ItemListProps) {
       >
         <ItemModal
           onClose={() => setSelectedItem(null)}
-          ButtonText="거래하러 가기"
-          onButtonClick={() => router.push("/trade/create")}
+          ButtonText={isReserved ? "거래 보러가기" : "거래하러 가기"}
+          onButtonClick={goToTrade}
           maker="maremare"
           img="/tempImg/tempItemImg.png"
           itemName={selectedItem?.name ?? ""}

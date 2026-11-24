@@ -6,9 +6,10 @@ import Coin from "@/src/entities/user/ui/Coin";
 import Image from "next/image";
 import CloseButton from "@/src/shared/ui/CloseButton";
 import { useRef, useState, type ChangeEvent } from "react";
+import { useUserStarStore } from "@/src/entities/user/model/useUserStarStore";
+import { NICKNAME_MAX_LENGTH, validateNickname } from "@u4u/ui";
 
 const DEFAULT_PROFILE_IMAGE = "/img/ProfileImg.svg";
-const NICKNAME_MAX_LENGTH = 10;
 
 interface MypageModalProps {
   isOpen: boolean;
@@ -20,15 +21,20 @@ export default function MypageModal({ isOpen, onClose }: MypageModalProps) {
   const [draftNickname, setDraftNickname] = useState(nickname);
   const [imageUrl, setImageUrl] = useState(DEFAULT_PROFILE_IMAGE);
   const [isEditing, setIsEditing] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const starCount = useUserStarStore((state) => state.starCount);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleClose = () => {
     setIsEditing(false);
+    setIsSubmitted(false);
+    setDraftNickname(nickname);
     onClose();
   };
 
   const startEditing = () => {
     setDraftNickname(nickname);
+    setIsSubmitted(false);
     setIsEditing(true);
   };
 
@@ -44,14 +50,25 @@ export default function MypageModal({ isOpen, onClose }: MypageModalProps) {
     setImageUrl(URL.createObjectURL(file));
   };
 
+  const handleRemoveImage = () => {
+    if (imageUrl.startsWith("blob:")) URL.revokeObjectURL(imageUrl);
+
+    setImageUrl(DEFAULT_PROFILE_IMAGE);
+
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  };
+
   const handleSave = () => {
-    // TODO: 프로필 수정 API 연동
-    const trimmed = draftNickname.trim();
+    setIsSubmitted(true);
 
-    if (trimmed) setNickname(trimmed);
+    if (validateNickname(draftNickname)) return;
 
+    setNickname(draftNickname.trim());
     setIsEditing(false);
   };
+
+  const nicknameError =
+    isEditing && isSubmitted ? validateNickname(draftNickname) : "";
 
   const avatar = (
     <Avatar
@@ -67,28 +84,44 @@ export default function MypageModal({ isOpen, onClose }: MypageModalProps) {
     <ModalParent isOpen={isOpen} onClose={handleClose}>
       <Wrapper>
         <Top>
-          <Coin coin={240} />
+          <Coin coin={starCount} />
           <ModalCloseButton onClick={handleClose} color="#8E8889" />
         </Top>
         <Character src={"/img/u4u.svg"} width={202} height={192} alt="뽀유" />
         <Bottom>
           <ProfileImage>
             {isEditing ? (
-              <PhotoButton
-                type="button"
-                aria-label="프로필 사진 변경"
-                onClick={() => fileInputRef.current?.click()}
-              >
-                {avatar}
-                <PhotoBadge aria-hidden="true">
-                  <Image
-                    src={"/icon/modify/icon/images/edit.svg"}
-                    width={14}
-                    height={14}
-                    alt=""
-                  />
-                </PhotoBadge>
-              </PhotoButton>
+              <>
+                <PhotoButton
+                  type="button"
+                  aria-label="프로필 사진 변경"
+                  onClick={() => fileInputRef.current?.click()}
+                >
+                  {avatar}
+                  <PhotoBadge aria-hidden="true">
+                    <Image
+                      src={"/icon/modify/icon/images/edit.svg"}
+                      width={14}
+                      height={14}
+                      alt=""
+                    />
+                  </PhotoBadge>
+                </PhotoButton>
+                {imageUrl !== DEFAULT_PROFILE_IMAGE && (
+                  <RemovePhotoButton
+                    type="button"
+                    aria-label="프로필 사진 삭제"
+                    onClick={handleRemoveImage}
+                  >
+                    <Image
+                      src={"/icon/deleteIcon/icon/UI_actions/close.svg"}
+                      width={20}
+                      height={20}
+                      alt=""
+                    />
+                  </RemovePhotoButton>
+                )}
+              </>
             ) : (
               avatar
             )}
@@ -104,13 +137,18 @@ export default function MypageModal({ isOpen, onClose }: MypageModalProps) {
           <Profile>
             <NameWrapper>
               {isEditing ? (
-                <NameField>
+                <NameField $isError={nicknameError !== ""}>
                   <NameInput
                     aria-label="닉네임"
                     value={draftNickname}
                     maxLength={NICKNAME_MAX_LENGTH}
                     placeholder="닉네임"
-                    onChange={(event) => setDraftNickname(event.target.value)}
+                    aria-invalid={nicknameError !== ""}
+                    onChange={(event) =>
+                      setDraftNickname(
+                        event.target.value.slice(0, NICKNAME_MAX_LENGTH),
+                      )
+                    }
                   />
                 </NameField>
               ) : (
@@ -136,6 +174,9 @@ export default function MypageModal({ isOpen, onClose }: MypageModalProps) {
                 </EditButton>
               )}
             </NameWrapper>
+            {nicknameError && (
+              <NicknameError role="alert">{nicknameError}</NicknameError>
+            )}
             <Id>@maremare</Id>
           </Profile>
         </Bottom>
@@ -152,11 +193,13 @@ const Character = styled(Image)`
 `;
 
 const ProfileImage = styled.div`
+  position: relative;
+  z-index: 1;
   display: flex;
   width: fit-content;
   border: 4px solid #fff;
   border-radius: 50%;
-  margin: 0 0 4px -4px;
+  margin: -36px 0 4px -4px;
 `;
 
 const Avatar = styled(Image)`
@@ -171,6 +214,20 @@ const PhotoButton = styled.button`
   border: none;
   border-radius: 50%;
   background: transparent;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+`;
+
+const RemovePhotoButton = styled.button`
+  position: absolute;
+  top: -6px;
+  left: -6px;
+  z-index: 1;
+  display: flex;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: #fff;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
 `;
@@ -223,7 +280,7 @@ const SaveButton = styled.button`
   -webkit-tap-highlight-color: transparent;
 `;
 
-const NameField = styled.span`
+const NameField = styled.span<{ $isError: boolean }>`
   position: relative;
   display: flex;
   flex: 1;
@@ -237,7 +294,8 @@ const NameField = styled.span`
     bottom: -3px;
     height: 2px;
     border-radius: 1px;
-    background: var(--pink-p3, #dfafaf);
+    background: ${({ $isError }) =>
+      $isError ? "var(--color-red-600, #f03e3e)" : "var(--pink-p3, #dfafaf)"};
   }
 `;
 
@@ -271,6 +329,16 @@ const NameWrapper = styled.div`
 
 const Profile = styled.div``;
 
+const NicknameError = styled.p`
+  margin: 2px 0 0;
+  color: var(--color-red-600, #f03e3e);
+  font-family: Pretendard;
+  font-size: var(--typo-body-xsmaill, 12px);
+  font-style: normal;
+  font-weight: 400;
+  line-height: 150%;
+`;
+
 const Id = styled.div`
   color: var(--gray-600, #8e8889);
 
@@ -297,7 +365,7 @@ const Bottom = styled.div`
   justify-content: flex-end;
   box-sizing: border-box;
   width: 320px;
-  height: 107px;
+  min-height: 107px;
   padding: 0 24px 24px;
   background: #fff;
   position: absolute;

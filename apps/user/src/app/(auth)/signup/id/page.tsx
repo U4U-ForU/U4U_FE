@@ -1,6 +1,5 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 import AuthFormLayout from "@/src/features/signup/ui/AuthFormLayout";
 import { Input, Requirement, Requirements, validateId } from "@u4u/ui";
@@ -12,15 +11,7 @@ import {
 export default function IdPage() {
   const [id, setId] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const router = useRouter();
-  const {
-    mutate: signup,
-    data: tokens,
-    isPending,
-    isSuccess,
-    error,
-    reset,
-  } = useSignup();
+  const { mutate: signup, isPending, error, reset } = useSignup();
 
   let errorMessage = "";
 

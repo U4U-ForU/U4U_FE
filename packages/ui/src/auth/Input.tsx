@@ -12,6 +12,7 @@ interface InputProps {
   label?: string;
   autoComplete?: string;
   isError?: boolean;
+  maxLength?: number;
 }
 
 export default function Input({
@@ -22,6 +23,7 @@ export default function Input({
   label,
   autoComplete,
   isError = false,
+  maxLength,
 }: InputProps) {
   const [isVisible, setIsVisible] = useState(false);
   const isPassword = type === "password";
@@ -36,7 +38,14 @@ export default function Input({
         type={isPassword && !isVisible ? "password" : "text"}
         placeholder={placeholder}
         value={value}
-        onChange={(event) => onChange?.(event.target.value)}
+        maxLength={maxLength}
+        onChange={(event) =>
+          onChange?.(
+            maxLength === undefined
+              ? event.target.value
+              : event.target.value.slice(0, maxLength),
+          )
+        }
         aria-label={label ?? placeholder}
         aria-invalid={isError}
         autoComplete={autoComplete ?? (isPassword ? "new-password" : undefined)}

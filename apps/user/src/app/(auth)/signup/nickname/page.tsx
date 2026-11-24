@@ -5,6 +5,7 @@ import { useState, type FormEvent } from "react";
 import AuthFormLayout from "@/src/features/signup/ui/AuthFormLayout";
 import {
   Input,
+  NICKNAME_MAX_LENGTH,
   Requirement,
   Requirements,
   useSignupContext,
@@ -49,6 +50,7 @@ export default function NicknamePage() {
         autoComplete="nickname"
         value={nickname}
         isError={!!errorMessage}
+        maxLength={NICKNAME_MAX_LENGTH}
         onChange={handleChange}
       />
       <Requirements>

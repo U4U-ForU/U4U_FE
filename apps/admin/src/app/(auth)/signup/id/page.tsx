@@ -33,7 +33,6 @@ export default function IdPage() {
 
     if (validateId(id)) return;
 
-    // TODO: 회원가입 API 연동
     save({ id });
     setIsSuccess(true);
     router.push("/login");

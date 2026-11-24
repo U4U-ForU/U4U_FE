@@ -23,7 +23,6 @@ export default function Login() {
     if (validateId(loginId)) return;
     if (validatePassword(password)) return;
 
-    // TODO: 로그인 API 연동
     router.replace("/items");
   };
 

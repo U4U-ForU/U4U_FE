@@ -2,6 +2,9 @@ const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PASSWORD = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[^A-Za-z0-9\s])\S{8,20}$/;
 const ID = /^[A-Za-z0-9]{4,20}$/;
 
+export const NICKNAME_MIN_LENGTH = 2;
+export const NICKNAME_MAX_LENGTH = 20;
+
 export function validateEmail(value: string) {
   if (value === "") return "이메일을 입력해주세요.";
   if (!EMAIL.test(value)) return "이메일 형식이 올바르지 않아요.";
@@ -23,13 +26,16 @@ export function validatePasswordConfirm(value: string, confirmValue: string) {
 }
 
 export function validateNickname(value: string) {
-  if (value === "") return "닉네임을 입력해주세요.";
+  const trimmed = value.trim();
 
-  const length = [...value].length;
+  if (trimmed === "") return "닉네임은 비어있을 수 없습니다.";
 
-  if (length < 2 || length > 20) {
-    return "2자 이상 20자 이하로 입력해주세요.";
+  const length = [...trimmed].length;
+
+  if (length < NICKNAME_MIN_LENGTH || length > NICKNAME_MAX_LENGTH) {
+    return `닉네임은 ${NICKNAME_MIN_LENGTH}~${NICKNAME_MAX_LENGTH}자만 허용됩니다.`;
   }
+
   return "";
 }
 

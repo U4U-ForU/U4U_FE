@@ -2,6 +2,8 @@ export { default as Button } from "./Button";
 export { outerTextStroke } from "./lib/textStroke";
 
 export {
+  NICKNAME_MAX_LENGTH,
+  NICKNAME_MIN_LENGTH,
   validateEmail,
   validateId,
   validateNickname,

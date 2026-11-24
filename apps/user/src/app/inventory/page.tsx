@@ -4,11 +4,11 @@ import { Global, css } from "@emotion/react";
 import Header from "@/src/shared/ui/Header";
 import ItemFiltering from "@/src/features/itemFiltering";
 import { MOCK_ITEMS } from "@/src/entities/item/model/mockItems";
-import { useSafeBack } from "@/src/shared/lib/useSafeBack";
+import { useBackTo } from "@/src/shared/lib/useBackTo";
 import Page from "@/src/shared/ui/PageFrame";
 
 export default function Inventory() {
-  const goBack = useSafeBack();
+  const goBack = useBackTo("/main");
   return (
     <Page>
       <Global styles={inventoryBackground} />

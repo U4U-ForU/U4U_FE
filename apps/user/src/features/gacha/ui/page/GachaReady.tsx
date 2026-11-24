@@ -3,17 +3,17 @@
 import styled from "@emotion/styled";
 import Image from "next/image";
 import Header from "@/src/shared/ui/Header";
-import Button from "@/src/shared/ui/Button";
+import { Button } from "@u4u/ui";
 import { useUserStarStore } from "@/src/entities/user/model/useUserStarStore";
 import type { GachaDrawCount } from "@/src/features/gacha/model/types";
-import { useSafeBack } from "@/src/shared/lib/useSafeBack";
+import { useBackTo } from "@/src/shared/lib/useBackTo";
 
 interface GachaReadyProps {
   onDraw: (drawCount: GachaDrawCount) => void;
 }
 
 export default function GachaReady({ onDraw }: GachaReadyProps) {
-  const goBack = useSafeBack();
+  const goBack = useBackTo("/main");
   const starCount = useUserStarStore((state) => state.starCount);
 
   return (

@@ -5,16 +5,17 @@ import { Global, css } from "@emotion/react";
 import styled from "@emotion/styled";
 import Header from "@/src/shared/ui/Header";
 import ItemInputList from "@/src/features/itemmix/ui/itemInputList";
-import Button from "@/src/shared/ui/Button";
+import { Button } from "@u4u/ui";
 import ItemPickerSheet from "@/src/features/deal/ui/detail/ItemPickerSheet";
 import { useItemSlots } from "@/src/features/pot/model/useItemSlots";
 import MixModal from "@/src/features/itemmix/ui/modal/MixModal";
 import ItemMixSuccess from "@/src/features/itemmix/ui/modal/itemMixSuccess";
 import { useSafeBack } from "@/src/shared/lib/useSafeBack";
 import Page from "@/src/shared/ui/PageFrame";
+import { useRouter } from "next/navigation";
 
 export default function Itemmix() {
-  const goBack = useSafeBack();
+  const router = useRouter();
 
   const {
     slots,
@@ -33,7 +34,7 @@ export default function Itemmix() {
   return (
     <Page>
       <Global styles={inventoryBackground} />
-      <Header title="아이템 섞기" onBackPress={goBack} />
+      <Header title="아이템 섞기" onBackPress={() => router.push("/pot")} />
       <ItemInputList
         slots={slots}
         onSlotClick={openPicker}

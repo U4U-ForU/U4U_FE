@@ -7,11 +7,11 @@ import Header from "@/src/shared/ui/Header";
 import DealList from "@/src/features/deal";
 import { MOCK_DEAL_ROOMS } from "@/src/features/deal/model/list/mockRooms";
 import { Button } from "@u4u/ui";
-import { useSafeBack } from "@/src/shared/lib/useSafeBack";
+import { useBackTo } from "@/src/shared/lib/useBackTo";
 import Page from "@/src/shared/ui/PageFrame";
 
 export default function List() {
-  const goBack = useSafeBack();
+  const goBack = useBackTo("/main");
   const router = useRouter();
   return (
     <Page>

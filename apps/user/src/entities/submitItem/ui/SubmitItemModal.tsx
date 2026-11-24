@@ -4,7 +4,7 @@ import styled from "@emotion/styled";
 import type { SubmitStatus } from "../model/types";
 import Image from "next/image";
 import CloseButton from "@/src/shared/ui/CloseButton";
-import Button from "@/src/shared/ui/Button";
+import { Button } from "@u4u/ui";
 import SubmitStatusBadge from "./SubmitStatusBadge";
 
 interface SubmitItemModalProps {
@@ -14,6 +14,7 @@ interface SubmitItemModalProps {
   submittedAt: string;
   img: string;
   onClose: () => void;
+  onCancelSubmit: () => void;
 }
 
 export default function SubmitItemModal({
@@ -23,6 +24,7 @@ export default function SubmitItemModal({
   submittedAt,
   img,
   onClose,
+  onCancelSubmit,
 }: SubmitItemModalProps) {
   const canCancel = status === "승인 전";
 
@@ -46,6 +48,7 @@ export default function SubmitItemModal({
           fontBorderColor="#A75959"
           backgroundColor="#E54D4D"
           boxShadow={false}
+          onClick={onCancelSubmit}
         />
       )}
     </Wrapper>

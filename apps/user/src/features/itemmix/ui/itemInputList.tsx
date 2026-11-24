@@ -13,6 +13,8 @@ export default function ItemInputList({
   onSlotClick,
   onRemove,
 }: ItemInputListProps) {
+  const targetIndex = slots.findIndex((item) => item === null);
+
   return (
     <Wrapper>
       <InputList>
@@ -21,6 +23,7 @@ export default function ItemInputList({
             key={index}
             item={item}
             index={index}
+            isTarget={index === targetIndex}
             onClick={() => onSlotClick(index)}
             onRemove={() => onRemove(index)}
           />

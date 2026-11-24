@@ -7,6 +7,7 @@ import Modal from "@/src/shared/ui/modal/ModalParent";
 import ConfirmModal from "@/src/shared/ui/modal/Modal";
 import SubmitItemModal from "./SubmitItemModal";
 import SubmitStatusBadge from "./SubmitStatusBadge";
+import ResultModal from "@/src/shared/ui/modal/ResultModal";
 
 interface SubmitItemProps {
   status: SubmitStatus;
@@ -23,6 +24,7 @@ export default function SubmitItem({
 }: SubmitItemProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isCancelOpen, setIsCancelOpen] = useState(false);
+  const [isCanceledOpen, setIsCanceledOpen] = useState(false);
 
   return (
     <>
@@ -51,18 +53,29 @@ export default function SubmitItem({
         isOpen={isCancelOpen}
         type="warn"
         title="제출 취소"
-        text="정말 아이템 제출을 취소하시겠습니까?"
+        text="정말 아이템 제출을 취소하시겠어요?"
         text2="취소한 제출은 복구할 수 없습니다."
         confirmText="제출 취소"
         onCancel={() => setIsCancelOpen(false)}
         onConfirm={() => {
-          // TODO: 아이템 제출 취소 API 연동
           setIsCancelOpen(false);
+          setIsCanceledOpen(true);
         }}
+      />
+
+      <ResultModal
+        isOpen={isCanceledOpen}
+        title="제출 취소되었습니다"
+        text="제출 목록에서 사라졌어요"
+        size="sm"
+        onDone={() => setIsCanceledOpen(false)}
       />
     </>
   );
 }
+
+
+
 
 const Status = styled(SubmitStatusBadge)`
   margin-bottom: -16px;

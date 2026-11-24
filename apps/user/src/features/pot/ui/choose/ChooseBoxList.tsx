@@ -1,24 +1,27 @@
 import ChooseBox from "./ChooseBox";
 import styled from "@emotion/styled";
-
-const MOCK_COMB_COUNT = 7;
+import type { Recipe } from "@/src/features/pot/model/mockRecipes";
 
 interface ChooseBoxListProps {
-  selectedIndex: number | null;
-  onSelect: (index: number) => void;
+  recipes: Recipe[];
+  selectedId: number | null;
+  onSelect: (id: number) => void;
 }
 
 export default function ChooseBoxList({
-  selectedIndex,
+  recipes,
+  selectedId,
   onSelect,
 }: ChooseBoxListProps) {
   return (
     <Wrapper>
-      {Array.from({ length: MOCK_COMB_COUNT }, (_, index) => (
+      {recipes.map((recipe) => (
         <ChooseBox
-          key={index}
-          selected={selectedIndex === index}
-          onClick={() => onSelect(index)}
+          key={recipe.id}
+          resultName={recipe.resultName}
+          materialNames={recipe.materialNames}
+          selected={selectedId === recipe.id}
+          onClick={() => onSelect(recipe.id)}
         />
       ))}
     </Wrapper>

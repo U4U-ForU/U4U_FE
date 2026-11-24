@@ -7,12 +7,29 @@ import Image from "next/image";
 import ItemPickerSheet from "@/src/features/deal/ui/detail/ItemPickerSheet";
 import ItemSlots from "@/src/features/pot/ui/ItemSlots";
 import { useItemSlots } from "@/src/features/pot/model/useItemSlots";
-import { useSafeBack } from "@/src/shared/lib/useSafeBack";
 import PageFrame from "@/src/shared/ui/PageFrame";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense, useState } from "react";
+import ConfirmModal from "@/src/shared/ui/modal/Modal";
+import ResultModal from "@/src/shared/ui/modal/ResultModal";
+import { MOCK_RECIPES } from "@/src/features/pot/model/mockRecipes";
 
 export default function Itemmix() {
+  return (
+    <Suspense>
+      <Recombine />
+    </Suspense>
+  );
+}
+
+function Recombine() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const recipe =
+    MOCK_RECIPES.find(({ id }) => id === Number(searchParams.get("recipe"))) ??
+    MOCK_RECIPES[0];
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+  const [isCompleteOpen, setIsCompleteOpen] = useState(false);
 
   const {
     slots,
@@ -27,7 +44,10 @@ export default function Itemmix() {
 
   return (
     <Page>
-      <Header title="아이템 재조합" onBackPress={() => router.push("/pot")} />
+      <Header
+        title="아이템 재조합"
+        onBackPress={() => router.push("/pot/recipechoice")}
+      />
 
       <ItemSlots slots={slots} onSlotClick={openPicker} onRemove={clearSlot} />
 
@@ -36,9 +56,9 @@ export default function Itemmix() {
           src={"/tempImg/tempItemImg.png"}
           width={285}
           height={285}
-          alt="이미지"
+          alt={recipe.resultName}
         />
-        <ItemName>아이템 이름</ItemName>
+        <ItemName>{recipe.resultName}</ItemName>
       </Result>
 
       <ButtonWrapper>
@@ -50,6 +70,7 @@ export default function Itemmix() {
           fontColor={canRecombine ? "white" : "#B3AEAF"}
           boxShadow={false}
           disabled={!canRecombine}
+          onClick={() => setIsConfirmOpen(true)}
         />
         <Button
           text="조합법 변경"
@@ -67,6 +88,27 @@ export default function Itemmix() {
         onClose={closePicker}
         onSelect={fillSlot}
         selectedItems={selectedItems}
+      />
+
+      <ConfirmModal
+        isOpen={isConfirmOpen}
+        type="confirm"
+        title={"재조합을 정말\n하시겠어요?"}
+        text="재조합 시 넣은 재료는 사라지며,"
+        text2="조합된 아이템이 인벤토리에 지급됩니다."
+        confirmText="재조합"
+        onCancel={() => setIsConfirmOpen(false)}
+        onConfirm={() => {
+          setIsConfirmOpen(false);
+          setIsCompleteOpen(true);
+        }}
+      />
+
+      <ResultModal
+        isOpen={isCompleteOpen}
+        title="재조합 완료!"
+        text="인벤토리를 확인해보세요"
+        onDone={() => router.push("/pot/recipechoice")}
       />
     </Page>
   );

@@ -1,13 +1,15 @@
 import styled from "@emotion/styled";
 import Image from "next/image";
-import PlusIcon from "./PlusIcon";
+import PlusIcon from "@/src/shared/ui/PlusIcon";
+import {
+  IDLE_BACKGROUND,
+  IDLE_BORDER_COLOR,
+  IDLE_COLOR,
+  NEXT_BACKGROUND,
+  NEXT_COLOR,
+} from "@/src/shared/ui/slotStyle";
 import type { InventoryItem } from "@/src/entities/item/model/types";
 
-const NEXT_COLOR = "#a75959";
-const NEXT_BACKGROUND = "rgba(255, 208, 208, 0.25)";
-const IDLE_COLOR = "var(--gray-600, #8e8889)";
-const IDLE_BORDER_COLOR = "var(--gray-400, #d0cccc)";
-const IDLE_BACKGROUND = "rgba(255, 255, 255, 0.45)";
 
 interface ItemSlotsProps {
   slots: (InventoryItem | null)[];

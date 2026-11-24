@@ -10,8 +10,8 @@ import ItemPickerSheet from "@/src/features/deal/ui/detail/ItemPickerSheet";
 import { useItemSlots } from "@/src/features/pot/model/useItemSlots";
 import MixModal from "@/src/features/itemmix/ui/modal/MixModal";
 import ItemMixSuccess from "@/src/features/itemmix/ui/modal/itemMixSuccess";
-import { useSafeBack } from "@/src/shared/lib/useSafeBack";
 import Page from "@/src/shared/ui/PageFrame";
+import ConfirmModal from "@/src/shared/ui/modal/Modal";
 import { useRouter } from "next/navigation";
 
 export default function Itemmix() {
@@ -29,6 +29,7 @@ export default function Itemmix() {
     clearAllSlots,
   } = useItemSlots(4);
   const [mixStep, setMixStep] = useState<"idle" | "mixing" | "success">("idle");
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const resetMixStep = () => setMixStep("idle");
 
   return (
@@ -48,7 +49,7 @@ export default function Itemmix() {
         fontColor={canMix ? "white" : "#B3AEAF"}
         boxShadow={false}
         disabled={!canMix}
-        onClick={() => setMixStep("mixing")}
+        onClick={() => setIsConfirmOpen(true)}
       />
       <ItemPickerSheet
         isOpen={isPickerOpen}
@@ -56,9 +57,22 @@ export default function Itemmix() {
         onSelect={fillSlot}
         selectedItems={selectedItems}
       />
+      <ConfirmModal
+        isOpen={isConfirmOpen}
+        type="confirm"
+        title={"아이템을 정말\n섞으시겠어요?"}
+        text="섞기 시작하면 넣은 아이템은"
+        text2="되돌릴 수 없습니다."
+        confirmText="섞기"
+        onCancel={() => setIsConfirmOpen(false)}
+        onConfirm={() => {
+          setIsConfirmOpen(false);
+          setMixStep("mixing");
+        }}
+      />
+
       <MixModal
         isOpen={mixStep === "mixing"}
-        onClose={resetMixStep}
         onDone={() => {
           clearAllSlots();
           setMixStep("success");

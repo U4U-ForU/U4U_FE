@@ -8,6 +8,8 @@ import styled from "@emotion/styled";
 import { useState } from "react";
 import { useBackTo } from "@/src/shared/lib/useBackTo";
 import { useRouter } from "next/navigation";
+import ResultModal from "@/src/shared/ui/modal/ResultModal";
+import ConfirmModal from "@/src/shared/ui/modal/Modal";
 
 export default function ItemSubmit() {
   const router = useRouter();
@@ -16,6 +18,8 @@ export default function ItemSubmit() {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [itemName, setItemName] = useState("");
   const [itemDescription, setItemDescription] = useState("");
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+  const [isSubmittedOpen, setIsSubmittedOpen] = useState(false);
 
   const canSubmit =
     imageFile !== null &&
@@ -24,7 +28,8 @@ export default function ItemSubmit() {
 
   const handleSubmit = () => {
     if (!canSubmit) return;
-    router.push("/itemsubmitlist");
+
+    setIsConfirmOpen(true);
   };
 
   return (
@@ -60,6 +65,27 @@ export default function ItemSubmit() {
         boxShadow={false}
         onClick={handleSubmit}
         disabled={!canSubmit}
+      />
+      <ConfirmModal
+        isOpen={isConfirmOpen}
+        type="confirm"
+        title={"아이템을 정말\n제출하시겠어요?"}
+        text="제출 후에는 내용 수정이 불가하며"
+        text2="승인 전까지 취소할 수 있습니다."
+        confirmText="제출"
+        onCancel={() => setIsConfirmOpen(false)}
+        onConfirm={() => {
+          setIsConfirmOpen(false);
+          setIsSubmittedOpen(true);
+        }}
+      />
+
+      <ResultModal
+        isOpen={isSubmittedOpen}
+        size="sm"
+        title="제출되었습니다"
+        text="제출 목록에서 확인하세요!"
+        onDone={() => router.push("/itemsubmitlist")}
       />
     </Wrapper>
   );

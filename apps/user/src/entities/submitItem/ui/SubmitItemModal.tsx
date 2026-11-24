@@ -6,6 +6,7 @@ import Image from "next/image";
 import CloseButton from "@/src/shared/ui/CloseButton";
 import { Button } from "@u4u/ui";
 import SubmitStatusBadge from "./SubmitStatusBadge";
+import { CONFIRM_COLORS } from "@/src/shared/ui/modal/Modal";
 
 interface SubmitItemModalProps {
   status: SubmitStatus;
@@ -33,7 +34,7 @@ export default function SubmitItemModal({
       <Top>
         <CloseButtonSpacer />
         <SubmittedAt>{submittedAt} 제출</SubmittedAt>
-        <CloseButton onClick={onClose} />
+        <ModalCloseButton onClick={onClose} />
       </Top>
       <ImageArea>
         <OverlapBadge status={status} />
@@ -45,8 +46,9 @@ export default function SubmitItemModal({
         <CancelButton
           text="제출 취소하기"
           fontColor="#fff"
-          fontBorderColor="#A75959"
-          backgroundColor="#E54D4D"
+          fontBorderColor={CONFIRM_COLORS.warn.fontBorder}
+          backgroundColor={CONFIRM_COLORS.warn.background}
+          borderColor={CONFIRM_COLORS.warn.border}
           boxShadow={false}
           onClick={onCancelSubmit}
         />
@@ -80,6 +82,10 @@ const Top = styled.div`
 
 const CloseButtonSpacer = styled.div`
   width: 43px;
+`;
+
+const ModalCloseButton = styled(CloseButton)`
+  margin-right: -20px;
 `;
 
 const SubmittedAt = styled.div`

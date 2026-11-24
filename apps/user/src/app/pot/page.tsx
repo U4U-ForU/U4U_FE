@@ -7,9 +7,12 @@ import Image from "next/image";
 import { useBackTo } from "@/src/shared/lib/useBackTo";
 import PageFrame from "@/src/shared/ui/PageFrame";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+import PotInfoModal from "@/src/features/pot/ui/PotInfoModal";
 
 export default function Itemrecomb() {
   const router = useRouter();
+  const [isInfoOpen, setIsInfoOpen] = useState(false);
 
   const moveToMix = () => {
     router.push("/pot/itemmix");
@@ -24,12 +27,18 @@ export default function Itemrecomb() {
     <Page>
       <Header title="가마솥" onBackPress={goBack} />
       <InfoIconWrapper>
-        <InfoIcon
-          src={"/icon/info/icon/action/Error.svg"}
-          width={24}
-          height={24}
-          alt="설명"
-        />
+        <InfoButton
+          type="button"
+          aria-label="가마솥 설명 보기"
+          onClick={() => setIsInfoOpen(true)}
+        >
+          <InfoIcon
+            src={"/icon/info/icon/action/Error.svg"}
+            width={24}
+            height={24}
+            alt=""
+          />
+        </InfoButton>
       </InfoIconWrapper>
       <PotArea>
         <PotImage src={"/img/pot.svg"} width={353} height={447} alt="이미지" />
@@ -54,9 +63,25 @@ export default function Itemrecomb() {
           onClick={moveToRecombList}
         />
       </ButtonWrapper>
+
+      <PotInfoModal isOpen={isInfoOpen} onClose={() => setIsInfoOpen(false)} />
     </Page>
   );
 }
+
+const InfoButton = styled.button`
+  display: flex;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+
+  &:focus-visible {
+    outline: 2px solid var(--pink-p3, #dfafaf);
+    outline-offset: 2px;
+  }
+`;
 
 const InfoIcon = styled(Image)`
   margin-top: 29px;
@@ -89,9 +114,6 @@ const ButtonWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 12px;
-  /* auto 로 바닥에 붙이되, 짧은 화면에서 가마솥 그림과 붙지 않도록 최소 여백을 둔다 */
-  margin-top: auto;
-  padding-top: 32px;
 `;
 
 const Page = styled(PageFrame)`

@@ -15,7 +15,6 @@ export default function EmailPage() {
 
   const handleChange = (value: string) => {
     setEmail(value);
-
     if (data.email) save({ email: "" });
   };
 

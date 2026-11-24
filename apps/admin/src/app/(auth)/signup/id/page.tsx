@@ -1,30 +1,32 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 import AuthFormLayout from "@/src/components/auth/AuthFormLayout";
+import { Input, Requirement, Requirements, validateId } from "@u4u/ui";
 import {
-  Input,
-  Requirement,
-  Requirements,
-  useSignupContext,
-  validateId,
-} from "@u4u/ui";
+  getSignupErrorMessage,
+  useSignup,
+} from "@/src/features/signup/model/useSignup";
 
 export default function IdPage() {
-  const router = useRouter();
-
-  const { data, save } = useSignupContext();
-  const [id, setId] = useState(data.id);
+  const [id, setId] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [isSuccess, setIsSuccess] = useState(false);
+  const { mutate: signup, isPending, error, reset } = useSignup();
 
-  const errorMessage = isSubmitted ? validateId(id) : "";
+  let errorMessage = "";
+
+  if (isSubmitted) {
+    errorMessage = validateId(id);
+  }
+
+  if (!errorMessage && error) {
+    errorMessage = getSignupErrorMessage(error);
+  }
 
   const handleChange = (value: string) => {
     setId(value);
 
-    if (data.id) save({ id: "" });
+    if (error) reset();
   };
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -33,9 +35,7 @@ export default function IdPage() {
 
     if (validateId(id)) return;
 
-    save({ id });
-    setIsSuccess(true);
-    router.push("/login");
+    signup(id);
   };
 
   return (
@@ -43,7 +43,8 @@ export default function IdPage() {
       <AuthFormLayout
         titles={["로그인 시 사용될", "아이디를 입력해주세요"]}
         errorMessage={errorMessage}
-        buttonText="가입하기"
+        buttonText={isPending ? "가입 중" : "가입하기"}
+        buttonDisabled={isPending}
         question="회원가입"
         onSubmit={handleSubmit}
       >

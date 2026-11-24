@@ -6,14 +6,12 @@ import { useEffect, type ReactNode } from "react";
 import {
   SignupProvider,
   useSignupContext,
-  type SignupData,
-} from "@/src/features/signup/model/SignupContext";
-import {
   validateEmail,
+  validateId,
   validateNickname,
   validatePassword,
-  validateId,
-} from "@/src/shared/lib/validate";
+  type SignupData,
+} from "@u4u/ui";
 
 const STEPS = ["email", "password", "nickname", "id"] as const;
 

@@ -1,6 +1,7 @@
 "use client";
 
 import styled from "@emotion/styled";
+import Image from "next/image";
 import { useState } from "react";
 
 interface DropDownProps<T extends string> {
@@ -27,7 +28,12 @@ export default function DropDown<T extends string>({
         >
           <Option>{value}</Option>
           <Icon>
-            <img src="/img/dropdown/icon/UI_actions/Vector.svg" alt="" />
+            <Image
+              src="/img/dropdown/icon/UI_actions/Vector.svg"
+              width={24}
+              height={24}
+              alt=""
+            />
           </Icon>
         </Trigger>
 

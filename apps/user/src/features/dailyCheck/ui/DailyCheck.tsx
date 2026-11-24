@@ -1,19 +1,34 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import styled from "@emotion/styled";
 import Image from "next/image";
 import DailyCheckBlock from "./block/DailyCheckBlock";
 import DailyCheckCover from "./cover/DailyCheckCover";
 import DailyCheckCompleteModal from "./cover/DailyCheckCompleteModal";
 import Rope from "./Rope";
+import { useUserStarStore } from "@/src/entities/user/model/useUserStarStore";
+import { RESULT_MODAL_DURATION } from "@/src/shared/ui/modal/resultDuration";
+import {
+  claimToday,
+  getClaimedDate,
+  getServerClaimedDate,
+  getToday,
+  subscribeClaimedDate,
+} from "../model/dailyCheckStorage";
 
-const NOTICE_DURATION = 1300;
+const DAILY_REWARD = 20;
 
 export default function DailyCheck() {
-  const [isCovered, setIsCovered] = useState(true);
+  const claimedDate = useSyncExternalStore(
+    subscribeClaimedDate,
+    getClaimedDate,
+    getServerClaimedDate,
+  );
+  const isClaimed = claimedDate === getToday();
   const [isNoticeOpen, setIsNoticeOpen] = useState(false);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const addStars = useUserStarStore((state) => state.addStars);
 
   useEffect(() => {
     return () => {
@@ -23,15 +38,18 @@ export default function DailyCheck() {
 
   const hideNotice = () => {
     setIsNoticeOpen(false);
-    setIsCovered(false);
   };
 
   const showNotice = () => {
+    if (isClaimed) return;
+
+    claimToday();
+    addStars(DAILY_REWARD);
     setIsNoticeOpen(true);
 
     if (timerRef.current !== null) clearTimeout(timerRef.current);
 
-    timerRef.current = setTimeout(hideNotice, NOTICE_DURATION);
+    timerRef.current = setTimeout(hideNotice, RESULT_MODAL_DURATION);
   };
 
   return (
@@ -45,11 +63,11 @@ export default function DailyCheck() {
         aria-hidden="true"
       />
       <DailyCheckBlock totalCount={5} />
-      {isCovered && <DailyCheckCover onClick={showNotice} />}
+      {!isClaimed && <DailyCheckCover onClick={showNotice} />}
 
       <DailyCheckCompleteModal
         isOpen={isNoticeOpen}
-        reward={20}
+        reward={DAILY_REWARD}
         onClose={hideNotice}
       />
     </DailyCheckSection>

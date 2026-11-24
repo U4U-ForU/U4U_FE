@@ -3,13 +3,13 @@
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 import AuthFormLayout from "@/src/features/signup/ui/AuthFormLayout";
-import PasswordField from "@/src/features/signup/ui/PasswordField";
-import Requirement from "@/src/features/signup/ui/Requirement";
 import {
+  PasswordField,
+  Requirement,
+  useSignupContext,
   validatePassword,
   validatePasswordConfirm,
-} from "@/src/shared/lib/validate";
-import { useSignupContext } from "@/src/features/signup/model/SignupContext";
+} from "@u4u/ui";
 
 export default function PasswordPage() {
   const router = useRouter();
@@ -18,18 +18,17 @@ export default function PasswordPage() {
   const [passwordConfirm, setPasswordConfirm] = useState(data.password);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const errorMessage = (() => {
-    const isMismatched = !!passwordConfirm && password !== passwordConfirm;
+  const mismatchError =
+    passwordConfirm && password !== passwordConfirm
+      ? validatePasswordConfirm(password, passwordConfirm)
+      : "";
 
-    if (isMismatched) return validatePasswordConfirm(password, passwordConfirm);
+  const passwordError = isSubmitted ? validatePassword(password) : "";
+  const passwordConfirmError =
+    mismatchError ||
+    (isSubmitted ? validatePasswordConfirm(password, passwordConfirm) : "");
 
-    if (!isSubmitted) return "";
-
-    return (
-      validatePassword(password) ||
-      validatePasswordConfirm(password, passwordConfirm)
-    );
-  })();
+  const errorMessage = mismatchError || passwordError || passwordConfirmError;
 
   const handlePasswordChange = (value: string) => {
     setPassword(value);
@@ -59,6 +58,8 @@ export default function PasswordPage() {
       <PasswordField
         password={password}
         passwordConfirm={passwordConfirm}
+        passwordError={!!passwordError}
+        passwordConfirmError={!!passwordConfirmError}
         onPasswordChange={handlePasswordChange}
         onPasswordConfirmChange={setPasswordConfirm}
       />

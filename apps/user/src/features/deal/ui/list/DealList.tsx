@@ -41,7 +41,7 @@ export default function DealList({ rooms }: DealListProps) {
               nickname={room.nickname}
               onClick={() =>
                 router.push(
-                  room.status === "내 글" ? "/trade/mytrade" : "/trade/detail",
+                  `${room.status === "내 글" ? "/trade/mytrade" : "/trade/detail"}?room=${room.id}`,
                 )
               }
             />

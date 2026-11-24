@@ -2,28 +2,45 @@
 
 import { Global, css } from "@emotion/react";
 import styled from "@emotion/styled";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { Suspense, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import Header from "@/src/shared/ui/Header";
 import RoomDetail from "@/src/features/deal/ui/detail/RoomDetail";
 import CommentList from "@/src/features/deal/ui/detail/CommentList";
 import { MOCK_COMMENTS } from "@/src/features/deal/model/detail/mockComments";
 import PostMenu from "@/src/features/deal/ui/detail/PostMenu";
 import Modal from "@/src/shared/ui/modal/Modal";
-import { useSafeBack } from "@/src/shared/lib/useSafeBack";
+import { useBackTo } from "@/src/shared/lib/useBackTo";
 import Page from "@/src/shared/ui/PageFrame";
+import { MOCK_ROOM_DETAIL } from "@/src/features/deal/model/detail/mockRoomDetail";
+import ResultModal from "@/src/shared/ui/modal/ResultModal";
+import { MOCK_DEAL_ROOMS } from "@/src/features/deal/model/list/mockRooms";
 
 export default function MyDetail() {
-  const goBack = useSafeBack();
+  return (
+    <Suspense>
+      <MyTradeDetail />
+    </Suspense>
+  );
+}
+
+function MyTradeDetail() {
+  const goBack = useBackTo("/trade/list");
   const router = useRouter();
-  const [comments, setComments] = useState(MOCK_COMMENTS);
+  const searchParams = useSearchParams();
+  const room = MOCK_DEAL_ROOMS.find(
+    ({ id }) => id === Number(searchParams.get("room")),
+  );
+  const title = room?.name ?? MOCK_ROOM_DETAIL.title;
+  const comments = MOCK_COMMENTS;
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+  const [isDeletedOpen, setIsDeletedOpen] = useState(false);
 
-  const deleteComment = (id: number) =>
-    setComments((prev) => prev.filter((comment) => comment.id !== id));
+  const deleteComment = () => {};
 
-  const acceptComment = (id: number) =>
-    setComments((prev) => prev.filter((comment) => comment.id !== id));
+  const acceptComment = () => {
+    router.push("/trade/list");
+  };
 
   return (
     <Page>
@@ -32,16 +49,19 @@ export default function MyDetail() {
 
       <Content>
         <RoomDetail
-          title="(방이름들감) 거래하실부운~ㅎ"
-          date="2026.09.18"
-          writer="maremare"
-          text="여기 8개 아이템 거래하실 분 있으신가여
-              몆개는 조합해서 얻은거라서 좀 희귀한 거랑 거래하고 싶어요...
-              사실 별생각없구요 거래댓 많이 달아주세염"
+          title={title}
+          date={MOCK_ROOM_DETAIL.date}
+          writer={room?.nickname ?? MOCK_ROOM_DETAIL.writer}
+          text={MOCK_ROOM_DETAIL.text}
+          itemCount={room?.itemCount ?? MOCK_ROOM_DETAIL.itemCount}
           commentCount={comments.length}
           menu={
             <PostMenu
-              onEdit={() => router.push("/trade/edittitle")}
+              onEdit={() =>
+                router.push(
+                  `/trade/edittitle?title=${encodeURIComponent(title)}`,
+                )
+              }
               onDelete={() => setIsDeleteOpen(true)}
             />
           }
@@ -59,15 +79,22 @@ export default function MyDetail() {
 
       <Modal
         title="글 삭제"
-        text="정말 글을 삭제하시겠습니까?"
+        text="정말 글을 삭제하시겠어요?"
         text2="삭제한 글은 복구할 수 없습니다."
         type="warn"
         isOpen={isDeleteOpen}
         onCancel={() => setIsDeleteOpen(false)}
         onConfirm={() => {
           setIsDeleteOpen(false);
-          router.push("/trade/list");
+          setIsDeletedOpen(true);
         }}
+      />
+
+      <ResultModal
+        isOpen={isDeletedOpen}
+        title="삭제되었습니다"
+        text="거래 글이 사라졌어요"
+        onDone={() => router.push("/trade/list")}
       />
     </Page>
   );

@@ -1,12 +1,16 @@
 import Item from "./Item";
 import styled from "@emotion/styled";
 
-export default function ItemList() {
+interface ItemListProps {
+  names: string[];
+}
+
+export default function ItemList({ names }: ItemListProps) {
   return (
     <SubItems>
-      <Item />
-      <Item />
-      <Item />
+      {names.map((name, index) => (
+        <Item key={`${name}-${index}`} name={name} />
+      ))}
     </SubItems>
   );
 }

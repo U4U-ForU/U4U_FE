@@ -1,15 +1,11 @@
 "use client";
 
 import styled from "@emotion/styled";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import DealItemList from "../item/DealItemList";
 import Modal from "@/src/shared/ui/modal/Modal";
-import ModalParent from "@/src/shared/ui/modal/ModalParent";
-import Button from "@/src/shared/ui/Button";
-import Image from "next/image";
-import { outerTextStroke } from "@/src/shared/lib/textStroke";
-
-const ACCEPTED_MODAL_DURATION = 2000;
+import ResultModal from "@/src/shared/ui/modal/ResultModal";
+import { Button } from "@u4u/ui";
 
 interface CommentProps {
   nickname: string;
@@ -29,17 +25,7 @@ export default function Comment({
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [isAcceptOpen, setIsAcceptOpen] = useState(false);
   const [isAcceptedOpen, setIsAcceptedOpen] = useState(false);
-
-  useEffect(() => {
-    if (!isAcceptedOpen) return;
-
-    const timer = setTimeout(() => {
-      setIsAcceptedOpen(false);
-      onAccept?.();
-    }, ACCEPTED_MODAL_DURATION);
-
-    return () => clearTimeout(timer);
-  }, [isAcceptedOpen, onAccept]);
+  const [isDeletedOpen, setIsDeletedOpen] = useState(false);
 
   return (
     <Wrapper>
@@ -65,7 +51,7 @@ export default function Comment({
 
       <Modal
         title="거래를 정말 
-                수락하시겠어요 ?"
+                수락하시겠어요?"
         text="거래 수락 시 등록된 아이템은 소멸되며,"
         text2="제안된 아이템이 인벤토리에 지급됩니다."
         confirmText="수락"
@@ -78,72 +64,43 @@ export default function Comment({
         }}
       />
 
-      <ModalParent isOpen={isAcceptedOpen}>
-        <AcceptedBox>
-          <AcceptedTitle data-text="거래 완료!">거래 완료!</AcceptedTitle>
-          <AcceptedText>인벤토리를 확인해보세요</AcceptedText>
-          <AcceptedImage src="/img/modal.svg" width={172} height={158} alt="" />
-        </AcceptedBox>
-      </ModalParent>
+      <ResultModal
+        isOpen={isAcceptedOpen}
+        title="거래 완료!"
+        text="인벤토리를 확인해보세요"
+        onDone={() => {
+          setIsAcceptedOpen(false);
+          onAccept?.();
+        }}
+      />
 
       <Modal
         title="댓글 삭제"
-        text="정말 댓글을 삭제하시겠습니까?"
+        text="정말 댓글을 삭제하시겠어요?"
         text2="삭제한 댓글은 복구할 수 없습니다."
         type="warn"
         isOpen={isDeleteOpen}
         onCancel={() => setIsDeleteOpen(false)}
         onConfirm={() => {
           setIsDeleteOpen(false);
+          setIsDeletedOpen(true);
           onDelete();
         }}
+      />
+
+      <ResultModal
+        isOpen={isDeletedOpen}
+        title="삭제되었습니다"
+        text="댓글이 사라졌어요"
+        onDone={() => setIsDeletedOpen(false)}
       />
     </Wrapper>
   );
 }
 
-const AcceptedBox = styled.div`
-  display: flex;
-  width: 320px;
-  height: 300px;
-  padding-top: 32px;
-  flex-direction: column;
-  align-items: center;
-  border-radius: 12px;
-  background-image: url("/img/background/100.png");
-  background-position: center;
-  background-size: cover;
-  overflow: hidden;
-`;
 
-const AcceptedTitle = styled.div`
-  font-family: "Cafe24 Ssurround";
-  font-size: 32px;
-  font-style: normal;
-  font-weight: 600;
-  line-height: 150%;
 
-  ${outerTextStroke(
-    "var(--color-gray-0, #fff)",
-    "var(--pink-p3, #A06D6D)",
-    "4px",
-  )}
-`;
 
-const AcceptedText = styled.div`
-  margin-top: 4px;
-  color: var(--brown-p1, #a06d6d);
-  text-align: center;
-  font-family: "Cafe24 Ssurround";
-  font-size: 20px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: normal;
-`;
-
-const AcceptedImage = styled(Image)`
-  margin-top: auto;
-`;
 
 const AcceptButton = styled(Button)`
   && {

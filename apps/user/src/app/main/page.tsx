@@ -1,7 +1,7 @@
 "use client";
 
 import MainHeader from "../../widgets/Header";
-import Button from "../../shared/ui/Button";
+import { Button } from "@u4u/ui";
 import Image from "next/image";
 import styled from "@emotion/styled";
 import DailyCheck from "@/src/features/dailyCheck";

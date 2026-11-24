@@ -1,16 +1,32 @@
 import styled from "@emotion/styled";
 import Item from "./Item";
-import type { InventoryItem } from "../model/types";
+import type { InventoryItem, ItemFilter } from "../model/types";
 import { useState } from "react";
 import Modal from "@/src/shared/ui/modal/ModalParent";
 import ItemModal from "./ItemModal";
+import { useRouter } from "next/navigation";
 
 interface ItemListProps {
   items: InventoryItem[];
+  filter: ItemFilter;
 }
 
-export default function ItemList({ items }: ItemListProps) {
+export default function ItemList({ items, filter }: ItemListProps) {
   const [selectedItem, setSelectedItem] = useState<InventoryItem | null>(null);
+  const router = useRouter();
+
+  const isReserved = selectedItem?.status === "예약";
+
+  const goToTrade = () => {
+    if (isReserved) {
+      router.push("/trade/detail?from=inventory");
+      return;
+    }
+
+    router.push(
+      `/trade/list?from=inventory&filter=${encodeURIComponent(filter)}`,
+    );
+  };
 
   return (
     <>
@@ -33,12 +49,13 @@ export default function ItemList({ items }: ItemListProps) {
       >
         <ItemModal
           onClose={() => setSelectedItem(null)}
-          ButtonText="거래하러 가기"
-          maker="maremare"
+          ButtonText={isReserved ? "거래 보러가기" : "거래하러 가기"}
+          onButtonClick={goToTrade}
+          maker={selectedItem?.maker}
           img="/tempImg/tempItemImg.png"
           itemName={selectedItem?.name ?? ""}
           itemCount={selectedItem?.count}
-          itemDescription="푹신한 핑크빛 젤리가 콕 박힌 귀여운 냥이 장갑! 착용하면 냥냥 펀치의 파워가 업! 심쿵 주의 귀여움으로 적의 마음을 스르륵 녹여 공격력을 살짝 낮춰버려요.푹신한 핑크빛 젤리가 콕 박힌 귀여운 냥이 장갑! 착용하면 냥냥 펀치의 파워가 업! 심쿵 주의 귀여움으로 적의 마음을 스르륵 녹여 공격력을 살짝 낮춰버려요.ㄴ"
+          itemDescription={selectedItem?.description ?? ""}
         />
       </Modal>
     </>

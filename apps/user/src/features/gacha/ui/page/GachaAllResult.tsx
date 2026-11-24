@@ -1,10 +1,9 @@
 "use client";
 
 import styled from "@emotion/styled";
-import { outerTextStroke } from "@/src/shared/lib/textStroke";
+import { Button, outerTextStroke } from "@u4u/ui";
 import GachaItemList from "../item/GachaItemList";
 import type { GachaItem } from "../../model/types";
-import Button from "@/src/shared/ui/Button";
 
 interface GachaAllResultProps {
   items: GachaItem[];

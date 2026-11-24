@@ -19,6 +19,8 @@ export default function InputBox({
   value,
   onChange,
 }: InputBoxProps) {
+  const count = Math.min(value.length, maxLength);
+
   return (
     <Wrapper>
       <Field
@@ -26,9 +28,12 @@ export default function InputBox({
         placeholder={placeholder}
         maxLength={maxLength}
         value={value}
-        onChange={(event) => onChange(event.target.value)}
+        onChange={(event) => onChange(event.target.value.slice(0, maxLength))}
         $height={height}
       />
+      <Counter $isFull={count >= maxLength}>
+        {count} / {maxLength}
+      </Counter>
     </Wrapper>
   );
 }
@@ -37,6 +42,17 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 4px;
+`;
+
+const Counter = styled.span<{ $isFull: boolean }>`
+  align-self: flex-end;
+  color: ${({ $isFull }) =>
+    $isFull ? "var(--pink-p4, #a75959)" : "var(--gray-600, #8e8889)"};
+  font-family: Pretendard;
+  font-size: var(--typo-body-xsmaill, 12px);
+  font-style: normal;
+  font-weight: 400;
+  line-height: 150%;
 `;
 
 const Field = styled.textarea<{ $height: number }>`

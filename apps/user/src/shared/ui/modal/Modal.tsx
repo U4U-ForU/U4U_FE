@@ -2,8 +2,7 @@
 
 import styled from "@emotion/styled";
 import ModalParent from "@/src/shared/ui/modal/ModalParent";
-import Button from "@/src/shared/ui/Button";
-import { outerTextStroke } from "@/src/shared/lib/textStroke";
+import { Button } from "@u4u/ui";
 
 interface ModalProps {
   isOpen: boolean;
@@ -16,7 +15,7 @@ interface ModalProps {
   confirmText?: string;
 }
 
-const CONFIRM_COLORS = {
+export const CONFIRM_COLORS = {
   warn: {
     background: "#E26C7A",
     border: "#A75959",
@@ -45,12 +44,7 @@ export default function Modal({
     <ModalParent isOpen={isOpen} onClose={onCancel}>
       <Wrapper>
         <Top>
-          <Title
-            data-text={title}
-            role="heading"
-            aria-level={2}
-            aria-label={title}
-          >
+          <Title role="heading" aria-level={2} aria-label={title} $type={type}>
             {title}
           </Title>
           <TextWrapper>
@@ -88,28 +82,33 @@ const Wrapper = styled.div`
   padding: var(--space-20, 20px);
   flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  height: 240px;
   box-sizing: border-box;
   border-radius: 12px;
   background: #fff;
 `;
 
-const Title = styled.div`
+const Title = styled.div<{ $type: ModalProps["type"] }>`
   text-align: center;
   white-space: pre-line;
   font-family: "Cafe24 Ssurround";
   font-size: 24px;
   font-style: normal;
-  font-weight: 600;
   line-height: 150%; /* 36px */
   margin-bottom: 4px;
 
-  ${outerTextStroke(
-    "var(--color-gray-0, #fff)",
-    "var(--pink-p3, #dfafaf)",
-    "4px",
-  )}
+  ${({ $type }) =>
+    $type === "confirm"
+      ? `
+    color: var(--color-gray-0, #fff);
+    -webkit-text-stroke-width: 5px;
+    -webkit-text-stroke-color: var(--brown-p1, #a06d6d);
+    paint-order: stroke fill;
+    font-weight: 700;
+  `
+      : `
+    color: var(--brown-p1, #a06d6d);
+    font-weight: 600;
+  `}
 `;
 
 const TextWrapper = styled.div``;
@@ -134,6 +133,16 @@ const Text = styled.div`
 
 const ButtonWrapper = styled.div`
   display: flex;
+  margin-top: 48px;
   gap: 12px;
   width: 100%;
+
+  button {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  span {
+    white-space: nowrap;
+  }
 `;

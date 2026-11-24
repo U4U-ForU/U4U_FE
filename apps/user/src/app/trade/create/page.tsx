@@ -8,12 +8,16 @@ import { useRouter } from "next/navigation";
 import ItemPickerSheet from "@/src/features/deal/ui/detail/ItemPickerSheet";
 import ItemList from "@/src/features/deal/ui/create.tsx/ItemList";
 import type { InventoryItem } from "@/src/entities/item/model/types";
-import Button from "@/src/shared/ui/Button";
+import { Button } from "@u4u/ui";
 import { SHEET_HALF_HEIGHT_DVH } from "@/src/shared/ui/BottomSheet";
 import { useSafeBack } from "@/src/shared/lib/useSafeBack";
 import PageFrame from "@/src/shared/ui/PageFrame";
+import TitleInput from "@/src/shared/ui/TitleInput";
+import ConfirmModal from "@/src/shared/ui/modal/Modal";
+import ResultModal from "@/src/shared/ui/modal/ResultModal";
 
 const MAX_SELECTED_ITEMS = 10;
+const MAX_ROOM_NAME_LENGTH = 30;
 
 export default function Detail() {
   const goBack = useSafeBack();
@@ -21,6 +25,11 @@ export default function Detail() {
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const [isSheetExpanded, setIsSheetExpanded] = useState(false);
   const [selectedItems, setSelectedItems] = useState<InventoryItem[]>([]);
+  const [roomName, setRoomName] = useState("");
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+  const [isCreatedOpen, setIsCreatedOpen] = useState(false);
+
+  const canCreate = roomName.trim() !== "" && selectedItems.length > 0;
 
   const addItem = (item: InventoryItem) =>
     setSelectedItems((prev) =>
@@ -38,7 +47,13 @@ export default function Detail() {
       <Header title="거래 생성" onBackPress={goBack} />
 
       <Content>
-        <Input type="text" placeholder="거래방 이름을 입력해주세요."></Input>
+        <TitleInput
+          label="거래방 이름"
+          placeholder="거래방 이름을 입력해주세요."
+          maxLength={MAX_ROOM_NAME_LENGTH}
+          value={roomName}
+          onChange={setRoomName}
+        />
         <ItemList
           items={selectedItems}
           isSheetOpen={isSheetOpen}
@@ -59,14 +74,35 @@ export default function Detail() {
       <ButtonArea $offsetDvh={buttonOffset} $isHidden={isSheetExpanded}>
         <Button
           text="거래 생성하기"
-          onClick={() => router.push("/trade/list")}
-          fontColor="white"
-          backgroundColor="#FFD0D0"
-          borderColor="#DFAFAF"
-          fontBorderColor="#A75959"
+          onClick={() => setIsConfirmOpen(true)}
+          disabled={!canCreate}
+          fontColor={canCreate ? "white" : "#B3AEAF"}
+          backgroundColor={canCreate ? "#FFD0D0" : "#E0DDDD"}
+          borderColor={canCreate ? "#DFAFAF" : "white"}
+          fontBorderColor={canCreate ? "#A75959" : "none"}
           boxShadow={false}
         />
       </ButtonArea>
+      <ConfirmModal
+        isOpen={isConfirmOpen}
+        type="confirm"
+        title={"거래방을 정말\n생성하시겠어요?"}
+        text="생성 후에는 등록한 아이템을"
+        text2="바꿀 수 없습니다."
+        confirmText="생성"
+        onCancel={() => setIsConfirmOpen(false)}
+        onConfirm={() => {
+          setIsConfirmOpen(false);
+          setIsCreatedOpen(true);
+        }}
+      />
+
+      <ResultModal
+        isOpen={isCreatedOpen}
+        title="생성되었습니다"
+        text="거래 목록에서 확인해보세요"
+        onDone={() => router.push("/trade/list")}
+      />
     </Page>
   );
 }
@@ -87,31 +123,6 @@ const ButtonArea = styled.div<{ $offsetDvh: number; $isHidden: boolean }>`
     opacity 0.2s ease;
 `;
 
-const Input = styled.input`
-  display: flex;
-  height: 48px;
-  padding: 0 var(--number-16, 16px);
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-  align-self: stretch;
-  border-radius: var(--number-6, 6px);
-  background: var(--color-gray-0, #fff);
-  outline: none;
-  border: none;
-
-  /* body/body-medium */
-  font-family: Pretendard;
-  font-size: var(--typo-body-medium, 16px);
-  font-style: normal;
-  font-weight: 400;
-  line-height: 150%; /* 24px */
-
-  ::placeholder {
-    color: #b3aeaf;
-  }
-`;
 
 const Content = styled.div`
   display: flex;

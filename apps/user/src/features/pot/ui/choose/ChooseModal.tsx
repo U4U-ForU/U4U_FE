@@ -4,17 +4,21 @@ import styled from "@emotion/styled";
 import Modal from "@/src/shared/ui/modal/ModalParent";
 import Image from "next/image";
 import ItemList from "./modalitem/ItemList";
-import Button from "@/src/shared/ui/Button";
+import { Button } from "@u4u/ui";
 import CloseButton from "@/src/shared/ui/CloseButton";
 
 interface ChooseModalProps {
   isOpen: boolean;
+  resultName: string;
+  materialNames: string[];
   onClose: () => void;
   onConfirm: () => void;
 }
 
 export default function ChooseModal({
   isOpen,
+  resultName,
+  materialNames,
   onClose,
   onConfirm,
 }: ChooseModalProps) {
@@ -25,7 +29,7 @@ export default function ChooseModal({
           <ModalCloseButton onClick={onClose} />
         </Top>
 
-        <ItemList />
+        <ItemList names={materialNames} />
 
         <DownArrow
           src={"/icon/location.svg"}
@@ -48,7 +52,7 @@ export default function ChooseModal({
               src={"/tempImg/tempItemImg.png"}
               width={172}
               height={172}
-              alt="결과 아이템"
+              alt={resultName}
             ></Image>
             <RightEffect
               src={"/icon/result.svg"}
@@ -58,7 +62,7 @@ export default function ChooseModal({
               aria-hidden="true"
             />
           </ResultImageRow>
-          <Text>아이템 이름</Text>
+          <Text>{resultName}</Text>
         </ResultItem>
 
         <FullWidthButton

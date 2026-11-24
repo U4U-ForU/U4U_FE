@@ -6,17 +6,16 @@ import { useTimeout } from "../../model/useTimeout";
 
 const FRAMES = ["/mixmodal_ver1.svg", "/mixmodal_ver2.svg"];
 const FRAME_INTERVAL_MS = 500;
-const MIX_DURATION_MS = 5_000;
+const MIX_DURATION_MS = 4_000;
 
 interface MixModalProps {
   isOpen: boolean;
-  onClose?: () => void;
   onDone?: () => void;
 }
 
-export default function MixModal({ isOpen, onClose, onDone }: MixModalProps) {
+export default function MixModal({ isOpen, onDone }: MixModalProps) {
   return (
-    <ModalParent isOpen={isOpen} onClose={onClose}>
+    <ModalParent isOpen={isOpen}>
       <Wrapper role="status" aria-live="polite">
         <Text>뽀유가 열심히 섞는 중· · ·</Text>
         <MixingCharacter onDone={onDone} />

@@ -2,53 +2,58 @@
 
 import styled from "@emotion/styled";
 import Header from "@/src/shared/ui/Header";
-import Button from "@/src/shared/ui/Button";
+import { Button } from "@u4u/ui";
 import ItemPickerSheet from "@/src/features/deal/ui/detail/ItemPickerSheet";
 import { useItemSlots } from "@/src/features/pot/model/useItemSlots";
 import ChooseBoxList from "@/src/features/pot/ui/choose/ChooseBoxList";
 import ChooseModal from "@/src/features/pot/ui/choose/ChooseModal";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useSafeBack } from "@/src/shared/lib/useSafeBack";
 import PageFrame from "@/src/shared/ui/PageFrame";
+import { MOCK_RECIPES } from "@/src/features/pot/model/mockRecipes";
 
 export default function Itemmix() {
-  const goBack = useSafeBack();
   const router = useRouter();
   const { selectedItems, isPickerOpen, closePicker, fillSlot } = useItemSlots();
-  const [selectedComb, setSelectedComb] = useState<number | null>(null);
+  const [selectedRecipeId, setSelectedRecipeId] = useState<number | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const canChoose = selectedComb !== null;
+  const selectedRecipe =
+    MOCK_RECIPES.find(({ id }) => id === selectedRecipeId) ?? null;
 
   return (
     <Page>
-      <Header title="조합법 선택" onBackPress={goBack} />
+      <Header title="조합법 선택" onBackPress={() => router.push("/pot")} />
 
       <Content>
         <ChooseBoxList
-          selectedIndex={selectedComb}
-          onSelect={setSelectedComb}
+          recipes={MOCK_RECIPES}
+          selectedId={selectedRecipeId}
+          onSelect={setSelectedRecipeId}
         />
       </Content>
 
       <ButtonArea>
         <ChooseButton
           text="재조합 하러 가기"
-          borderColor={canChoose ? "#DFAFAF" : "white"}
-          fontBorderColor={canChoose ? "#A75959" : "none"}
-          backgroundColor={canChoose ? "#FFD0D0" : "#E0DDDD"}
-          fontColor={canChoose ? "white" : "#B3AEAF"}
+          borderColor={selectedRecipe ? "#DFAFAF" : "white"}
+          fontBorderColor={selectedRecipe ? "#A75959" : "none"}
+          backgroundColor={selectedRecipe ? "#FFD0D0" : "#E0DDDD"}
+          fontColor={selectedRecipe ? "white" : "#B3AEAF"}
           boxShadow={false}
           onClick={() => setIsModalOpen(true)}
-          disabled={!canChoose}
+          disabled={selectedRecipe === null}
         />
       </ButtonArea>
 
       <ChooseModal
         isOpen={isModalOpen}
+        resultName={selectedRecipe?.resultName ?? ""}
+        materialNames={selectedRecipe?.materialNames ?? []}
         onClose={() => setIsModalOpen(false)}
-        onConfirm={() => router.push("/itemmix")}
+        onConfirm={() =>
+          router.push(`/pot/recomb?recipe=${selectedRecipeId ?? ""}`)
+        }
       />
 
       <ItemPickerSheet

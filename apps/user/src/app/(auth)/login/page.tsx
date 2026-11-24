@@ -2,12 +2,11 @@
 
 import { useState, type FormEvent } from "react";
 import AuthFormLayout from "@/src/features/signup/ui/AuthFormLayout";
-import { validateId, validatePassword } from "@/src/shared/lib/validate";
+import { LoginField, validateId, validatePassword } from "@u4u/ui";
 import {
   getLoginErrorMessage,
   useLogin,
 } from "@/src/features/login/model/useLogin";
-import LoginField from "@/src/features/login/ui/LoginField";
 
 export default function Login() {
   const [loginId, setLoginId] = useState("");
@@ -15,13 +14,15 @@ export default function Login() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const { mutate: login, isPending, error, reset } = useLogin();
 
-  let errorMessage = "";
+  const loginIdError = isSubmitted ? validateId(loginId) : "";
+  const passwordError =
+    isSubmitted && !loginIdError ? validatePassword(password) : "";
 
-  if (isSubmitted) {
-    errorMessage = validateId(loginId) || validatePassword(password);
-  }
+  let errorMessage = loginIdError || passwordError;
 
-  if (!errorMessage && error) {
+  const hasServerError = !errorMessage && !!error;
+
+  if (hasServerError) {
     errorMessage = getLoginErrorMessage(error);
   }
 
@@ -58,6 +59,8 @@ export default function Login() {
       <LoginField
         loginId={loginId}
         password={password}
+        loginIdError={!!loginIdError || hasServerError}
+        passwordError={!!passwordError || hasServerError}
         onLoginIdChange={handleLoginIdChange}
         onPasswordChange={handlePasswordChange}
       />

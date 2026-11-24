@@ -2,8 +2,7 @@ import styled from "@emotion/styled";
 import Image from "next/image";
 import ModalParent from "@/src/shared/ui/modal/ModalParent";
 import { useTimeout } from "../../model/useTimeout";
-
-const SUCCESS_DURATION_MS = 2_000;
+import { RESULT_MODAL_DURATION } from "@/src/shared/ui/modal/resultDuration";
 
 const STARS = [
   { left: 235, top: 83, size: 74, rotate: 12 },
@@ -36,7 +35,7 @@ export default function ItemMixSuccess({
 }
 
 function SuccessContent({ onDone }: { onDone?: () => void }) {
-  useTimeout(onDone, SUCCESS_DURATION_MS);
+  useTimeout(onDone, RESULT_MODAL_DURATION);
 
   return (
     <Wrapper role="status" aria-live="polite">

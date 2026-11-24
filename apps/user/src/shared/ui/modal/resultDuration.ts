@@ -1,0 +1,1 @@
+export const RESULT_MODAL_DURATION = 1200;

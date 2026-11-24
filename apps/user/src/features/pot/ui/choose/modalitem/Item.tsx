@@ -1,16 +1,20 @@
 import styled from "@emotion/styled";
 import Image from "next/image";
 
-export default function Item() {
+interface ItemProps {
+  name: string;
+}
+
+export default function Item({ name }: ItemProps) {
   return (
     <Wrapper>
       <Image
         src={"/tempImg/tempItemImg.png"}
         width={68}
         height={68}
-        alt="서브 아이템"
+        alt={name}
       ></Image>
-      <Text>아이템 이름</Text>
+      <Text>{name}</Text>
     </Wrapper>
   );
 }

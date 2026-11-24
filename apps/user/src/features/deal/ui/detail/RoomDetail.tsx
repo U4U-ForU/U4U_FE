@@ -7,6 +7,7 @@ interface RoomDetailProps {
   date: string;
   writer: string;
   text: string;
+  itemCount: number;
   commentCount: number;
   menu?: ReactNode;
   children?: ReactNode;
@@ -17,6 +18,7 @@ export default function RoomDetail({
   date,
   writer,
   text,
+  itemCount,
   commentCount,
   menu,
   children,
@@ -30,7 +32,7 @@ export default function RoomDetail({
         <InfoDetail>@{writer}</InfoDetail>
       </Info>
       <Text>{text}</Text>
-      <DealItemList itemCount={10} showAll />
+      <DealItemList itemCount={itemCount} showAll />
       <CommentCount>댓글 {commentCount}개</CommentCount>
       {children}
     </Wrapper>

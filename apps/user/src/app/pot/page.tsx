@@ -2,25 +2,47 @@
 
 import styled from "@emotion/styled";
 import Header from "@/src/shared/ui/Header";
-import Button from "@/src/shared/ui/Button";
+import { Button } from "@u4u/ui";
 import Image from "next/image";
-import { useSafeBack } from "@/src/shared/lib/useSafeBack";
+import { useBackTo } from "@/src/shared/lib/useBackTo";
 import PageFrame from "@/src/shared/ui/PageFrame";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import PotInfoModal from "@/src/features/pot/ui/PotInfoModal";
 
 export default function Itemrecomb() {
-  const goBack = useSafeBack();
+  const router = useRouter();
+  const [isInfoOpen, setIsInfoOpen] = useState(false);
+
+  const moveToMix = () => {
+    router.push("/pot/itemmix");
+  };
+
+  const moveToRecombList = () => {
+    router.push("/pot/recipechoice");
+  };
+
+  const goBack = useBackTo("/main");
   return (
     <Page>
       <Header title="가마솥" onBackPress={goBack} />
       <InfoIconWrapper>
-        <InfoIcon
-          src={"/icon/info/icon/action/Error.svg"}
-          width={24}
-          height={24}
-          alt="설명"
-        />
+        <InfoButton
+          type="button"
+          aria-label="가마솥 설명 보기"
+          onClick={() => setIsInfoOpen(true)}
+        >
+          <InfoIcon
+            src={"/icon/info/icon/action/Error.svg"}
+            width={24}
+            height={24}
+            alt=""
+          />
+        </InfoButton>
       </InfoIconWrapper>
-      <PotImage src={"/img/pot.svg"} width={353} height={447} alt="이미지" />
+      <PotArea>
+        <PotImage src={"/img/pot.svg"} width={353} height={447} alt="이미지" />
+      </PotArea>
       <ButtonWrapper>
         <Button
           text="아이템 섞기"
@@ -29,6 +51,7 @@ export default function Itemrecomb() {
           backgroundColor="#FFD0D0"
           fontColor="white"
           boxShadow={false}
+          onClick={moveToMix}
         />
         <Button
           text="아이템 재조합"
@@ -37,11 +60,28 @@ export default function Itemrecomb() {
           backgroundColor="white"
           fontColor="#A75959"
           boxShadow={false}
+          onClick={moveToRecombList}
         />
       </ButtonWrapper>
+
+      <PotInfoModal isOpen={isInfoOpen} onClose={() => setIsInfoOpen(false)} />
     </Page>
   );
 }
+
+const InfoButton = styled.button`
+  display: flex;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+
+  &:focus-visible {
+    outline: 2px solid var(--pink-p3, #dfafaf);
+    outline-offset: 2px;
+  }
+`;
 
 const InfoIcon = styled(Image)`
   margin-top: 29px;
@@ -54,8 +94,18 @@ const InfoIconWrapper = styled.div`
   margin-right: 30px;
 `;
 
+const PotArea = styled.div`
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 0;
+`;
+
 const PotImage = styled(Image)`
-  margin-top: 24px;
+  max-width: 100%;
+  height: auto;
 `;
 
 const ButtonWrapper = styled.div`
@@ -64,9 +114,6 @@ const ButtonWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 12px;
-  /* auto 로 바닥에 붙이되, 짧은 화면에서 가마솥 그림과 붙지 않도록 최소 여백을 둔다 */
-  margin-top: auto;
-  padding-top: 32px;
 `;
 
 const Page = styled(PageFrame)`

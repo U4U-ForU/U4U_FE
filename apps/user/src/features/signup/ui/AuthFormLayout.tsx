@@ -2,11 +2,9 @@
 
 import styled from "@emotion/styled";
 import type { FormEvent, ReactNode } from "react";
-import Button from "@/src/shared/ui/Button";
+import { Button, ErrorMessage, Question, Title } from "@u4u/ui";
+import { markReplace } from "@/src/shared/lib/navStack";
 import BottomArea from "./BottomArea";
-import ErrorMessage from "./ErrorMessage";
-import Question from "./Question";
-import Title from "./Title";
 
 interface AuthFormLayoutProps {
   titles: string[];
@@ -51,7 +49,7 @@ export default function AuthFormLayout({
           fontBorderColor="#C57373"
           disabled={buttonDisabled}
         />
-        <Question text={question} />
+        <Question text={question} onBeforeNavigate={markReplace} />
       </BottomArea>
     </Wrapper>
   );

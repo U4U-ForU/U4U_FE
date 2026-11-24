@@ -2,11 +2,15 @@ import styled from "@emotion/styled";
 import Image from "next/image";
 
 interface ChooseBoxProps {
+  resultName: string;
+  materialNames: string[];
   selected?: boolean;
   onClick?: () => void;
 }
 
 export default function ChooseBox({
+  resultName,
+  materialNames,
   selected = false,
   onClick,
 }: ChooseBoxProps) {
@@ -18,7 +22,7 @@ export default function ChooseBox({
       $selected={selected}
     >
       <Top>
-        <ItemName>아이템 이름</ItemName>
+        <ItemName>{resultName}</ItemName>
         {selected && <Select>선택됨</Select>}
       </Top>
 
@@ -38,24 +42,15 @@ export default function ChooseBox({
         />
 
         <ImageWrapper>
-          <Image
-            src={"/tempImg/tempItemImg.png"}
-            width={50}
-            height={50}
-            alt="최종 이미지"
-          />
-          <Image
-            src={"/tempImg/tempItemImg.png"}
-            width={50}
-            height={50}
-            alt="최종 이미지"
-          />
-          <Image
-            src={"/tempImg/tempItemImg.png"}
-            width={50}
-            height={50}
-            alt="최종 이미지"
-          />
+          {materialNames.map((name, index) => (
+            <Image
+              key={`${name}-${index}`}
+              src={"/tempImg/tempItemImg.png"}
+              width={50}
+              height={50}
+              alt={name}
+            />
+          ))}
         </ImageWrapper>
       </Center>
     </Wrapper>

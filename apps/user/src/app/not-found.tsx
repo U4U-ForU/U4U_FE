@@ -3,17 +3,12 @@
 import PageFrame from "@/src/shared/ui/PageFrame";
 import styled from "@emotion/styled";
 import { Button } from "@u4u/ui";
-import { useRouter } from "next/navigation";
+import { useBackTo } from "@/src/shared/lib/useBackTo";
+import { useSafeBack } from "@/src/shared/lib/useSafeBack";
 
 export default function NotFound() {
-  const router = useRouter();
-  const cancel = () => {
-    router.back();
-  };
-
-  const accept = () => {
-    router.push("/main");
-  };
+  const cancel = useSafeBack();
+  const goMain = useBackTo("/main");
 
   return (
     <Page>
@@ -35,13 +30,13 @@ export default function NotFound() {
             onClick={cancel}
           />
           <Button
-            text="수락"
+            text="확인"
             borderColor="#DFAFAF"
             backgroundColor="#FFD0D0"
             boxShadow={false}
             fontColor="white"
             fontBorderColor="#A75959"
-            onClick={accept}
+            onClick={goMain}
           />
         </ButtonWrapper>
       </Wrapper>

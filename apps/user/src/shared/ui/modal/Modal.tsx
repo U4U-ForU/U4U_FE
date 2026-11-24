@@ -135,4 +135,13 @@ const ButtonWrapper = styled.div`
   display: flex;
   gap: 12px;
   width: 100%;
+
+  button {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  span {
+    white-space: nowrap;
+  }
 `;

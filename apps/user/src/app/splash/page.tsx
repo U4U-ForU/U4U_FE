@@ -4,7 +4,7 @@ import styled from "@emotion/styled";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { getAccessToken } from "@/src/shared/lib/tokenStorage";
+import { hasSession } from "@/src/shared/lib/tokenStorage";
 import { markReplace } from "@/src/shared/lib/navStack";
 
 export default function Splash() {
@@ -13,7 +13,7 @@ export default function Splash() {
   useEffect(() => {
     const timer = setTimeout(() => {
       markReplace();
-      router.replace(getAccessToken() === null ? "/login" : "/main");
+      router.replace(hasSession() ? "/main" : "/login");
     }, 1000);
 
     return () => clearTimeout(timer);

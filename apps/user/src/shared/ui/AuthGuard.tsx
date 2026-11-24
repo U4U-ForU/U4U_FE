@@ -3,13 +3,13 @@
 import { useEffect, useSyncExternalStore, type ReactNode } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import {
-  getAccessToken,
+  hasSession,
   subscribeTokenChange,
 } from "@/src/shared/lib/tokenStorage";
 import { isGuestOnly, resolveAuthRedirect } from "@/src/shared/lib/authRoutes";
 import { markReplace } from "@/src/shared/lib/navStack";
 
-const getSnapshot = () => getAccessToken() !== null;
+const getSnapshot = () => hasSession();
 
 const getServerSnapshot = () => false;
 

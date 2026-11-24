@@ -31,7 +31,9 @@ export default function Itemrecomb() {
           alt="설명"
         />
       </InfoIconWrapper>
-      <PotImage src={"/img/pot.svg"} width={353} height={447} alt="이미지" />
+      <PotArea>
+        <PotImage src={"/img/pot.svg"} width={353} height={447} alt="이미지" />
+      </PotArea>
       <ButtonWrapper>
         <Button
           text="아이템 섞기"
@@ -67,8 +69,18 @@ const InfoIconWrapper = styled.div`
   margin-right: 30px;
 `;
 
+const PotArea = styled.div`
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 0;
+`;
+
 const PotImage = styled(Image)`
-  margin-top: 24px;
+  max-width: 100%;
+  height: auto;
 `;
 
 const ButtonWrapper = styled.div`

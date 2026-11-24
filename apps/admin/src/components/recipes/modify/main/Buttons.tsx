@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import Button from "@/src/components/shared/Button";
+import { Button } from "@u4u/ui";
 
 interface ButtonsProps {
   canSubmit: boolean;

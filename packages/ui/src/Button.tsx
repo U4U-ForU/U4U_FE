@@ -1,7 +1,7 @@
 "use client";
 
 import styled from "@emotion/styled";
-import { outerTextStroke } from "./textStroke";
+import { outerTextStroke } from "./lib/textStroke";
 
 interface ButtonProps {
   text: string;

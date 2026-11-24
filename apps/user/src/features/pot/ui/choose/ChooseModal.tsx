@@ -4,7 +4,7 @@ import styled from "@emotion/styled";
 import Modal from "@/src/shared/ui/modal/ModalParent";
 import Image from "next/image";
 import ItemList from "./modalitem/ItemList";
-import Button from "@/src/shared/ui/Button";
+import { Button } from "@u4u/ui";
 import CloseButton from "@/src/shared/ui/CloseButton";
 
 interface ChooseModalProps {

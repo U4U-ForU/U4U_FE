@@ -6,7 +6,7 @@ import Header from "@/src/shared/ui/Header";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-import Button from "@/src/shared/ui/Button";
+import { Button } from "@u4u/ui";
 import { SHEET_HALF_HEIGHT_DVH } from "@/src/shared/ui/BottomSheet";
 import { useSafeBack } from "@/src/shared/lib/useSafeBack";
 import PageFrame from "@/src/shared/ui/PageFrame";

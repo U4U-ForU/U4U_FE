@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import Header from "@/src/shared/ui/Header";
 import DealList from "@/src/features/deal";
 import { MOCK_DEAL_ROOMS } from "@/src/features/deal/model/list/mockRooms";
-import Button from "@/src/shared/ui/Button";
+import { Button } from "@u4u/ui";
 import { useSafeBack } from "@/src/shared/lib/useSafeBack";
 import Page from "@/src/shared/ui/PageFrame";
 

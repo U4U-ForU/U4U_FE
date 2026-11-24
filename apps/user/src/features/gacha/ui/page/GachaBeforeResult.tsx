@@ -4,7 +4,7 @@ import styled from "@emotion/styled";
 import Image from "next/image";
 import SkipButton from "../SkipButton";
 import { SkipArea } from "@/src/features/gacha/ui/SkipArea";
-import Button from "@/src/shared/ui/Button";
+import { Button } from "@u4u/ui";
 
 interface GachaBeforeResultProps {
   onFinish: () => void;

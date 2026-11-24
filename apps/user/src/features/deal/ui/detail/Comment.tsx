@@ -5,9 +5,8 @@ import { useEffect, useState } from "react";
 import DealItemList from "../item/DealItemList";
 import Modal from "@/src/shared/ui/modal/Modal";
 import ModalParent from "@/src/shared/ui/modal/ModalParent";
-import Button from "@/src/shared/ui/Button";
+import { Button, outerTextStroke } from "@u4u/ui";
 import Image from "next/image";
-import { outerTextStroke } from "@/src/shared/lib/textStroke";
 
 const ACCEPTED_MODAL_DURATION = 2000;
 

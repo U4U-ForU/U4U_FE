@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import Button from "@/src/shared/ui/Button";
+import { Button } from "@u4u/ui";
 import StarWrppaer from "./Star/StarWrppaer";
 import { useUserStarStore } from "@/src/entities/user/model/useUserStarStore";
 import {

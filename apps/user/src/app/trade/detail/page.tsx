@@ -3,7 +3,7 @@
 import { Global, css } from "@emotion/react";
 import styled from "@emotion/styled";
 import Header from "@/src/shared/ui/Header";
-import Button from "@/src/shared/ui/Button";
+import { Button } from "@u4u/ui";
 import RoomDetail from "@/src/features/deal/ui/detail/RoomDetail";
 import CommentList from "@/src/features/deal/ui/detail/CommentList";
 import CommentInput from "@/src/features/deal/ui/detail/CommentInput";

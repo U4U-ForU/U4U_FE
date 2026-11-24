@@ -10,12 +10,7 @@ interface RequirementProps {
 export default function Requirement({ informationText }: RequirementProps) {
   return (
     <Wrapper>
-      <Image
-        src={"/img/info/icon/action/Vector.png"}
-        width={13}
-        height={13}
-        alt="info"
-      />
+      <Image src={"/auth/info.png"} width={13} height={13} alt="info" />
       <Info>{informationText}</Info>
     </Wrapper>
   );

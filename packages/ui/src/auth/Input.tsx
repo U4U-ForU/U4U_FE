@@ -11,6 +11,7 @@ interface InputProps {
   onChange?: (value: string) => void;
   label?: string;
   autoComplete?: string;
+  isError?: boolean;
 }
 
 export default function Input({
@@ -20,6 +21,7 @@ export default function Input({
   onChange,
   label,
   autoComplete,
+  isError = false,
 }: InputProps) {
   const [isVisible, setIsVisible] = useState(false);
   const isPassword = type === "password";
@@ -29,13 +31,14 @@ export default function Input({
   };
 
   return (
-    <Wrapper>
+    <Wrapper $isError={isError}>
       <Field
         type={isPassword && !isVisible ? "password" : "text"}
         placeholder={placeholder}
         value={value}
         onChange={(event) => onChange?.(event.target.value)}
         aria-label={label ?? placeholder}
+        aria-invalid={isError}
         autoComplete={autoComplete ?? (isPassword ? "new-password" : undefined)}
       />
       {isPassword && (
@@ -47,9 +50,7 @@ export default function Input({
         >
           <Image
             src={
-              isVisible
-                ? "/img/icon/action/eye_visibility.png"
-                : "/img/icon/action/Vector.png"
+              isVisible ? "/auth/eye-visible.png" : "/auth/eye-hidden.png"
             }
             alt=""
             width={isVisible ? 20 : 18}
@@ -62,7 +63,7 @@ export default function Input({
   );
 }
 
-const Wrapper = styled.div`
+const Wrapper = styled.div<{ $isError: boolean }>`
   display: flex;
   height: 48px;
   padding: 0 var(--number-16, 16px);
@@ -70,6 +71,11 @@ const Wrapper = styled.div`
   align-items: center;
   gap: 8px;
   align-self: stretch;
+  border: 1px solid
+    ${({ $isError }) =>
+      $isError
+        ? "var(--color-red-600, #f03e3e)"
+        : "var(--color-gray-200, #e9ecef)"};
   border-radius: var(--number-6, 6px);
   background: var(--color-gray-0, #fff);
 `;

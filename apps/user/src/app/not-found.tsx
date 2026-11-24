@@ -2,7 +2,7 @@
 
 import PageFrame from "@/src/shared/ui/PageFrame";
 import styled from "@emotion/styled";
-import Button from "@/src/shared/ui/Button";
+import { Button } from "@u4u/ui";
 import { useRouter } from "next/navigation";
 
 export default function NotFound() {

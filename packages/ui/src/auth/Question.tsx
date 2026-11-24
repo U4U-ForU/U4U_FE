@@ -2,19 +2,19 @@
 
 import styled from "@emotion/styled";
 import { useRouter } from "next/navigation";
-import { markReplace } from "@/src/shared/lib/navStack";
 
 interface QuestionProps {
   text: "회원가입" | "로그인";
+  onBeforeNavigate?: () => void;
 }
 
-export default function Question({ text }: QuestionProps) {
+export default function Question({ text, onBeforeNavigate }: QuestionProps) {
   const router = useRouter();
 
   const isSignup = text === "회원가입";
 
   const move = () => {
-    markReplace();
+    onBeforeNavigate?.();
     router.replace(isSignup ? "/login" : "/signup");
   };
 

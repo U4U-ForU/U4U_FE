@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import ItemPickerSheet from "@/src/features/deal/ui/detail/ItemPickerSheet";
 import ItemList from "@/src/features/deal/ui/create.tsx/ItemList";
 import type { InventoryItem } from "@/src/entities/item/model/types";
-import Button from "@/src/shared/ui/Button";
+import { Button } from "@u4u/ui";
 import { SHEET_HALF_HEIGHT_DVH } from "@/src/shared/ui/BottomSheet";
 import { useSafeBack } from "@/src/shared/lib/useSafeBack";
 import PageFrame from "@/src/shared/ui/PageFrame";

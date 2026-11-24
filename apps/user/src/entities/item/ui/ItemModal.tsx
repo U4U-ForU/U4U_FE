@@ -1,7 +1,7 @@
 "use client";
 
 import styled from "@emotion/styled";
-import Button from "@/src/shared/ui/Button";
+import { Button } from "@u4u/ui";
 import Image from "next/image";
 import CloseButton from "@/src/shared/ui/CloseButton";
 import ItemCountBadge from "./ItemCountBadge";

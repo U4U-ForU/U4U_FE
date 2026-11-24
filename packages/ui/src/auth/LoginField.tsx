@@ -1,8 +1,12 @@
-import Input from "@/src/features/signup/ui/Input";
+"use client";
+
+import Input from "./Input";
 
 interface LoginFieldProps {
   loginId: string;
   password: string;
+  loginIdError?: boolean;
+  passwordError?: boolean;
   onLoginIdChange: (value: string) => void;
   onPasswordChange: (value: string) => void;
 }
@@ -10,6 +14,8 @@ interface LoginFieldProps {
 export default function LoginField({
   loginId,
   password,
+  loginIdError = false,
+  passwordError = false,
   onLoginIdChange,
   onPasswordChange,
 }: LoginFieldProps) {
@@ -20,6 +26,7 @@ export default function LoginField({
         placeholder="아이디를 입력해주세요."
         autoComplete="username"
         value={loginId}
+        isError={loginIdError}
         onChange={onLoginIdChange}
       />
       <Input
@@ -28,6 +35,7 @@ export default function LoginField({
         type="password"
         autoComplete="current-password"
         value={password}
+        isError={passwordError}
         onChange={onPasswordChange}
       />
     </>

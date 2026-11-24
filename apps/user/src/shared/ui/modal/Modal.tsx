@@ -2,8 +2,7 @@
 
 import styled from "@emotion/styled";
 import ModalParent from "@/src/shared/ui/modal/ModalParent";
-import Button from "@/src/shared/ui/Button";
-import { outerTextStroke } from "@/src/shared/lib/textStroke";
+import { Button, outerTextStroke } from "@u4u/ui";
 
 interface ModalProps {
   isOpen: boolean;

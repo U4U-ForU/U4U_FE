@@ -17,6 +17,8 @@ interface GachaResultProps {
 
 type SlideDirection = "next" | "prev";
 
+type SwipeAxis = "undecided" | "horizontal" | "vertical";
+
 interface LeavingCardState {
   item: GachaItem;
   label: string;
@@ -43,8 +45,8 @@ export default function GachaResult({ items, onSkip }: GachaResultProps) {
   const [index, setIndex] = useState(0);
   const [direction, setDirection] = useState<SlideDirection>("next");
   const [leaving, setLeaving] = useState<LeavingCardState | null>(null);
-  const startXRef = useRef<number | null>(null);
-  const isDraggingRef = useRef(false);
+  const startRef = useRef<{ x: number; y: number } | null>(null);
+  const axisRef = useRef<SwipeAxis>("undecided");
 
   const currentItem = items[index];
   const isSingleDraw = items.length === 1;
@@ -81,37 +83,53 @@ export default function GachaResult({ items, onSkip }: GachaResultProps) {
   };
 
   const handlePointerDown = (event: PointerEvent<HTMLDivElement>) => {
-    startXRef.current = event.clientX;
-    isDraggingRef.current = false;
+    startRef.current = { x: event.clientX, y: event.clientY };
+    axisRef.current = "undecided";
   };
 
   const handlePointerMove = (event: PointerEvent<HTMLDivElement>) => {
-    const startX = startXRef.current;
+    const start = startRef.current;
 
-    if (startX === null || isDraggingRef.current) return;
-    if (Math.abs(event.clientX - startX) < DRAG_START_THRESHOLD) return;
+    if (start === null || axisRef.current !== "undecided") return;
 
-    isDraggingRef.current = true;
+    const distanceX = event.clientX - start.x;
+    const distanceY = event.clientY - start.y;
+
+    if (
+      Math.max(Math.abs(distanceX), Math.abs(distanceY)) < DRAG_START_THRESHOLD
+    )
+      return;
+
+    if (Math.abs(distanceX) <= Math.abs(distanceY)) {
+      axisRef.current = "vertical";
+
+      return;
+    }
+
+    axisRef.current = "horizontal";
     event.currentTarget.setPointerCapture(event.pointerId);
   };
 
   const endPointer = () => {
-    startXRef.current = null;
-    isDraggingRef.current = false;
+    startRef.current = null;
+    axisRef.current = "undecided";
   };
 
   const handlePointerUp = (event: PointerEvent<HTMLDivElement>) => {
-    const startX = startXRef.current;
+    const start = startRef.current;
+    const axis = axisRef.current;
 
     endPointer();
 
-    if (startX === null) return;
+    if (start === null || axis === "vertical") return;
 
-    const distance = event.clientX - startX;
+    const distanceX = event.clientX - start.x;
+    const distanceY = event.clientY - start.y;
 
-    if (Math.abs(distance) < SWIPE_THRESHOLD) return;
+    if (Math.abs(distanceX) < SWIPE_THRESHOLD) return;
+    if (Math.abs(distanceX) <= Math.abs(distanceY)) return;
 
-    if (distance < 0) {
+    if (distanceX < 0) {
       goNext();
     } else {
       goPrev();
@@ -225,6 +243,10 @@ const CardArea = styled.div`
   touch-action: pan-y;
   user-select: none;
   -webkit-user-drag: none;
+
+  img {
+    -webkit-user-drag: none;
+  }
 `;
 
 const StackedCard = styled.div<{ $depth: number }>`

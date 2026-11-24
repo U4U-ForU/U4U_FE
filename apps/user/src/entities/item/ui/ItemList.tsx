@@ -4,6 +4,7 @@ import type { InventoryItem } from "../model/types";
 import { useState } from "react";
 import Modal from "@/src/shared/ui/modal/ModalParent";
 import ItemModal from "./ItemModal";
+import { useRouter } from "next/navigation";
 
 interface ItemListProps {
   items: InventoryItem[];
@@ -11,6 +12,7 @@ interface ItemListProps {
 
 export default function ItemList({ items }: ItemListProps) {
   const [selectedItem, setSelectedItem] = useState<InventoryItem | null>(null);
+  const router = useRouter();
 
   return (
     <>
@@ -34,6 +36,7 @@ export default function ItemList({ items }: ItemListProps) {
         <ItemModal
           onClose={() => setSelectedItem(null)}
           ButtonText="거래하러 가기"
+          onButtonClick={() => router.push("/trade/create")}
           maker="maremare"
           img="/tempImg/tempItemImg.png"
           itemName={selectedItem?.name ?? ""}

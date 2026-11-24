@@ -37,4 +37,9 @@ const Wrapper = styled.div`
   flex: 1;
   min-height: 0;
   overflow-y: auto;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;

@@ -87,7 +87,7 @@ export default function ModalParent({
 const Backdrop = styled.div`
   position: fixed;
   inset: 0;
-  z-index: 100;
+  z-index: 200;
   display: flex;
   overflow-y: auto;
   overscroll-behavior: contain;

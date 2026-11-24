@@ -28,7 +28,7 @@ export default function GachaModal({
         <Title>{drawCount}회 뽑기</Title>
         <TextWrapper>
           <Text>별 {drawCost}개를 사용하여</Text>
-          <Text>{drawCount}회 뽑기를 진행하시겠습니까?</Text>
+          <Text>{drawCount}회 뽑기를 진행하시겠어요?</Text>
         </TextWrapper>
       </Top>
       <StarWrppaer drawCount={drawCount} />

@@ -68,4 +68,9 @@ const Block = styled.button<{
   border: 2px solid ${({ $colors }) => $colors.border};
   background: ${({ $colors }) => $colors.background};
   -webkit-text-stroke-color: ${({ $colors }) => $colors.border};
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
 `;

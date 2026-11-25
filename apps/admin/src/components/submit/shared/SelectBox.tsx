@@ -1,6 +1,10 @@
 import styled from "@emotion/styled";
 
-type SelectBoxProps = { onClick?: () => void; width?: number } & (
+type SelectBoxProps = {
+  onClick?: () => void;
+  width?: number;
+  disabled?: boolean;
+} & (
   | { type: keyof typeof TYPE_COLORS; modalType?: never }
   | { modalType: keyof typeof MODAL_TYPE_COLORS; type?: never }
 );
@@ -24,6 +28,7 @@ export default function SelectBox({
   modalType,
   onClick,
   width,
+  disabled = false,
 }: SelectBoxProps) {
   const colors = modalType ? MODAL_TYPE_COLORS[modalType] : TYPE_COLORS[type];
 
@@ -33,6 +38,7 @@ export default function SelectBox({
       $colors={colors}
       $width={width ?? (modalType ? 263 : 170)}
       onClick={onClick}
+      disabled={disabled}
     >
       {modalType ?? type}
     </Block>

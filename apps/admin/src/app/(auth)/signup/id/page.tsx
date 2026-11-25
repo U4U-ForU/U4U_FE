@@ -1,17 +1,29 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
+import { useBackTo } from "@/src/shared/lib/useBackTo";
 import AuthFormLayout from "@/src/components/auth/AuthFormLayout";
-import { Input, Requirement, Requirements, validateId } from "@u4u/ui";
+import {
+  Input,
+  Requirement,
+  Requirements,
+  SuccessModal,
+  useSignupContext,
+  validateId,
+} from "@u4u/ui";
 import {
   getSignupErrorMessage,
   useSignup,
 } from "@/src/features/signup/model/useSignup";
 
 export default function IdPage() {
-  const [id, setId] = useState("");
+  const router = useRouter();
+  const { data, save } = useSignupContext();
+  const [id, setId] = useState(data.id);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const { mutate: signup, isPending, error, reset } = useSignup();
+  const goBack = useBackTo("/signup/nickname");
+  const { mutate: signup, isPending, isSuccess, error, reset } = useSignup();
 
   let errorMessage = "";
 
@@ -35,6 +47,7 @@ export default function IdPage() {
 
     if (validateId(id)) return;
 
+    save({ id });
     signup(id);
   };
 
@@ -45,6 +58,7 @@ export default function IdPage() {
         errorMessage={errorMessage}
         buttonText={isPending ? "가입 중" : "가입하기"}
         buttonDisabled={isPending}
+        onBack={goBack}
         question="회원가입"
         onSubmit={handleSubmit}
       >
@@ -61,6 +75,7 @@ export default function IdPage() {
           <Requirement informationText="가입 후에는 아이디를 변경할 수 없어요" />
         </Requirements>
       </AuthFormLayout>
+      {isSuccess && <SuccessModal onConfirm={() => router.replace("/login")} />}
     </>
   );
 }

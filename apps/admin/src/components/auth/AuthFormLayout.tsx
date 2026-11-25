@@ -4,6 +4,8 @@ import styled from "@emotion/styled";
 import Image from "next/image";
 import type { FormEvent, ReactNode } from "react";
 import { Button, ErrorMessage, Question, Title } from "@u4u/ui";
+import { markReplace } from "@/src/shared/lib/navStack";
+import BackButton from "./BackButton";
 
 interface AuthFormLayoutProps {
   titles: string[];
@@ -12,6 +14,7 @@ interface AuthFormLayoutProps {
   buttonText: string;
   buttonDisabled?: boolean;
   question: "회원가입" | "로그인";
+  onBack?: () => void;
   onSubmit: (event: FormEvent<HTMLFormElement>) => void;
   children: ReactNode;
 }
@@ -23,6 +26,7 @@ export default function AuthFormLayout({
   buttonText,
   buttonDisabled = false,
   question,
+  onBack,
   onSubmit,
   children,
 }: AuthFormLayoutProps) {
@@ -43,7 +47,8 @@ export default function AuthFormLayout({
         </TitleWrapper>
       </Header>
 
-      <Card>
+      <Card $hasBack={!!onBack}>
+        {onBack && <BackButton onClick={onBack} />}
         <Field>
           {children}
           <ErrorMessage text={errorMessage} />
@@ -58,7 +63,7 @@ export default function AuthFormLayout({
           fontBorderColor="#C57373"
           disabled={buttonDisabled}
         />
-        <Question text={question} />
+        <Question text={question} onBeforeNavigate={markReplace} />
       </Card>
     </Wrapper>
   );
@@ -81,15 +86,17 @@ const Header = styled.div`
 
 const TitleWrapper = styled.div<{ $align: "left" | "center" }>`
   display: flex;
+  margin-bottom: 10px;
   flex-direction: column;
   align-items: ${({ $align }) =>
     $align === "center" ? "center" : "flex-start"};
 `;
 
-const Card = styled.div`
+const Card = styled.div<{ $hasBack: boolean }>`
+  position: relative;
   display: flex;
   width: 100%;
-  padding: 32px;
+  padding: ${({ $hasBack }) => ($hasBack ? "56px 32px 32px" : "32px")};
   flex-direction: column;
   align-items: center;
   gap: 20px;

@@ -4,6 +4,7 @@ import { useState, type FormEvent } from "react";
 import AuthFormLayout from "@/src/components/auth/AuthFormLayout";
 import { LoginField, validateId, validatePassword } from "@u4u/ui";
 import {
+  getLoginErrorFields,
   getLoginErrorMessage,
   useLogin,
 } from "@/src/features/login/model/useLogin";
@@ -25,6 +26,8 @@ export default function Login() {
   if (hasServerError) {
     errorMessage = getLoginErrorMessage(error);
   }
+
+  const errorFields = hasServerError ? getLoginErrorFields(error) : null;
 
   const handleLoginIdChange = (value: string) => {
     setLoginId(value);
@@ -59,8 +62,8 @@ export default function Login() {
       <LoginField
         loginId={loginId}
         password={password}
-        loginIdError={!!loginIdError || hasServerError}
-        passwordError={!!passwordError || hasServerError}
+        loginIdError={!!loginIdError || !!errorFields?.loginId}
+        passwordError={!!passwordError || !!errorFields?.password}
         onLoginIdChange={handleLoginIdChange}
         onPasswordChange={handlePasswordChange}
       />

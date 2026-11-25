@@ -1,4 +1,5 @@
 import axios, { isAxiosError } from "axios";
+import { isAdminRole } from "../lib/role";
 import {
   getAccessToken,
   getRefreshToken,
@@ -6,19 +7,26 @@ import {
   saveTokens,
   type Tokens,
 } from "../lib/tokenStorage";
+import { FORBIDDEN_SESSION_MESSAGE, ForbiddenRoleError } from "./forbiddenRole";
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 const skipUrls = ["/api/auth/login", "/api/auth/signup", "/api/auth/refresh"];
 
+const EXPIRED_TOKEN_STATUSES = [400, 401];
+
+const REQUEST_TIMEOUT_MS = 15000;
+
 const isSkipUrl = (url?: string) =>
   !!url && skipUrls.some((skipUrl) => url.includes(skipUrl));
 
+const isExpiredTokenStatus = (status?: number) =>
+  status !== undefined && EXPIRED_TOKEN_STATUSES.includes(status);
+
 export const api = axios.create({
   baseURL: BASE_URL,
-  timeout: 15000,
+  timeout: REQUEST_TIMEOUT_MS,
   headers: { "Content-Type": "application/json" },
-  withCredentials: true,
 });
 
 let currentRefreshPromise: Promise<string> | null = null;
@@ -32,8 +40,16 @@ const refreshTokens = async () => {
     const response = await axios.post<Tokens>(
       `${BASE_URL}/api/auth/refresh`,
       { refreshToken },
-      { headers: { "Content-Type": "application/json" } },
+      {
+        headers: { "Content-Type": "application/json" },
+        timeout: REQUEST_TIMEOUT_MS,
+      },
     );
+
+    if (!isAdminRole(response.data.role)) {
+      removeTokens();
+      throw new ForbiddenRoleError(FORBIDDEN_SESSION_MESSAGE);
+    }
 
     saveTokens(response.data);
 
@@ -43,6 +59,16 @@ const refreshTokens = async () => {
   if (typeof navigator === "undefined" || !("locks" in navigator)) return run();
 
   return await navigator.locks.request("token-refresh", run);
+};
+
+export const refreshSession = () => {
+  if (!currentRefreshPromise) {
+    currentRefreshPromise = refreshTokens().finally(() => {
+      currentRefreshPromise = null;
+    });
+  }
+
+  return currentRefreshPromise;
 };
 
 api.interceptors.request.use((config) => {
@@ -59,14 +85,14 @@ api.interceptors.response.use(
   (response) => response,
   async (error) => {
     const config = error.config;
+    const status = error.response?.status;
 
-    if (!config || isSkipUrl(config.url) || error.response?.status !== 401) {
+    if (!config || isSkipUrl(config.url) || !isExpiredTokenStatus(status)) {
       return Promise.reject(error);
     }
 
     if (config._retry) {
-      console.log("토큰을 삭제합니다.");
-      removeTokens();
+      if (status === 401) removeTokens();
 
       return Promise.reject(error);
     }
@@ -76,24 +102,17 @@ api.interceptors.response.use(
     config._retry = true;
 
     try {
-      if (!currentRefreshPromise) {
-        currentRefreshPromise = refreshTokens().finally(() => {
-          currentRefreshPromise = null;
-        });
-      }
-
-      const newAccessToken = await currentRefreshPromise;
+      const newAccessToken = await refreshSession();
 
       config.headers.Authorization = `Bearer ${newAccessToken}`;
 
       return api(config);
     } catch (refreshError) {
-      const status = isAxiosError(refreshError)
+      const refreshStatus = isAxiosError(refreshError)
         ? refreshError.response?.status
         : undefined;
 
-      if (status !== undefined && status < 500) {
-        console.log("토큰을 삭제합니다.");
+      if (refreshStatus !== undefined && refreshStatus < 500) {
         removeTokens();
       }
 

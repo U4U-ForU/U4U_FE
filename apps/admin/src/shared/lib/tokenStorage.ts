@@ -1,6 +1,6 @@
 const LEGACY_ACCESS_TOKEN_KEY = "accessToken";
+const LEGACY_ROLE_KEY = "role";
 const REFRESH_TOKEN_KEY = "refreshToken";
-const ROLE_KEY = "role";
 
 export interface Tokens {
   accessToken: string;
@@ -13,12 +13,14 @@ const TOKEN_CHANGE_EVENT = "tokenchange";
 const isBrowser = () => typeof window !== "undefined";
 
 let accessToken: string | null = null;
+let role: string | null = null;
 
-const removeLegacyAccessToken = () => {
+const removeLegacyKeys = () => {
   localStorage.removeItem(LEGACY_ACCESS_TOKEN_KEY);
+  localStorage.removeItem(LEGACY_ROLE_KEY);
 };
 
-if (isBrowser()) removeLegacyAccessToken();
+if (isBrowser()) removeLegacyKeys();
 
 const notifyTokenChange = () => {
   window.dispatchEvent(new Event(TOKEN_CHANGE_EVENT));
@@ -36,12 +38,12 @@ export const subscribeTokenChange = (onChange: () => void) => {
 
 export const saveTokens = (tokens: Tokens) => {
   accessToken = tokens.accessToken;
+  role = tokens.role;
 
   if (!isBrowser()) return;
 
-  removeLegacyAccessToken();
+  removeLegacyKeys();
   localStorage.setItem(REFRESH_TOKEN_KEY, tokens.refreshToken);
-  localStorage.setItem(ROLE_KEY, tokens.role);
 
   notifyTokenChange();
 };
@@ -53,17 +55,16 @@ export const getRefreshToken = () =>
 
 export const hasSession = () => getRefreshToken() !== null;
 
-export const getRole = () =>
-  isBrowser() ? localStorage.getItem(ROLE_KEY) : null;
+export const getRole = () => role;
 
 export const removeTokens = () => {
   accessToken = null;
+  role = null;
 
   if (!isBrowser()) return;
 
-  removeLegacyAccessToken();
+  removeLegacyKeys();
   localStorage.removeItem(REFRESH_TOKEN_KEY);
-  localStorage.removeItem(ROLE_KEY);
 
   notifyTokenChange();
 };

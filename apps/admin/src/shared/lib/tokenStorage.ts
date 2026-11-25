@@ -48,7 +48,24 @@ const removeLegacyKeys = () => {
   clearStorage(LEGACY_ROLE_KEY);
 };
 
-if (isBrowser()) removeLegacyKeys();
+const clearMemoryTokens = () => {
+  accessToken = null;
+  role = null;
+  refreshToken = null;
+  generation += 1;
+};
+
+const handleExternalStorageChange = (event: StorageEvent) => {
+  if (event.storageArea !== localStorage) return;
+  if (event.key !== null && event.key !== REFRESH_TOKEN_KEY) return;
+
+  clearMemoryTokens();
+};
+
+if (isBrowser()) {
+  removeLegacyKeys();
+  window.addEventListener("storage", handleExternalStorageChange);
+}
 
 const notifyTokenChange = () => {
   window.dispatchEvent(new Event(TOKEN_CHANGE_EVENT));
@@ -95,10 +112,7 @@ export const getRole = () => role;
 export const getSessionGeneration = () => generation;
 
 export const removeTokens = () => {
-  accessToken = null;
-  role = null;
-  refreshToken = null;
-  generation += 1;
+  clearMemoryTokens();
 
   if (!isBrowser()) return;
 

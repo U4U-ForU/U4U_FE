@@ -1,20 +1,26 @@
 import styled from "@emotion/styled";
 import Image from "next/image";
 import Badge from "./Badge";
-import type { Status } from "./ItemType";
+import { itemImageSrc } from "@/src/shared/lib/itemImage";
 
 interface ItemProps {
   name: string;
-  status: Status;
+  status: string;
+  imageUrl?: string;
   onClick: () => void;
 }
 
-export default function Item({ name, status, onClick }: ItemProps) {
+export default function Item({
+  name,
+  status,
+  imageUrl,
+  onClick,
+}: ItemProps) {
   return (
     <Wrapper type="button" onClick={onClick}>
-      <Badge text={status} />
+      <Badge status={status} />
       <Image
-        src={"/tempImg/itemImg/itemImg.svg"}
+        src={itemImageSrc(imageUrl)}
         width={250}
         height={250}
         alt="아이템 이미지"
@@ -47,5 +53,5 @@ const Name = styled.div`
   font-size: 18px;
   font-style: normal;
   font-weight: 700;
-  line-height: 150%; /* 30px */
+  line-height: 150%;
 `;

@@ -1,20 +1,36 @@
 import Item from "./Item";
 import styled from "@emotion/styled";
-import type { ItemMockType } from "./ItemType";
+import type { SubmitItem } from "@/src/api/SubmitItem/type";
 
 interface ItemListProps {
-  items: ItemMockType[];
-  onItemClick: (item: ItemMockType) => void;
+  items: SubmitItem[];
+  isLoading: boolean;
+  errorMessage: string;
+  onItemClick: (item: SubmitItem) => void;
 }
 
-export default function ItemList({ items, onItemClick }: ItemListProps) {
+export default function ItemList({
+  items,
+  isLoading,
+  errorMessage,
+  onItemClick,
+}: ItemListProps) {
+  if (isLoading) return <Message>불러오는 중이에요</Message>;
+
+  if (errorMessage) return <Message>{errorMessage}</Message>;
+
+  if (items.length === 0) {
+    return <Message>제출된 아이템이 없어요</Message>;
+  }
+
   return (
     <Wrapper>
       {items.map((item) => (
         <Item
-          key={item.id}
+          key={item.submissionId}
           name={item.name}
           status={item.status}
+          imageUrl={item.imageUrl}
           onClick={() => onItemClick(item)}
         />
       ))}
@@ -29,4 +45,14 @@ const Wrapper = styled.div`
   flex-direction: column;
   align-items: flex-start;
   gap: 48px;
+`;
+
+const Message = styled.div`
+  display: flex;
+  width: 1200px;
+  padding: 80px 0;
+  justify-content: center;
+  color: var(--gray-600, #8e8889);
+  font-size: var(--typo-body-medium, 16px);
+  font-weight: 600;
 `;

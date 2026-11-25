@@ -3,26 +3,39 @@
 import styled from "@emotion/styled";
 import SelectBox from "../shared/SelectBox";
 import type { Status } from "../Item/ItemType";
+import type {
+  SubmitItem,
+  SubmitItemDetailApiResponse,
+} from "@/src/api/SubmitItem/type";
 import InfoText from "./modalItem/InfoText";
 import ItemDetailModal from "./ItemDetailModal";
 import ItemTitle from "./modalItem/ItemTitle";
 import ItemDescription from "./modalItem/ItemDescription";
 import CheckModal, { type CheckType } from "./CheckModal";
+import { formatDate } from "@/src/shared/lib/formatDate";
 import { useId, useState } from "react";
 
 interface PendingModalProps {
   name: string;
   status: Status;
+  item?: SubmitItem;
+  detail?: SubmitItemDetailApiResponse;
+  detailMessage?: string;
   onClose: () => void;
 }
 
 export default function PendingModal({
   name,
   status,
+  item,
+  detail,
+  detailMessage,
   onClose,
 }: PendingModalProps) {
   const titleId = useId();
   const [checkType, setCheckType] = useState<CheckType | null>(null);
+  const submittedAt = formatDate(detail?.createdAt ?? item?.createdAt);
+  const submitter = detail?.submitterLoginId ?? item?.submitterLoginId;
 
   return (
     <ItemDetailModal
@@ -30,6 +43,7 @@ export default function PendingModal({
       labelledBy={titleId}
       subText="아이템 제출 심사중"
       status={status}
+      imageUrl={detail?.imageUrl ?? item?.imageUrl}
       overlay={
         checkType && (
           <CheckModal
@@ -44,9 +58,11 @@ export default function PendingModal({
       }
     >
       <div>
-        <ItemTitle id={titleId}>{name}</ItemTitle>
-        <FixedDescription>아이템 설명</FixedDescription>
-        <InfoText date="2026.11.11" userName="maremare" />
+        <ItemTitle id={titleId}>{detail?.name ?? name}</ItemTitle>
+        <FixedDescription>
+          {detail?.description ?? detailMessage}
+        </FixedDescription>
+        {submitter && <InfoText date={submittedAt} userName={submitter} />}
       </div>
 
       <SelectBoxList>

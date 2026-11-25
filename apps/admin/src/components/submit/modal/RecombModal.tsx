@@ -44,8 +44,6 @@ export default function RecombModal({
   const submittedAt = formatDate(detail?.createdAt ?? item?.createdAt);
   const submitter = detail?.submitterLoginId ?? item?.submitterLoginId;
 
-  if (!recipe) return null;
-
   return (
     <ItemDetailModal
       onClose={onClose}
@@ -69,22 +67,26 @@ export default function RecombModal({
     >
       <Top>
         <ItemTitle id={titleId}>
-          {detail?.name ?? name ?? recipe.result.name}
+          {detail?.name ?? name ?? recipe?.result.name}
         </ItemTitle>
-        <ImageWrapper>
-          {recipe.ingredients.map((ingredient, idx) => (
-            <RecombItem key={idx} text={ingredient} />
-          ))}
-        </ImageWrapper>
+        {recipe && (
+          <ImageWrapper>
+            {recipe.ingredients.map((ingredient, idx) => (
+              <RecombItem key={idx} text={ingredient} />
+            ))}
+          </ImageWrapper>
+        )}
 
         {submitter && <InfoText date={submittedAt} userName={submitter} />}
       </Top>
 
       <SelectBoxWrapper>
-        <SelectBox
-          modalType="수정"
-          onClick={() => router.push(`/recipes/${recipe.id}/modify`)}
-        />
+        {recipe && (
+          <SelectBox
+            modalType="수정"
+            onClick={() => router.push(`/recipes/${recipe.id}/modify`)}
+          />
+        )}
         <SelectBox
           modalType="삭제"
           onClick={() => setIsDeleteCheckOpen(true)}

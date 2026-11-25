@@ -33,5 +33,7 @@ const STATUS_BY_SERVER_VALUE: Record<string, Status> = {
   CANCELED: "취소됨",
 };
 
+const isStatus = (value: string): value is Status => value in STATUS_LABEL;
+
 export const toStatus = (value: string): Status | null =>
-  STATUS_BY_SERVER_VALUE[value] ?? null;
+  isStatus(value) ? value : (STATUS_BY_SERVER_VALUE[value] ?? null);

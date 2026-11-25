@@ -10,6 +10,10 @@ import { useBackTo } from "@/src/shared/lib/useBackTo";
 import { useRouter } from "next/navigation";
 import ResultModal from "@/src/shared/ui/modal/ResultModal";
 import ConfirmModal from "@/src/shared/ui/modal/Modal";
+import {
+  getSubmitItemErrorMessage,
+  useSubmitItem,
+} from "@/src/features/submitItem/model/useSubmitItem";
 
 export default function ItemSubmit() {
   const router = useRouter();
@@ -20,6 +24,7 @@ export default function ItemSubmit() {
   const [itemDescription, setItemDescription] = useState("");
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const [isSubmittedOpen, setIsSubmittedOpen] = useState(false);
+  const { mutate: submit, isPending, error, reset } = useSubmitItem();
 
   const canSubmit =
     imageFile !== null &&
@@ -64,7 +69,7 @@ export default function ItemSubmit() {
         borderColor="#DFAFAF"
         boxShadow={false}
         onClick={handleSubmit}
-        disabled={!canSubmit}
+        disabled={!canSubmit || isPending}
       />
       <ConfirmModal
         isOpen={isConfirmOpen}
@@ -73,10 +78,28 @@ export default function ItemSubmit() {
         text="제출 후에는 내용 수정이 불가하며"
         text2="승인 전까지 취소할 수 있습니다."
         confirmText="제출"
-        onCancel={() => setIsConfirmOpen(false)}
-        onConfirm={() => {
+        confirmDisabled={isPending}
+        errorMessage={error ? getSubmitItemErrorMessage(error) : ""}
+        onCancel={() => {
+          reset();
           setIsConfirmOpen(false);
-          setIsSubmittedOpen(true);
+        }}
+        onConfirm={() => {
+          if (imageFile === null) return;
+
+          submit(
+            {
+              name: itemName.trim(),
+              description: itemDescription.trim(),
+              image: imageFile,
+            },
+            {
+              onSuccess: () => {
+                setIsConfirmOpen(false);
+                setIsSubmittedOpen(true);
+              },
+            },
+          );
         }}
       />
 

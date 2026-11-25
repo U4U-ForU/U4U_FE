@@ -11,6 +11,25 @@ export interface SubmitItemResponse {
   data: SubmitItem[];
 }
 
+export interface ApproveSubmitItemResponse {
+  submissionId: string;
+  status: string;
+  approvedAt: string;
+  itemId: string;
+}
+
+export interface CombineSubmitItemResponse {
+  submissionId: string;
+  status: string;
+  combinedAt: string;
+  itemId: string;
+}
+
+export interface RejectSubmitItemResponse {
+  submissionId: string;
+  status: string;
+}
+
 export interface SubmitItemDetailApiResponse {
   submissionId: string;
   name: string;

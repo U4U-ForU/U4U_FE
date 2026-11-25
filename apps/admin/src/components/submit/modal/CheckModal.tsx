@@ -10,6 +10,8 @@ export type CheckType = "거절" | "승인" | "등록" | "삭제";
 interface CheckModalProps {
   type: CheckType;
   target?: "아이템" | "조합법";
+  isPending?: boolean;
+  errorMessage?: string;
   onCancel: () => void;
   onConfirm: () => void;
   onClick?: () => void;
@@ -18,18 +20,22 @@ interface CheckModalProps {
 export default function CheckModal({
   type,
   target = "아이템",
+  isPending = false,
+  errorMessage = "",
   onCancel,
   onConfirm,
   onClick,
 }: CheckModalProps) {
   const titleId = useId();
-  const { ref, handleKeyDown } = useDialogFocus(onCancel);
+  const { ref, handleKeyDown } = useDialogFocus(() => {
+    if (!isPending) onCancel();
+  });
 
   return (
     <Backdrop
       onClick={(event) => {
         event.stopPropagation();
-        onCancel();
+        if (!isPending) onCancel();
       }}
     >
       <Wrapper
@@ -51,15 +57,36 @@ export default function CheckModal({
             {type}하시겠습니까?
           </Title>
           <SubText text={`${type} 시 복구가 불가능합니다.`} />
+          {errorMessage && <ErrorText>{errorMessage}</ErrorText>}
         </Top>
         <SelectBoxWrapper>
-          <SelectBox type="취소" width={134} onClick={onCancel} />
-          <SelectBox type={type} width={134} onClick={onConfirm} />
+          <SelectBox
+            type="취소"
+            width={134}
+            onClick={onCancel}
+            disabled={isPending}
+          />
+          <SelectBox
+            type={type}
+            width={134}
+            onClick={onConfirm}
+            disabled={isPending}
+          />
         </SelectBoxWrapper>
       </Wrapper>
     </Backdrop>
   );
 }
+
+const ErrorText = styled.p`
+  margin: 0;
+  color: #e26c7a;
+  text-align: center;
+  font-family: Pretendard;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 150%;
+`;
 
 const SelectBoxWrapper = styled.div`
   display: flex;
@@ -100,7 +127,7 @@ const Title = styled.div<{ $colors: { border: string; background: string } }>`
   font-size: 24px;
   font-style: normal;
   font-weight: 700;
-  line-height: 150%; /* 36px */
+  line-height: 150%;
 
   color: ${({ $colors }) => $colors.border};
 `;

@@ -2,6 +2,11 @@
 
 import styled from "@emotion/styled";
 import type { Status } from "../Item/ItemType";
+import type {
+  SubmitItem,
+  SubmitItemDetailApiResponse,
+} from "@/src/api/SubmitItem/type";
+import { formatDate } from "@/src/shared/lib/formatDate";
 import RecombItem from "./modalItem/RecombItem";
 import SelectBox from "../shared/SelectBox";
 import InfoText from "./modalItem/InfoText";
@@ -16,6 +21,8 @@ interface RecombModalProps {
   recipe: Recipe | null;
   name?: string;
   status?: Status;
+  item?: SubmitItem;
+  detail?: SubmitItemDetailApiResponse;
   onClose: () => void;
 }
 
@@ -23,20 +30,27 @@ export default function RecombModal({
   recipe,
   name,
   status,
+  item,
+  detail,
   onClose,
 }: RecombModalProps) {
   const titleId = useId();
   const router = useRouter();
   const [isDeleteCheckOpen, setIsDeleteCheckOpen] = useState(false);
-
-  if (!recipe) return null;
+  const combinedAt = formatDate(detail?.combinedAt ?? detail?.approvedAt);
+  const reviewedText = combinedAt
+    ? `아이템 제출 심사완료 ${combinedAt}`
+    : "아이템 제출 심사완료";
+  const submittedAt = formatDate(detail?.createdAt ?? item?.createdAt);
+  const submitter = detail?.submitterLoginId ?? item?.submitterLoginId;
 
   return (
     <ItemDetailModal
       onClose={onClose}
       labelledBy={titleId}
-      subText={status && "아이템 제출 심사완료 2026.10.09"}
+      subText={status && reviewedText}
       status={status}
+      imageUrl={detail?.imageUrl ?? item?.imageUrl}
       overlay={
         isDeleteCheckOpen && (
           <CheckModal
@@ -52,21 +66,27 @@ export default function RecombModal({
       }
     >
       <Top>
-        <ItemTitle id={titleId}>{name ?? recipe.result.name}</ItemTitle>
-        <ImageWrapper>
-          {recipe.ingredients.map((ingredient, idx) => (
-            <RecombItem key={idx} text={ingredient} />
-          ))}
-        </ImageWrapper>
+        <ItemTitle id={titleId}>
+          {detail?.name ?? name ?? recipe?.result.name}
+        </ItemTitle>
+        {recipe && (
+          <ImageWrapper>
+            {recipe.ingredients.map((ingredient, idx) => (
+              <RecombItem key={idx} text={ingredient} />
+            ))}
+          </ImageWrapper>
+        )}
 
-        <InfoText date="2026.11.11" userName="maremare" />
+        {submitter && <InfoText date={submittedAt} userName={submitter} />}
       </Top>
 
       <SelectBoxWrapper>
-        <SelectBox
-          modalType="수정"
-          onClick={() => router.push(`/recipes/${recipe.id}/modify`)}
-        />
+        {recipe && (
+          <SelectBox
+            modalType="수정"
+            onClick={() => router.push(`/recipes/${recipe.id}/modify`)}
+          />
+        )}
         <SelectBox
           modalType="삭제"
           onClick={() => setIsDeleteCheckOpen(true)}

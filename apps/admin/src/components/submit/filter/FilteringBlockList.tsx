@@ -1,10 +1,7 @@
 import FilteringBlock from "./FilteringBlock";
 import styled from "@emotion/styled";
-import {
-  STATUS_LABEL,
-  type ItemMockType,
-  type StatusFilter,
-} from "../Item/ItemType";
+import { STATUS_LABEL, toStatus, type StatusFilter } from "../Item/ItemType";
+import type { SubmitItem } from "@/src/api/SubmitItem/type";
 
 const FILTERS: StatusFilter[] = [
   "전체",
@@ -16,7 +13,7 @@ const FILTERS: StatusFilter[] = [
 ];
 
 interface FilteringBlockListProps {
-  items: ItemMockType[];
+  items: SubmitItem[];
   active: StatusFilter;
   onChange: (status: StatusFilter) => void;
 }
@@ -29,7 +26,7 @@ export default function FilteringBlockList({
   const getCount = (name: StatusFilter) =>
     name === "전체"
       ? items.length
-      : items.filter((item) => item.status === name).length;
+      : items.filter((item) => toStatus(item.status) === name).length;
 
   return (
     <Wrapper>

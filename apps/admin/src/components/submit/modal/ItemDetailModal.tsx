@@ -8,12 +8,14 @@ import type { Status } from "../Item/ItemType";
 import CloseButton from "../shared/CloseButton";
 import ModalLayout from "./ModalLayout";
 import SubText from "./modalItem/SubText";
+import { itemImageSrc } from "@/src/shared/lib/itemImage";
 
 interface ItemDetailModalProps {
   onClose: () => void;
   labelledBy: string;
   subText?: string;
   status?: Status;
+  imageUrl?: string;
   children: ReactNode;
   overlay?: ReactNode;
 }
@@ -23,6 +25,7 @@ export default function ItemDetailModal({
   labelledBy,
   subText,
   status,
+  imageUrl,
   children,
   overlay,
 }: ItemDetailModalProps) {
@@ -35,9 +38,9 @@ export default function ItemDetailModal({
 
       <Bottom>
         <ImageBox>
-          {status && <Badge text={status} />}
+          {status && <Badge status={status} />}
           <Image
-            src={"/tempImg/itemImg/itemImg.svg"}
+            src={itemImageSrc(imageUrl)}
             width={400}
             height={400}
             alt="아이템 이미지"

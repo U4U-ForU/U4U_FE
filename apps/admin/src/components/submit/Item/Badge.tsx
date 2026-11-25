@@ -1,22 +1,21 @@
 import styled from "@emotion/styled";
-import { STATUS_LABEL, type Status } from "./ItemType";
+import {
+  STATUS_COLOR,
+  STATUS_LABEL,
+  toStatus,
+  UNKNOWN_STATUS_COLOR,
+} from "./ItemType";
 
 interface BadgeProps {
-  text: Status;
+  status: string;
 }
 
-const BADGE_COLORS: Record<Status, string> = {
-  "심사 중": "#b3aeaf",
-  "승인 완료": "#50ab80",
-  "조합 처리 완료": "#69add4",
-  거절됨: "#e26c7a",
-  취소됨: "#8e8889",
-};
+export default function Badge({ status }: BadgeProps) {
+  const known = toStatus(status);
 
-export default function Badge({ text }: BadgeProps) {
   return (
-    <BadgeWrapper $color={BADGE_COLORS[text]}>
-      {STATUS_LABEL[text]}
+    <BadgeWrapper $color={known ? STATUS_COLOR[known] : UNKNOWN_STATUS_COLOR}>
+      {known ? STATUS_LABEL[known] : status}
     </BadgeWrapper>
   );
 }
@@ -30,12 +29,11 @@ const BadgeWrapper = styled.div<{ $color: string }>`
   left: 31px;
   top: 15px;
 
-  /* body/body-xsmall-bold */
   font-family: Pretendard;
   font-size: var(--typo-body-xsmaill, 12px);
   font-style: normal;
   font-weight: 600;
-  line-height: 150%; /* 18px */
+  line-height: 150%;
 
   display: flex;
   padding: 4px var(--space-8, 8px);

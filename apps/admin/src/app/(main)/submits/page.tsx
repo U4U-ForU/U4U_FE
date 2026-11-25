@@ -4,41 +4,62 @@ import styled from "@emotion/styled";
 import FilteringBlockList from "@/src/components/submit/filter/FilteringBlockList";
 import ItemList from "@/src/components/submit/Item/ItemList";
 import { useState } from "react";
-import { mock_submits } from "@/src/components/submit/Item/mock_submits";
-import type {
-  ItemMockType,
-  StatusFilter,
+import {
+  toStatus,
+  type StatusFilter,
 } from "@/src/components/submit/Item/ItemType";
 import { MODAL_BY_STATUS } from "@/src/components/submit/modal/modalByStatus";
-import { findRecipe } from "@/src/components/recipes/mock_recipes";
+import useGetSubmitItems, {
+  getSubmitItemsErrorMessage,
+} from "@/src/hooks/useGetSubmitItems";
+import useGetSubmitItemDetail, {
+  getSubmitItemDetailErrorMessage,
+} from "@/src/hooks/useGetSubmitItemDetail";
+import type { SubmitItem } from "@/src/api/SubmitItem/type";
 
 export default function SubmitsPage() {
   const [active, setActive] = useState<StatusFilter>("전체");
-  const [selected, setSelected] = useState<ItemMockType | null>(null);
+  const [selected, setSelected] = useState<SubmitItem | null>(null);
+  const { data, isLoading, isError, error } = useGetSubmitItems();
+  const detailQuery = useGetSubmitItemDetail(selected?.submissionId ?? null);
+
+  const items = data ?? [];
 
   const filtered =
     active === "전체"
-      ? mock_submits
-      : mock_submits.filter((item) => item.status === active);
+      ? items
+      : items.filter((item) => toStatus(item.status) === active);
 
-  const Modal = selected ? MODAL_BY_STATUS[selected.status] : null;
-  const recipe =
-    selected?.recipeId === undefined ? null : findRecipe(selected.recipeId);
+  const selectedStatus = selected ? toStatus(selected.status) : null;
+  const Modal = selectedStatus ? MODAL_BY_STATUS[selectedStatus] : null;
+
+  const getDetailMessage = () => {
+    if (detailQuery.isLoading) return "불러오는 중이에요";
+    if (detailQuery.isError) {
+      return getSubmitItemDetailErrorMessage(detailQuery.error);
+    }
+
+    return "";
+  };
 
   return (
     <Wrapper>
-      <FilteringBlockList
-        items={mock_submits}
-        active={active}
-        onChange={setActive}
+      <FilteringBlockList items={items} active={active} onChange={setActive} />
+      <ItemList
+        items={filtered}
+        isLoading={isLoading}
+        errorMessage={isError ? getSubmitItemsErrorMessage(error) : ""}
+        onItemClick={setSelected}
       />
-      <ItemList items={filtered} onItemClick={setSelected} />
 
-      {Modal && selected && (
+      {Modal && selected && selectedStatus && (
         <Modal
           name={selected.name}
-          status={selected.status}
-          recipe={recipe}
+          status={selectedStatus}
+          item={selected}
+          detail={detailQuery.data}
+          detailMessage={getDetailMessage()}
+          recipe={null}
           onClose={() => setSelected(null)}
         />
       )}

@@ -27,7 +27,9 @@ export default function CheckModal({
   onClick,
 }: CheckModalProps) {
   const titleId = useId();
-  const { ref, handleKeyDown } = useDialogFocus(onCancel);
+  const { ref, handleKeyDown } = useDialogFocus(() => {
+    if (!isPending) onCancel();
+  });
 
   return (
     <Backdrop

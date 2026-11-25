@@ -14,10 +14,38 @@ const isBrowser = () => typeof window !== "undefined";
 
 let accessToken: string | null = null;
 let role: string | null = null;
+let refreshToken: string | null = null;
+let generation = 0;
+let isStorageAvailable = true;
+
+const readStorage = (key: string) => {
+  try {
+    return localStorage.getItem(key);
+  } catch {
+    isStorageAvailable = false;
+    return null;
+  }
+};
+
+const writeStorage = (key: string, value: string) => {
+  try {
+    localStorage.setItem(key, value);
+  } catch {
+    isStorageAvailable = false;
+  }
+};
+
+const clearStorage = (key: string) => {
+  try {
+    localStorage.removeItem(key);
+  } catch {
+    isStorageAvailable = false;
+  }
+};
 
 const removeLegacyKeys = () => {
-  localStorage.removeItem(LEGACY_ACCESS_TOKEN_KEY);
-  localStorage.removeItem(LEGACY_ROLE_KEY);
+  clearStorage(LEGACY_ACCESS_TOKEN_KEY);
+  clearStorage(LEGACY_ROLE_KEY);
 };
 
 if (isBrowser()) removeLegacyKeys();
@@ -39,32 +67,43 @@ export const subscribeTokenChange = (onChange: () => void) => {
 export const saveTokens = (tokens: Tokens) => {
   accessToken = tokens.accessToken;
   role = tokens.role;
+  refreshToken = tokens.refreshToken;
+  generation += 1;
 
   if (!isBrowser()) return;
 
   removeLegacyKeys();
-  localStorage.setItem(REFRESH_TOKEN_KEY, tokens.refreshToken);
+  writeStorage(REFRESH_TOKEN_KEY, tokens.refreshToken);
 
   notifyTokenChange();
 };
 
 export const getAccessToken = () => accessToken;
 
-export const getRefreshToken = () =>
-  isBrowser() ? localStorage.getItem(REFRESH_TOKEN_KEY) : null;
+export const getRefreshToken = () => {
+  if (!isBrowser()) return null;
+
+  const stored = readStorage(REFRESH_TOKEN_KEY);
+
+  return isStorageAvailable ? stored : refreshToken;
+};
 
 export const hasSession = () => getRefreshToken() !== null;
 
 export const getRole = () => role;
 
+export const getSessionGeneration = () => generation;
+
 export const removeTokens = () => {
   accessToken = null;
   role = null;
+  refreshToken = null;
+  generation += 1;
 
   if (!isBrowser()) return;
 
   removeLegacyKeys();
-  localStorage.removeItem(REFRESH_TOKEN_KEY);
+  clearStorage(REFRESH_TOKEN_KEY);
 
   notifyTokenChange();
 };

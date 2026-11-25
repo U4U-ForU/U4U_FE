@@ -5,11 +5,20 @@ import Image from "next/image";
 
 interface BackButtonProps {
   onClick: () => void;
+  disabled?: boolean;
 }
 
-export default function BackButton({ onClick }: BackButtonProps) {
+export default function BackButton({
+  onClick,
+  disabled = false,
+}: BackButtonProps) {
   return (
-    <Button type="button" aria-label="이전 단계로" onClick={onClick}>
+    <Button
+      type="button"
+      aria-label="이전 단계로"
+      onClick={onClick}
+      disabled={disabled}
+    >
       <Image src={"/icon/Before.svg"} width={7} height={11} alt="" />
     </Button>
   );
@@ -27,6 +36,11 @@ const Button = styled.button`
   border: none;
   background: transparent;
   cursor: pointer;
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: default;
+  }
 
   &:focus-visible {
     outline: 2px solid var(--pink-p3, #dfafaf);

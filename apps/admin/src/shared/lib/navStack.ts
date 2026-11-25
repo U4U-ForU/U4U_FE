@@ -37,6 +37,15 @@ const writeStack = (stack: NavStack) => {
   } catch {}
 };
 
+const readLastDepth = (): number => {
+  try {
+    const parsed = Number(sessionStorage.getItem(LAST_DEPTH_KEY) ?? "-1");
+    return Number.isNaN(parsed) ? -1 : parsed;
+  } catch {
+    return -1;
+  }
+};
+
 const readDepth = (): number | null => {
   const state = window.history.state as Record<string, unknown> | null;
   const depth = state?.[DEPTH_KEY];
@@ -52,8 +61,7 @@ export function recordEntry(pathname: string) {
   let depth = readDepth();
 
   if (depth === null) {
-    const parsed = Number(sessionStorage.getItem(LAST_DEPTH_KEY) ?? "-1");
-    const last = Number.isNaN(parsed) ? -1 : parsed;
+    const last = readLastDepth();
     depth = isReplace ? Math.max(last, 0) : last + 1;
 
     const state = (window.history.state ?? {}) as Record<string, unknown>;

@@ -15,6 +15,7 @@ interface AuthFormLayoutProps {
   buttonDisabled?: boolean;
   question: "회원가입" | "로그인";
   onBack?: () => void;
+  navDisabled?: boolean;
   onSubmit: (event: FormEvent<HTMLFormElement>) => void;
   children: ReactNode;
 }
@@ -27,6 +28,7 @@ export default function AuthFormLayout({
   buttonDisabled = false,
   question,
   onBack,
+  navDisabled = false,
   onSubmit,
   children,
 }: AuthFormLayoutProps) {
@@ -48,7 +50,7 @@ export default function AuthFormLayout({
       </Header>
 
       <Card $hasBack={!!onBack}>
-        {onBack && <BackButton onClick={onBack} />}
+        {onBack && <BackButton onClick={onBack} disabled={navDisabled} />}
         <Field>
           {children}
           <ErrorMessage text={errorMessage} />
@@ -63,7 +65,11 @@ export default function AuthFormLayout({
           fontBorderColor="#C57373"
           disabled={buttonDisabled}
         />
-        <Question text={question} onBeforeNavigate={markReplace} />
+        <Question
+          text={question}
+          onBeforeNavigate={markReplace}
+          disabled={navDisabled}
+        />
       </Card>
     </Wrapper>
   );

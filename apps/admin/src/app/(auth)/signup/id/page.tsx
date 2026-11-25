@@ -59,6 +59,7 @@ export default function IdPage() {
         buttonText={isPending ? "가입 중" : "가입하기"}
         buttonDisabled={isPending}
         onBack={goBack}
+        navDisabled={isPending}
         question="회원가입"
         onSubmit={handleSubmit}
       >

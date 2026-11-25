@@ -6,9 +6,14 @@ import { useRouter } from "next/navigation";
 interface QuestionProps {
   text: "회원가입" | "로그인";
   onBeforeNavigate?: () => void;
+  disabled?: boolean;
 }
 
-export default function Question({ text, onBeforeNavigate }: QuestionProps) {
+export default function Question({
+  text,
+  onBeforeNavigate,
+  disabled = false,
+}: QuestionProps) {
   const router = useRouter();
 
   const isSignup = text === "회원가입";
@@ -21,7 +26,7 @@ export default function Question({ text, onBeforeNavigate }: QuestionProps) {
   return (
     <Wrapper>
       <Q>{isSignup ? "계정이 있으신가요?" : "계정이 없으신가요?"}</Q>
-      <Button type="button" onClick={move}>
+      <Button type="button" onClick={move} disabled={disabled}>
         {isSignup ? "로그인" : "회원가입"}
       </Button>
     </Wrapper>
@@ -52,4 +57,9 @@ const Button = styled.button`
   outline: none;
   background: transparent;
   cursor: pointer;
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: default;
+  }
 `;

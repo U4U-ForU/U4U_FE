@@ -3,17 +3,24 @@ import { isAdminRole } from "../lib/role";
 import {
   getAccessToken,
   getRefreshToken,
+  getSessionGeneration,
   removeTokens,
   saveTokens,
   type Tokens,
 } from "../lib/tokenStorage";
-import { FORBIDDEN_SESSION_MESSAGE, ForbiddenRoleError } from "./forbiddenRole";
+import {
+  FORBIDDEN_SESSION_MESSAGE,
+  ForbiddenRoleError,
+  isForbiddenRoleError,
+} from "./forbiddenRole";
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 const skipUrls = ["/api/auth/login", "/api/auth/signup", "/api/auth/refresh"];
 
 const EXPIRED_TOKEN_STATUSES = [400, 401];
+
+const SESSION_INVALID_STATUSES = [400, 401, 404];
 
 const REQUEST_TIMEOUT_MS = 15000;
 
@@ -22,6 +29,20 @@ const isSkipUrl = (url?: string) =>
 
 const isExpiredTokenStatus = (status?: number) =>
   status !== undefined && EXPIRED_TOKEN_STATUSES.includes(status);
+
+const isSessionInvalidStatus = (status?: number) =>
+  status !== undefined && SESSION_INVALID_STATUSES.includes(status);
+
+export class StaleSessionError extends Error {
+  constructor() {
+    super("재발급 중에 세션이 변경되었습니다.");
+    this.name = "StaleSessionError";
+  }
+}
+
+export const isSessionInvalidError = (error: unknown) =>
+  isForbiddenRoleError(error) ||
+  (isAxiosError(error) && isSessionInvalidStatus(error.response?.status));
 
 export const api = axios.create({
   baseURL: BASE_URL,
@@ -33,6 +54,7 @@ let currentRefreshPromise: Promise<string> | null = null;
 
 const refreshTokens = async () => {
   const run = async () => {
+    const generationAtStart = getSessionGeneration();
     const refreshToken = getRefreshToken();
 
     if (!refreshToken) throw new Error("저장된 refreshToken이 없습니다.");
@@ -45,6 +67,10 @@ const refreshTokens = async () => {
         timeout: REQUEST_TIMEOUT_MS,
       },
     );
+
+    if (getSessionGeneration() !== generationAtStart) {
+      throw new StaleSessionError();
+    }
 
     if (!isAdminRole(response.data.role)) {
       removeTokens();
@@ -112,9 +138,7 @@ api.interceptors.response.use(
         ? refreshError.response?.status
         : undefined;
 
-      if (refreshStatus !== undefined && refreshStatus < 500) {
-        removeTokens();
-      }
+      if (isSessionInvalidStatus(refreshStatus)) removeTokens();
 
       return Promise.reject(refreshError);
     }

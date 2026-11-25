@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
+import { useBackTo } from "@/src/shared/lib/useBackTo";
 import AuthFormLayout from "@/src/components/auth/AuthFormLayout";
 import {
   Input,
@@ -17,6 +18,7 @@ export default function NicknamePage() {
   const { data, save } = useSignupContext();
   const [nickname, setNickname] = useState(data.nickname);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const goBack = useBackTo("/signup/password");
 
   const errorMessage = isSubmitted ? validateNickname(nickname) : "";
 
@@ -41,6 +43,7 @@ export default function NicknamePage() {
       titles={["서비스에서 사용할", "닉네임을 입력해주세요"]}
       errorMessage={errorMessage}
       buttonText="다음"
+      onBack={goBack}
       question="회원가입"
       onSubmit={handleNext}
     >

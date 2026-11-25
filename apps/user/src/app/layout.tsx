@@ -53,7 +53,8 @@ export default function RootLayout({
         <main className="app-content">
           <QueryProvider>
             <NavStackTracker />
-            <AuthGuard>{children}</AuthGuard>
+            {children}
+            {/* <AuthGuard>{children}</AuthGuard> */}
           </QueryProvider>
         </main>
       </body>

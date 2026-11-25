@@ -1,20 +1,43 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 import AuthFormLayout from "@/src/components/auth/AuthFormLayout";
 import { LoginField, validateId, validatePassword } from "@u4u/ui";
+import {
+  getLoginErrorFields,
+  getLoginErrorMessage,
+  useLogin,
+} from "@/src/features/login/model/useLogin";
 
 export default function Login() {
-  const router = useRouter();
   const [loginId, setLoginId] = useState("");
   const [password, setPassword] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const { mutate: login, isPending, error, reset } = useLogin();
 
   const loginIdError = isSubmitted ? validateId(loginId) : "";
   const passwordError =
     isSubmitted && !loginIdError ? validatePassword(password) : "";
-  const errorMessage = loginIdError || passwordError;
+
+  let errorMessage = loginIdError || passwordError;
+
+  const hasServerError = !errorMessage && !!error;
+
+  if (hasServerError) {
+    errorMessage = getLoginErrorMessage(error);
+  }
+
+  const errorFields = hasServerError ? getLoginErrorFields(error) : null;
+
+  const handleLoginIdChange = (value: string) => {
+    setLoginId(value);
+    if (error) reset();
+  };
+
+  const handlePasswordChange = (value: string) => {
+    setPassword(value);
+    if (error) reset();
+  };
 
   const handleLogin = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -23,7 +46,7 @@ export default function Login() {
     if (validateId(loginId)) return;
     if (validatePassword(password)) return;
 
-    router.replace("/items");
+    login({ loginId, password });
   };
 
   return (
@@ -31,17 +54,18 @@ export default function Login() {
       titles={["로그인"]}
       titleAlign="center"
       errorMessage={errorMessage}
-      buttonText="로그인"
+      buttonText={isPending ? "로그인 중" : "로그인"}
+      buttonDisabled={isPending}
       question="로그인"
       onSubmit={handleLogin}
     >
       <LoginField
         loginId={loginId}
         password={password}
-        loginIdError={!!loginIdError}
-        passwordError={!!passwordError}
-        onLoginIdChange={setLoginId}
-        onPasswordChange={setPassword}
+        loginIdError={!!loginIdError || !!errorFields?.loginId}
+        passwordError={!!passwordError || !!errorFields?.password}
+        onLoginIdChange={handleLoginIdChange}
+        onPasswordChange={handlePasswordChange}
       />
     </AuthFormLayout>
   );

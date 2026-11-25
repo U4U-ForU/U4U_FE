@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
+import { useBackTo } from "@/src/shared/lib/useBackTo";
 import AuthFormLayout from "@/src/components/auth/AuthFormLayout";
 import {
   PasswordField,
@@ -17,6 +18,7 @@ export default function PasswordPage() {
   const [password, setPassword] = useState(data.password);
   const [passwordConfirm, setPasswordConfirm] = useState(data.password);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const goBack = useBackTo("/signup/email");
 
   const mismatchError =
     passwordConfirm && password !== passwordConfirm
@@ -52,6 +54,7 @@ export default function PasswordPage() {
       titles={["비밀번호를", "입력해주세요"]}
       errorMessage={errorMessage}
       buttonText="다음"
+      onBack={goBack}
       question="회원가입"
       onSubmit={handleNext}
     >

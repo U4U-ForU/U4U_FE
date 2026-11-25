@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
+import { useBackTo } from "@/src/shared/lib/useBackTo";
 import AuthFormLayout from "@/src/components/auth/AuthFormLayout";
 import { Input, useSignupContext, validateEmail } from "@u4u/ui";
 
@@ -10,12 +11,12 @@ export default function EmailPage() {
   const { data, save } = useSignupContext();
   const [email, setEmail] = useState(data.email);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const goBack = useBackTo("/login");
 
   const errorMessage = isSubmitted ? validateEmail(email) : "";
 
   const handleChange = (value: string) => {
     setEmail(value);
-
     if (data.email) save({ email: "" });
   };
 
@@ -34,6 +35,7 @@ export default function EmailPage() {
       titles={["이메일을", "입력해주세요"]}
       errorMessage={errorMessage}
       buttonText="다음"
+      onBack={goBack}
       question="회원가입"
       onSubmit={handleNext}
     >

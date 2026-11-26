@@ -11,8 +11,8 @@ import { ForbiddenRoleError } from "@/src/shared/api/forbiddenRole";
 import { markReplace } from "@/src/shared/lib/navStack";
 import { isAdminRole } from "@/src/shared/lib/role";
 import { saveTokens } from "@/src/shared/lib/tokenStorage";
-import { login } from "../api/login";
-import type { LoginRequestProps } from "../api/type";
+import { login } from "../../api/login/login";
+import type { LoginRequestProps } from "../../api/login/type";
 
 const INVALID_CREDENTIALS_MESSAGE = "아이디 또는 비밀번호가 올바르지 않습니다.";
 

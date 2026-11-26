@@ -7,7 +7,7 @@ import {
   getLoginErrorFields,
   getLoginErrorMessage,
   useLogin,
-} from "@/src/features/login/model/useLogin";
+} from "@/src/hooks/auth/useLogin";
 
 export default function Login() {
   const [loginId, setLoginId] = useState("");

@@ -1,0 +1,16 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "admin",
+      "runtimeExecutable": "bun",
+      "runtimeArgs": [
+        "run",
+        "--filter",
+        "@u4u/admin",
+        "dev"
+      ],
+      "port": 3001
+    }
+  ]
+}

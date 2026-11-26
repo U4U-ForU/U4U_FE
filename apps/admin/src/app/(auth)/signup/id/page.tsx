@@ -12,10 +12,7 @@ import {
   useSignupContext,
   validateId,
 } from "@u4u/ui";
-import {
-  getSignupErrorMessage,
-  useSignup,
-} from "@/src/features/signup/model/useSignup";
+import { getSignupErrorMessage, useSignup } from "@/src/hooks/auth/useSignup";
 
 export default function IdPage() {
   const router = useRouter();

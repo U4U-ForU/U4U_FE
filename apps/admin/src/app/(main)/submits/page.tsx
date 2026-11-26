@@ -11,10 +11,10 @@ import {
 import { MODAL_BY_STATUS } from "@/src/components/submit/modal/modalByStatus";
 import useGetSubmitItems, {
   getSubmitItemsErrorMessage,
-} from "@/src/hooks/useGetSubmitItems";
+} from "@/src/hooks/submit/useGetSubmitItems";
 import useGetSubmitItemDetail, {
   getSubmitItemDetailErrorMessage,
-} from "@/src/hooks/useGetSubmitItemDetail";
+} from "@/src/hooks/submit/useGetSubmitItemDetail";
 import type { SubmitItem } from "@/src/api/SubmitItem/type";
 
 export default function SubmitsPage() {

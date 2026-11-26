@@ -15,13 +15,13 @@ import CheckModal, { type CheckType } from "./CheckModal";
 import { formatDate } from "@/src/shared/lib/formatDate";
 import useApproveSubmitItem, {
   getApproveSubmitItemErrorMessage,
-} from "@/src/hooks/useApproveSubmitItem";
+} from "@/src/hooks/submit/useApproveSubmitItem";
 import useCombineSubmitItem, {
   getCombineSubmitItemErrorMessage,
-} from "@/src/hooks/useCombineSubmitItem";
+} from "@/src/hooks/submit/useCombineSubmitItem";
 import useRejectSubmitItem, {
   getRejectSubmitItemErrorMessage,
-} from "@/src/hooks/useRejectSubmitItem";
+} from "@/src/hooks/submit/useRejectSubmitItem";
 import { useId, useState } from "react";
 
 interface SubmitAction {

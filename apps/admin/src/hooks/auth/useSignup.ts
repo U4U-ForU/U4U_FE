@@ -6,7 +6,7 @@ import {
   TOO_MANY_REQUESTS_MESSAGE,
 } from "@/src/shared/api/errorResponse";
 import { useSignupContext } from "@u4u/ui";
-import { signup } from "../api/signup";
+import { signup } from "../../api/signup/signup";
 
 export const getSignupErrorMessage = createErrorMessage({
   status: {

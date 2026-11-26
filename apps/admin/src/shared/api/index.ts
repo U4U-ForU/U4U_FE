@@ -18,7 +18,7 @@ const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 const skipUrls = ["/api/auth/login", "/api/auth/signup", "/api/auth/refresh"];
 
-const EXPIRED_TOKEN_STATUSES = [400, 401];
+const EXPIRED_TOKEN_STATUS = 401;
 
 const SESSION_INVALID_STATUSES = [400, 401, 404];
 
@@ -28,7 +28,7 @@ const isSkipUrl = (url?: string) =>
   !!url && skipUrls.some((skipUrl) => url.includes(skipUrl));
 
 const isExpiredTokenStatus = (status?: number) =>
-  status !== undefined && EXPIRED_TOKEN_STATUSES.includes(status);
+  status === EXPIRED_TOKEN_STATUS;
 
 const isSessionInvalidStatus = (status?: number) =>
   status !== undefined && SESSION_INVALID_STATUSES.includes(status);
@@ -118,7 +118,7 @@ api.interceptors.response.use(
     }
 
     if (config._retry) {
-      if (status === 401) removeTokens();
+      removeTokens();
 
       return Promise.reject(error);
     }

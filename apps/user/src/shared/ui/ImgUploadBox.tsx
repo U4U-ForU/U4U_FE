@@ -33,6 +33,7 @@ interface ImageUploadBoxProps {
 
 export default function ImageUploadBox({ onChange }: ImageUploadBoxProps) {
   const inputRef = useRef<HTMLInputElement>(null);
+  const selectionRef = useRef(0);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -43,7 +44,12 @@ export default function ImageUploadBox({ onChange }: ImageUploadBoxProps) {
 
     if (!file) return;
 
+    selectionRef.current += 1;
+    const selectionId = selectionRef.current;
+    const isStale = () => selectionId !== selectionRef.current;
+
     const reject = (message: string) => {
+      if (isStale()) return;
       setErrorMessage(message);
       setPreviewUrl(null);
       onChange?.(null);
@@ -75,6 +81,8 @@ export default function ImageUploadBox({ onChange }: ImageUploadBoxProps) {
       reject("가로와 세로가 1:1인 이미지만 올릴 수 있어요.");
       return;
     }
+
+    if (isStale()) return;
 
     setErrorMessage("");
     setPreviewUrl(dataUrl);

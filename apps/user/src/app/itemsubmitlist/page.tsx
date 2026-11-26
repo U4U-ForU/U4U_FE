@@ -4,11 +4,21 @@ import styled from "@emotion/styled";
 import ProfileHeader from "@/src/shared/ui/Header";
 import { Button } from "@u4u/ui";
 import SubmitItemFiltering from "@/src/features/submitItemFiltering";
-import { MOCK_SUBMIT_ITEMS } from "@/src/entities/submitItem/model/mockSubmitItems";
+import {
+  getMySubmitItemsErrorMessage,
+  useMySubmitItems,
+} from "@/src/features/submitItem/model/useMySubmitItems";
 import { useRouter } from "next/navigation";
 
 export default function ItemSubmitList() {
   const router = useRouter();
+  const { data, isPending, isError, error } = useMySubmitItems();
+
+  const message = isPending
+    ? "제출 목록을 불러오는 중입니다."
+    : isError
+      ? getMySubmitItemsErrorMessage(error)
+      : undefined;
 
   return (
     <Wrapper>
@@ -19,7 +29,7 @@ export default function ItemSubmitList() {
           router.push("/main");
         }}
       />
-      <SubmitItemFiltering items={MOCK_SUBMIT_ITEMS} />
+      <SubmitItemFiltering items={data ?? []} message={message} />
       <BottomArea>
         <Button
           text="아이템 제출"

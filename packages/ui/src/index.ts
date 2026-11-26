@@ -6,6 +6,7 @@ export {
   NICKNAME_MIN_LENGTH,
   validateEmail,
   validateId,
+  validateLoginPassword,
   validateNickname,
   validatePassword,
   validatePasswordConfirm,

@@ -1,5 +1,6 @@
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const PASSWORD = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[^A-Za-z0-9\s])\S{8,20}$/;
+const PASSWORD =
+  /^(?=.*[A-Za-z])(?=.*\d)(?=.*[^A-Za-z0-9])[\x21-\x7E]{8,20}$/;
 const ID = /^[A-Za-z0-9]{4,20}$/;
 
 export const NICKNAME_MIN_LENGTH = 2;
@@ -16,6 +17,11 @@ export function validatePassword(value: string) {
   if (!PASSWORD.test(value)) {
     return "영문, 숫자, 특수문자를 포함하여 8~20자로 입력해주세요.";
   }
+  return "";
+}
+
+export function validateLoginPassword(value: string) {
+  if (value === "") return "비밀번호를 입력해주세요.";
   return "";
 }
 

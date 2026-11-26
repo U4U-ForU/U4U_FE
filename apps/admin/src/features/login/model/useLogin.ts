@@ -1,6 +1,6 @@
 "use client";
 
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { isAxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import {
@@ -53,6 +53,7 @@ export const getLoginErrorFields = (error: unknown): LoginErrorFields => {
 
 export const useLogin = () => {
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: async (credentials: LoginRequestProps) => {
@@ -65,6 +66,7 @@ export const useLogin = () => {
     },
 
     onSuccess: () => {
+      queryClient.clear();
       markReplace();
       router.replace("/items");
     },

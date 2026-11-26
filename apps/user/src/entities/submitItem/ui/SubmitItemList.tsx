@@ -1,25 +1,12 @@
 import styled from "@emotion/styled";
-import SubmitItem from "./SubmitItem";
-import type { SubmittedItem } from "../model/types";
+import type { ReactNode } from "react";
 
 interface SubmitItemListProps {
-  items: SubmittedItem[];
+  children: ReactNode;
 }
 
-export default function SubmitItemList({ items }: SubmitItemListProps) {
-  return (
-    <Wrapper>
-      {items.map((item) => (
-        <SubmitItem
-          key={item.id}
-          status={item.status}
-          itemName={item.itemName}
-          itemDescription={item.itemDescription}
-          submittedAt={item.submittedAt}
-        />
-      ))}
-    </Wrapper>
-  );
+export default function SubmitItemList({ children }: SubmitItemListProps) {
+  return <Wrapper>{children}</Wrapper>;
 }
 
 const Wrapper = styled.div`

@@ -4,6 +4,7 @@ import styled from "@emotion/styled";
 import type { SubmitStatus } from "../model/types";
 import Image from "next/image";
 import CloseButton from "@/src/shared/ui/CloseButton";
+import { useItemImage } from "@/src/shared/lib/useItemImage";
 import { Button } from "@u4u/ui";
 import SubmitStatusBadge from "./SubmitStatusBadge";
 import { CONFIRM_COLORS } from "@/src/shared/ui/modal/Modal";
@@ -13,7 +14,8 @@ interface SubmitItemModalProps {
   itemName: string;
   itemDescription: string;
   submittedAt: string;
-  img: string;
+  imageUrl: string;
+  canCancel: boolean;
   onClose: () => void;
   onCancelSubmit: () => void;
 }
@@ -23,11 +25,12 @@ export default function SubmitItemModal({
   itemName,
   itemDescription,
   submittedAt,
-  img,
+  imageUrl,
+  canCancel,
   onClose,
   onCancelSubmit,
 }: SubmitItemModalProps) {
-  const canCancel = status === "승인 전";
+  const image = useItemImage(imageUrl);
 
   return (
     <Wrapper>
@@ -38,7 +41,13 @@ export default function SubmitItemModal({
       </Top>
       <ImageArea>
         <OverlapBadge status={status} />
-        <Image src={img} width={235} height={235} alt="아이템 이미지" />
+        <Image
+          src={image.src}
+          width={235}
+          height={235}
+          alt="아이템 이미지"
+          onError={image.onError}
+        />
       </ImageArea>
       <ItemName>{itemName}</ItemName>
       <ItemDes $hasButton={canCancel}>{itemDescription}</ItemDes>

@@ -12,6 +12,14 @@ export function markReplace() {
   replacePending = true;
 }
 
+const consumeReplaceMark = () => {
+  const isPending = replacePending;
+
+  replacePending = false;
+
+  return isPending;
+};
+
 const readStack = (): NavStack => {
   try {
     const raw = sessionStorage.getItem(STACK_KEY);
@@ -37,18 +45,18 @@ const readDepth = (): number | null => {
 export function recordEntry(pathname: string) {
   if (!isBrowser()) return;
 
+  const isReplace = consumeReplaceMark();
+
   let depth = readDepth();
 
   if (depth === null) {
     const parsed = Number(sessionStorage.getItem(LAST_DEPTH_KEY) ?? "-1");
     const last = Number.isNaN(parsed) ? -1 : parsed;
-    depth = replacePending ? Math.max(last, 0) : last + 1;
+    depth = isReplace ? Math.max(last, 0) : last + 1;
 
     const state = (window.history.state ?? {}) as Record<string, unknown>;
     window.history.replaceState({ ...state, [DEPTH_KEY]: depth }, "");
   }
-
-  replacePending = false;
 
   try {
     sessionStorage.setItem(LAST_DEPTH_KEY, String(depth));

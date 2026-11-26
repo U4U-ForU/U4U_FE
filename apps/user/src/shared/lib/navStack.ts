@@ -1,16 +1,26 @@
 const DEPTH_KEY = "__u4uDepth";
 const STACK_KEY = "u4uNavStack";
 const LAST_DEPTH_KEY = "u4uNavLastDepth";
+const REPLACE_MARK_TTL_MS = 5000;
 
 type NavStack = Record<string, string>;
 
 const isBrowser = () => typeof window !== "undefined";
 
-let replacePending = false;
+let replaceMarkedAt = 0;
 
 export function markReplace() {
-  replacePending = true;
+  replaceMarkedAt = Date.now();
 }
+
+const consumeReplaceMark = () => {
+  const isPending =
+    replaceMarkedAt !== 0 && Date.now() - replaceMarkedAt < REPLACE_MARK_TTL_MS;
+
+  replaceMarkedAt = 0;
+
+  return isPending;
+};
 
 const readStack = (): NavStack => {
   try {
@@ -37,18 +47,18 @@ const readDepth = (): number | null => {
 export function recordEntry(pathname: string) {
   if (!isBrowser()) return;
 
+  const isReplace = consumeReplaceMark();
+
   let depth = readDepth();
 
   if (depth === null) {
     const parsed = Number(sessionStorage.getItem(LAST_DEPTH_KEY) ?? "-1");
     const last = Number.isNaN(parsed) ? -1 : parsed;
-    depth = replacePending ? Math.max(last, 0) : last + 1;
+    depth = isReplace ? Math.max(last, 0) : last + 1;
 
     const state = (window.history.state ?? {}) as Record<string, unknown>;
     window.history.replaceState({ ...state, [DEPTH_KEY]: depth }, "");
   }
-
-  replacePending = false;
 
   try {
     sessionStorage.setItem(LAST_DEPTH_KEY, String(depth));

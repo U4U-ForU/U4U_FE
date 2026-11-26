@@ -73,13 +73,16 @@ api.interceptors.response.use(
       return Promise.reject(error);
     }
 
+    const sessionExpired = () =>
+      Promise.reject(new UserFacingError(SESSION_EXPIRED_MESSAGE));
+
     if (config._retry) {
       removeTokens();
 
-      return Promise.reject(error);
+      return sessionExpired();
     }
 
-    if (!getRefreshToken()) return Promise.reject(error);
+    if (!getRefreshToken()) return sessionExpired();
 
     config._retry = true;
 
@@ -103,7 +106,7 @@ api.interceptors.response.use(
       if (refreshStatus !== undefined && refreshStatus < 500) {
         removeTokens();
 
-        return Promise.reject(new UserFacingError(SESSION_EXPIRED_MESSAGE));
+        return sessionExpired();
       }
 
       return Promise.reject(refreshError);

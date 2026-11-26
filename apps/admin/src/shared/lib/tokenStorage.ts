@@ -16,13 +16,11 @@ let accessToken: string | null = null;
 let role: string | null = null;
 let refreshToken: string | null = null;
 let generation = 0;
-let isStorageAvailable = true;
 
 const readStorage = (key: string) => {
   try {
     return localStorage.getItem(key);
   } catch {
-    isStorageAvailable = false;
     return null;
   }
 };
@@ -30,17 +28,13 @@ const readStorage = (key: string) => {
 const writeStorage = (key: string, value: string) => {
   try {
     localStorage.setItem(key, value);
-  } catch {
-    isStorageAvailable = false;
-  }
+  } catch {}
 };
 
 const clearStorage = (key: string) => {
   try {
     localStorage.removeItem(key);
-  } catch {
-    isStorageAvailable = false;
-  }
+  } catch {}
 };
 
 const removeLegacyKeys = () => {
@@ -102,7 +96,7 @@ export const getRefreshToken = () => {
 
   const stored = readStorage(REFRESH_TOKEN_KEY);
 
-  return isStorageAvailable ? stored : refreshToken;
+  return stored ?? refreshToken;
 };
 
 export const hasSession = () => getRefreshToken() !== null;

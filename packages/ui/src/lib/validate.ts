@@ -20,6 +20,11 @@ export function validatePassword(value: string) {
   return "";
 }
 
+export function validateLoginPassword(value: string) {
+  if (value === "") return "비밀번호를 입력해주세요.";
+  return "";
+}
+
 export function validatePasswordConfirm(value: string, confirmValue: string) {
   if (confirmValue === "") return "비밀번호를 한 번 더 입력해주세요.";
   if (value !== confirmValue) return "비밀번호가 일치하지 않아요.";

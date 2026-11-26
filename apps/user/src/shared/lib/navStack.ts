@@ -1,23 +1,21 @@
 const DEPTH_KEY = "__u4uDepth";
 const STACK_KEY = "u4uNavStack";
 const LAST_DEPTH_KEY = "u4uNavLastDepth";
-const REPLACE_MARK_TTL_MS = 5000;
 
 type NavStack = Record<string, string>;
 
 const isBrowser = () => typeof window !== "undefined";
 
-let replaceMarkedAt = 0;
+let replacePending = false;
 
 export function markReplace() {
-  replaceMarkedAt = Date.now();
+  replacePending = true;
 }
 
 const consumeReplaceMark = () => {
-  const isPending =
-    replaceMarkedAt !== 0 && Date.now() - replaceMarkedAt < REPLACE_MARK_TTL_MS;
+  const isPending = replacePending;
 
-  replaceMarkedAt = 0;
+  replacePending = false;
 
   return isPending;
 };

@@ -2,80 +2,32 @@
 
 import styled from "@emotion/styled";
 import type { SubmitStatus } from "../model/types";
-import { useState } from "react";
-import Modal from "@/src/shared/ui/modal/ModalParent";
-import ConfirmModal from "@/src/shared/ui/modal/Modal";
-import SubmitItemModal from "./SubmitItemModal";
 import SubmitStatusBadge from "./SubmitStatusBadge";
-import ResultModal from "@/src/shared/ui/modal/ResultModal";
+import { useItemImage } from "@/src/shared/lib/useItemImage";
 
 interface SubmitItemProps {
   status: SubmitStatus;
   itemName: string;
-  itemDescription: string;
-  submittedAt: string;
+  imageUrl: string;
+  onClick: () => void;
 }
 
 export default function SubmitItem({
   status,
   itemName,
-  itemDescription,
-  submittedAt,
+  imageUrl,
+  onClick,
 }: SubmitItemProps) {
-  const [isOpen, setIsOpen] = useState(false);
-  const [isCancelOpen, setIsCancelOpen] = useState(false);
-  const [isCanceledOpen, setIsCanceledOpen] = useState(false);
+  const image = useItemImage(imageUrl);
 
   return (
-    <>
-      <Wrapper type="button" onClick={() => setIsOpen(true)}>
-        <Status status={status} />
-        <Img src="/tempImg/tempItemImg.png"></Img>
-        <ItemName>{itemName}</ItemName>
-      </Wrapper>
-
-      <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
-        <SubmitItemModal
-          status={status}
-          itemName={itemName}
-          itemDescription={itemDescription}
-          submittedAt={submittedAt}
-          img="/tempImg/tempItemImg.png"
-          onClose={() => setIsOpen(false)}
-          onCancelSubmit={() => {
-            setIsOpen(false);
-            setIsCancelOpen(true);
-          }}
-        />
-      </Modal>
-
-      <ConfirmModal
-        isOpen={isCancelOpen}
-        type="warn"
-        title="제출 취소"
-        text="정말 아이템 제출을 취소하시겠어요?"
-        text2="취소한 제출은 복구할 수 없습니다."
-        confirmText="제출 취소"
-        onCancel={() => setIsCancelOpen(false)}
-        onConfirm={() => {
-          setIsCancelOpen(false);
-          setIsCanceledOpen(true);
-        }}
-      />
-
-      <ResultModal
-        isOpen={isCanceledOpen}
-        title="제출 취소되었습니다"
-        text="제출 목록에서 사라졌어요"
-        size="sm"
-        onDone={() => setIsCanceledOpen(false)}
-      />
-    </>
+    <Wrapper type="button" onClick={onClick}>
+      <Status status={status} />
+      <Img src={image.src} alt="" onError={image.onError} />
+      <ItemName>{itemName}</ItemName>
+    </Wrapper>
   );
 }
-
-
-
 
 const Status = styled(SubmitStatusBadge)`
   margin-bottom: -16px;
@@ -122,7 +74,7 @@ const ItemName = styled.div`
   font-size: 12px;
   font-style: normal;
   font-weight: 700;
-  line-height: 120%; /* 14.4px */
+  line-height: 120%;
   width: 136px;
   margin-top: 7px;
 `;

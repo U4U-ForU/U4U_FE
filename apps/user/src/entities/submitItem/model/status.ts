@@ -11,3 +11,10 @@ export const STATUS_BACKGROUNDS: Partial<Record<SubmitStatus, string>> = {
   "조합아이템 승인": "#50B4DC",
   승인완료: "#20AF61",
 };
+
+export const SUBMIT_STATUS_LABELS: Record<string, SubmitStatus | undefined> = {
+  PENDING: "승인 전",
+  REJECTED: "승인거절",
+  COMBINED: "조합아이템 승인",
+  APPROVED: "승인완료",
+};

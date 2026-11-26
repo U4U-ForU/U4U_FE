@@ -12,3 +12,16 @@ export interface SubmitItemResponseProps {
   status: string;
   createdAt: string;
 }
+
+export interface MySubmitItemResponseProps {
+  submissionId: string;
+  name: string;
+  imageUrl: string;
+  status: string;
+  createdAt: string;
+}
+
+export interface MySubmitItemDetailResponseProps
+  extends MySubmitItemResponseProps {
+  description: string;
+}

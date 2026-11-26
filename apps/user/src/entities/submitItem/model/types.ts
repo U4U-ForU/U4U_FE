@@ -15,9 +15,9 @@ export const SUBMIT_FILTERS: SubmitFilter[] = [
 ];
 
 export interface SubmittedItem {
-  id: number;
+  submissionId: string;
   status: SubmitStatus;
   itemName: string;
-  itemDescription: string;
+  imageUrl: string;
   submittedAt: string;
 }

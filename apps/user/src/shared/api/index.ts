@@ -1,5 +1,9 @@
 import axios, { isAxiosError } from "axios";
 import {
+  SESSION_EXPIRED_MESSAGE,
+  UserFacingError,
+} from "./errorResponse";
+import {
   getAccessToken,
   getRefreshToken,
   removeTokens,
@@ -11,14 +15,18 @@ const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 const skipUrls = ["/api/auth/login", "/api/auth/signup", "/api/auth/refresh"];
 
+const EXPIRED_TOKEN_STATUS = 401;
+
 const isSkipUrl = (url?: string) =>
   !!url && skipUrls.some((skipUrl) => url.includes(skipUrl));
+
+const isExpiredTokenStatus = (status?: number) =>
+  status === EXPIRED_TOKEN_STATUS;
 
 export const api = axios.create({
   baseURL: BASE_URL,
   timeout: 15000,
   headers: { "Content-Type": "application/json" },
-  withCredentials: true,
 });
 
 let currentRefreshPromise: Promise<string> | null = null;
@@ -59,13 +67,13 @@ api.interceptors.response.use(
   (response) => response,
   async (error) => {
     const config = error.config;
+    const status = error.response?.status;
 
-    if (!config || isSkipUrl(config.url) || error.response?.status !== 401) {
+    if (!config || isSkipUrl(config.url) || !isExpiredTokenStatus(status)) {
       return Promise.reject(error);
     }
 
     if (config._retry) {
-      console.log("토큰을 삭제합니다.");
       removeTokens();
 
       return Promise.reject(error);
@@ -88,13 +96,14 @@ api.interceptors.response.use(
 
       return api(config);
     } catch (refreshError) {
-      const status = isAxiosError(refreshError)
+      const refreshStatus = isAxiosError(refreshError)
         ? refreshError.response?.status
         : undefined;
 
-      if (status !== undefined && status < 500) {
-        console.log("토큰을 삭제합니다.");
+      if (refreshStatus !== undefined && refreshStatus < 500) {
         removeTokens();
+
+        return Promise.reject(new UserFacingError(SESSION_EXPIRED_MESSAGE));
       }
 
       return Promise.reject(refreshError);

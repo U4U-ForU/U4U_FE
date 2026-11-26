@@ -4,6 +4,7 @@ import { useState } from "react";
 import DropDown from "@/src/shared/ui/DropDown";
 import EmptyList from "@/src/shared/ui/EmptyList";
 import SubmitItemList from "@/src/entities/submitItem/ui/SubmitItemList";
+import SubmitItemCard from "@/src/features/submitItem/ui/SubmitItemCard";
 import {
   SUBMIT_FILTERS,
   type SubmitFilter,
@@ -20,10 +21,12 @@ const EMPTY_MESSAGE: Record<SubmitFilter, string> = {
 
 interface SubmitItemFilteringProps {
   items: SubmittedItem[];
+  message?: string;
 }
 
 export default function SubmitItemFiltering({
   items,
+  message,
 }: SubmitItemFilteringProps) {
   const [filter, setFilter] = useState<SubmitFilter>("전체");
 
@@ -33,10 +36,16 @@ export default function SubmitItemFiltering({
   return (
     <>
       <DropDown options={SUBMIT_FILTERS} value={filter} onChange={setFilter} />
-      {filteredItems.length === 0 ? (
+      {message ? (
+        <EmptyList text={message} />
+      ) : filteredItems.length === 0 ? (
         <EmptyList text={EMPTY_MESSAGE[filter]} />
       ) : (
-        <SubmitItemList items={filteredItems} />
+        <SubmitItemList>
+          {filteredItems.map((item) => (
+            <SubmitItemCard key={item.submissionId} item={item} />
+          ))}
+        </SubmitItemList>
       )}
     </>
   );

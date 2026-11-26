@@ -1,5 +1,6 @@
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const PASSWORD = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[^A-Za-z0-9\s])\S{8,20}$/;
+const PASSWORD =
+  /^(?=.*[A-Za-z])(?=.*\d)(?=.*[^A-Za-z0-9])[\x21-\x7E]{8,20}$/;
 const ID = /^[A-Za-z0-9]{4,20}$/;
 
 export const NICKNAME_MIN_LENGTH = 2;

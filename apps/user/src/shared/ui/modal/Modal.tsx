@@ -13,6 +13,8 @@ interface ModalProps {
   text: string;
   text2: string;
   confirmText?: string;
+  confirmDisabled?: boolean;
+  errorMessage?: string;
 }
 
 export const CONFIRM_COLORS = {
@@ -37,11 +39,16 @@ export default function Modal({
   text,
   text2,
   confirmText = "삭제",
+  confirmDisabled = false,
+  errorMessage = "",
 }: ModalProps) {
   const colors = CONFIRM_COLORS[type];
 
   return (
-    <ModalParent isOpen={isOpen} onClose={onCancel}>
+    <ModalParent
+      isOpen={isOpen}
+      onClose={confirmDisabled ? undefined : onCancel}
+    >
       <Wrapper>
         <Top>
           <Title role="heading" aria-level={2} aria-label={title} $type={type}>
@@ -50,6 +57,7 @@ export default function Modal({
           <TextWrapper>
             <Text>{text}</Text>
             <Text>{text2}</Text>
+            {errorMessage && <ErrorText>{errorMessage}</ErrorText>}
           </TextWrapper>
         </Top>
         <ButtonWrapper>
@@ -60,6 +68,7 @@ export default function Modal({
             borderColor="#D0CCCC"
             boxShadow={false}
             onClick={onCancel}
+            disabled={confirmDisabled}
           />
           <Button
             text={confirmText}
@@ -69,12 +78,23 @@ export default function Modal({
             borderColor={colors.border}
             boxShadow={false}
             onClick={onConfirm}
+            disabled={confirmDisabled}
           />
         </ButtonWrapper>
       </Wrapper>
     </ModalParent>
   );
 }
+
+const ErrorText = styled.p`
+  margin: 6px 0 0;
+  color: #e26c7a;
+  text-align: center;
+  font-family: Pretendard;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 150%;
+`;
 
 const Wrapper = styled.div`
   display: flex;
@@ -93,7 +113,7 @@ const Title = styled.div<{ $type: ModalProps["type"] }>`
   font-family: "Cafe24 Ssurround";
   font-size: 24px;
   font-style: normal;
-  line-height: 150%; /* 36px */
+  line-height: 150%;
   margin-bottom: 4px;
 
   ${({ $type }) =>
@@ -123,12 +143,11 @@ const Text = styled.div`
   color: var(--gray-600, #8e8889);
   text-align: center;
 
-  /* body/body-medium */
   font-family: Pretendard;
   font-size: var(--typo-body-medium, 16px);
   font-style: normal;
   font-weight: 400;
-  line-height: 150%; /* 24px */
+  line-height: 150%;
 `;
 
 const ButtonWrapper = styled.div`

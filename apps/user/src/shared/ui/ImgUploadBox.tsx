@@ -4,6 +4,7 @@ import styled from "@emotion/styled";
 import { useRef, useState, type ChangeEvent } from "react";
 
 const ALLOWED_TYPE = "image/png";
+const MAX_SIZE_BYTES = 5 * 1024 * 1024;
 
 function readAsDataUrl(file: File) {
   return new Promise<string>((resolve, reject) => {
@@ -32,6 +33,7 @@ interface ImageUploadBoxProps {
 
 export default function ImageUploadBox({ onChange }: ImageUploadBoxProps) {
   const inputRef = useRef<HTMLInputElement>(null);
+  const selectionRef = useRef(0);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -42,20 +44,45 @@ export default function ImageUploadBox({ onChange }: ImageUploadBoxProps) {
 
     if (!file) return;
 
-    if (file.type !== ALLOWED_TYPE) {
-      setErrorMessage("PNG 파일만 올릴 수 있어요.");
+    selectionRef.current += 1;
+    const selectionId = selectionRef.current;
+    const isStale = () => selectionId !== selectionRef.current;
+
+    const reject = (message: string) => {
+      if (isStale()) return;
+      setErrorMessage(message);
+      setPreviewUrl(null);
       onChange?.(null);
+    };
+
+    if (file.type !== ALLOWED_TYPE) {
+      reject("PNG 파일만 올릴 수 있어요.");
       return;
     }
 
-    const dataUrl = await readAsDataUrl(file);
-    const { width, height } = await loadImageSize(dataUrl);
+    if (file.size > MAX_SIZE_BYTES) {
+      reject("5MB 이하 이미지만 올릴 수 있어요.");
+      return;
+    }
+
+    let dataUrl: string;
+    let width: number;
+    let height: number;
+
+    try {
+      dataUrl = await readAsDataUrl(file);
+      ({ width, height } = await loadImageSize(dataUrl));
+    } catch {
+      reject("이미지를 읽지 못했어요. 다른 파일을 선택해주세요.");
+      return;
+    }
 
     if (width !== height) {
-      setErrorMessage("가로와 세로가 1:1인 이미지만 올릴 수 있어요.");
-      onChange?.(null);
+      reject("가로와 세로가 1:1인 이미지만 올릴 수 있어요.");
       return;
     }
+
+    if (isStale()) return;
 
     setErrorMessage("");
     setPreviewUrl(dataUrl);
@@ -117,7 +144,7 @@ const Notice = styled.div`
   font-size: var(--typo-body-xsmaill, 12px);
   font-style: normal;
   font-weight: 400;
-  line-height: 150%; /* 18px */
+  line-height: 150%;
 `;
 
 const Box = styled.button`
@@ -150,7 +177,7 @@ const Label = styled.span`
   font-size: 14px;
   font-style: normal;
   font-weight: 700;
-  line-height: 150%; /* 21px */
+  line-height: 150%;
 `;
 
 const Preview = styled.img`

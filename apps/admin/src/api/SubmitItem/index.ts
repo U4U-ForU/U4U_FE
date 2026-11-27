@@ -3,16 +3,16 @@ import type {
   ApproveSubmitItemResponse,
   CombineSubmitItemResponse,
   RejectSubmitItemResponse,
+  SubmitItem,
   SubmitItemDetailApiResponse,
-  SubmitItemResponse,
 } from "./type";
 
 export const submitItemApi = async () => {
-  const response = await api.get<SubmitItemResponse>(
+  const response = await api.get<SubmitItem[]>(
     `/api/admin/items/submissions`,
   );
 
-  return response.data.data;
+  return response.data;
 };
 
 export const approveSubmitItemApi = async (submissionId: string) => {
